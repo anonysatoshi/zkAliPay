@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            UPDATE orders \n            SET \"remainingAmount\" = \"remainingAmount\" + $1\n            WHERE \"orderId\" = $2\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Numeric",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "7fdba288df2bdf9936ad7f19317bedd3a6561e63ea020f5c507656f4ac1f885e"
+}

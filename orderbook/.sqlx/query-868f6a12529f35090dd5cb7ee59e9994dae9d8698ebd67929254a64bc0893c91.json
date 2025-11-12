@@ -1,0 +1,24 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            INSERT INTO trades (\n                \"tradeId\", \"orderId\", \"buyer\", \"tokenAmount\", \"cnyAmount\",\n                \"paymentNonce\", \"createdAt\", \"expiresAt\", \"status\",\n                \"escrowTxHash\", \"settlementTxHash\"\n            )\n            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)\n            ON CONFLICT (\"tradeId\") DO NOTHING\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Numeric",
+        "Numeric",
+        "Text",
+        "Int8",
+        "Int8",
+        "Int4",
+        "Varchar",
+        "Varchar"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "868f6a12529f35090dd5cb7ee59e9994dae9d8698ebd67929254a64bc0893c91"
+}

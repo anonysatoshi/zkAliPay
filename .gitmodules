@@ -1,0 +1,6 @@
+[submodule "contracts/lib/openzeppelin-contracts"]
+	path = contracts/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "contracts/lib/openvm-solidity-sdk"]
+	path = contracts/lib/openvm-solidity-sdk
+	url = https://github.com/openvm-org/openvm-solidity-sdk

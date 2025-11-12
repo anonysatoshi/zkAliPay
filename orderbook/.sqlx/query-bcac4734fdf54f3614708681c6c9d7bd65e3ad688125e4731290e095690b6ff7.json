@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            UPDATE trades \n            SET pdf_file = $1, pdf_filename = $2, pdf_uploaded_at = $3\n            WHERE \"tradeId\" = $4\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Bytea",
+        "Text",
+        "Timestamptz",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "bcac4734fdf54f3614708681c6c9d7bd65e3ad688125e4731290e095690b6ff7"
+}

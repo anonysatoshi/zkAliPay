@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "zkAliPay Deployment Configuration",
+  "description": "Centralized configuration for all deployment environments",
+  
+  "networks": {
+    "sepolia": {
+      "name": "Ethereum Sepolia Testnet",
+      "chainId": 11155111,
+      "rpcUrl": "https://eth-sepolia.g.alchemy.com/v2/YOUR_ALCHEMY_KEY",
+      "blockExplorer": "https://sepolia.etherscan.io",
+      "currency": "ETH",
+      "contracts": {
+        "escrow": "0xEE0982021e5EBFE1F441687223f138ad8F895aF5",
+        "mockUsdc": "0x984f2D79d020f31323fa6BDd364CF625035Cc3B5"
+      },
+      "relayWallet": {
+        "address": "0x5B9719f72b654fb07Fd95eae61087B261E4e01fe",
+        "privateKey": "0x62fe1a033a8b98f006ac1895572967d6319944fd0a2eac34f3f746418a4106e0",
+        "note": "⚠️ TEST ONLY - Never use on mainnet!"
+      }
+    },
+    "base-sepolia": {
+      "name": "Base Sepolia Testnet",
+      "chainId": 84532,
+      "rpcUrl": "https://sepolia.base.org",
+      "blockExplorer": "https://sepolia.basescan.org",
+      "currency": "ETH",
+      "faucet": "https://www.alchemy.com/faucets/base-sepolia",
+      "contracts": {
+        "escrow": "0xe03C7b74A7c4338E397c65d8B60b18FAF56E3546",
+        "mockUsdc": "0xd4B280FFB336e2061cB39347Bd599cB88FF1617A",
+        "mockUsdt": "0x9C607084a30b3E5f222b8f92313c3f75fA12667F",
+        "mockSol": "0x9913854799d1BB4E049CDE227156508bB3bA1AbF",
+        "mockBtc": "0x819509cF2A5CD7849399C9A137547731686914ae",
+        "mockEth": "0x9e0cdc73bEE1C6b8D99857fFA18b7C02D8ba162F",
+        "verifier": "0xE1859d7071eD3CE7F1AB592c76c3A6D342140A87"
+      },
+      "relayWallet": {
+        "address": "0x5B9719f72b654fb07Fd95eae61087B261E4e01fe",
+        "privateKey": "0x62fe1a033a8b98f006ac1895572967d6319944fd0a2eac34f3f746418a4106e0",
+        "note": "⚠️ TEST ONLY - Same wallet as Sepolia for testing"
+      }
+    },
+    "base-mainnet": {
+      "name": "Base Mainnet",
+      "chainId": 8453,
+      "rpcUrl": "https://base-mainnet.g.alchemy.com/v2/YOUR_ALCHEMY_KEY",
+      "blockExplorer": "https://basescan.org",
+      "currency": "ETH",
+      "contracts": {
+        "escrow": "TO_BE_DEPLOYED",
+        "usdc": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+      },
+      "relayWallet": {
+        "address": "TO_BE_SET",
+        "privateKey": "TO_BE_SET",
+        "note": "⚠️ PRODUCTION - Use hardware wallet or secure key management!"
+      }
+    }
+  },
+  
+  "axiom": {
+    "apiKey": "key_01k8v8egack3pe2e4fehh2epam",
+    "configId": "cfg_01k3w1spnpnxzry017g5jzcy97",
+    "programId": "prg_01k8vn94vy3hwve3np6dxgkgz8",
+    "programHash": "004b0a628c0a43a8474d07d7d7f5e3651bae5ddd73f66fc6680c2afd14b8986b",
+    "openvmVersion": "v1.4.1",
+    "note": "Axiom Proving API configuration for zkPDF proofs",
+    "publicKeyDerHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "publicKeyDerHashNote": "⚠️ Set to 0x0000...0000 for testing - bypasses PDF signature verification"
+  },
+  
+  "walletConnect": {
+    "projectId": "21fef48091f12692cad574a6f7753643",
+    "note": "⚠️ TEMPORARY TEST ID - Get your own from https://cloud.walletconnect.com for production use"
+  },
+  
+  "database": {
+    "development": {
+      "host": "localhost",
+      "port": 5432,
+      "database": "zkalipay_orderbook",
+      "user": "zkalipay",
+      "password": "zkalipay_dev_password",
+      "url": "postgresql://zkalipay:zkalipay_dev_password@localhost:5432/zkalipay_orderbook"
+    },
+    "production": {
+      "host": "TO_BE_SET",
+      "port": 5432,
+      "database": "zkalipay_orderbook",
+      "user": "TO_BE_SET",
+      "password": "TO_BE_SET",
+      "url": "TO_BE_SET",
+      "note": "Use environment variables or secrets manager in production"
+    }
+  },
+  
+  "features": {
+    "axiomProofGeneration": false,
+    "blockchainSubmission": false,
+    "note": "Temporarily disabled for codebase cleanup - re-enable after migration to Base"
+  },
+  
+  "deployment": {
+    "instructions": "See DEPLOYMENT.md for step-by-step deployment guide",
+    "steps": [
+      "1. Choose target network (base-sepolia recommended for testing)",
+      "2. Update RPC URL with your Alchemy API key",
+      "3. Deploy MockUSDC contract (testnet only)",
+      "4. Deploy ZkAliPayEscrow contract",
+      "5. Update contract addresses in this file",
+      "6. Generate deployment environment file using: npm run generate-env",
+      "7. Deploy backend to Railway/Render",
+      "8. Deploy frontend to Vercel",
+      "9. Test end-to-end flow"
+    ]
+  }
+}
+

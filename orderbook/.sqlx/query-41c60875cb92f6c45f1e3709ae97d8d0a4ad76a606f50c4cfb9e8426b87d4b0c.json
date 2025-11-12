@@ -1,0 +1,40 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT \"orderId\", \"seller\", \"alipayId\", \"alipayName\"\n        FROM orders\n        WHERE \"orderId\" = $1\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "orderId",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "seller",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "alipayId",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "alipayName",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "41c60875cb92f6c45f1e3709ae97d8d0a4ad76a606f50c4cfb9e8426b87d4b0c"
+}

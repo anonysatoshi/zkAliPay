@@ -1,0 +1,27 @@
+# Environment variables (contains private keys!)
+.env
+.env.*
+!.env.example
+
+# Foundry build artifacts
+cache/
+out/
+broadcast/
+
+# Dependencies
+lib/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+

@@ -1,0 +1,76 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            SELECT \n                \"orderId\" as \"order_id!\",\n                seller as \"seller!\",\n                token as \"token!\",\n                \"totalAmount\"::TEXT as \"total_amount!\",\n                \"remainingAmount\"::TEXT as \"remaining_amount!\",\n                \"exchangeRate\"::TEXT as \"exchange_rate!\",\n                \"alipayId\" as \"alipay_id!\",\n                \"alipayName\" as \"alipay_name!\",\n                \"createdAt\" as \"created_at!\",\n                \"syncedAt\" as \"synced_at!\"\n            FROM orders\n            WHERE \"remainingAmount\" > 0\n            ORDER BY \"exchangeRate\" ASC, \"createdAt\" ASC\n            LIMIT $1\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "order_id!",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "seller!",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "token!",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "total_amount!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "remaining_amount!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 5,
+        "name": "exchange_rate!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 6,
+        "name": "alipay_id!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 7,
+        "name": "alipay_name!",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 8,
+        "name": "created_at!",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 9,
+        "name": "synced_at!",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      null,
+      null,
+      null,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "48395b01a3f38a73b74d83fde805880f4df18adef95b83da3e51d06049f2845b"
+}

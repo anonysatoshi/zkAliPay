@@ -1,0 +1,71 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+target/
+.next/
+out/
+dist/
+build/
+
+# Foundry/Forge
+cache/
+out/
+broadcast/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+*.old
+*.bak
+*.backup
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Database
+*.db
+*.sqlite
+
+# Rust
+**/*.rs.bk
+# Note: Cargo.lock should be committed for applications (only ignore for libraries)
+
+# Python (if any)
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+env/
+
+# Vercel
+.vercel
+
+# Turbo
+.turbo
+

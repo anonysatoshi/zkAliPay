@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT \"tradeId\", \"expiresAt\"\n        FROM trades\n        WHERE \"status\" = 0\n        AND \"expiresAt\" < $1\n        ORDER BY \"expiresAt\" ASC\n        LIMIT 100\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "tradeId",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "expiresAt",
+        "type_info": "Int8"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "65dc96e01bddc44fb55087ea7a66f9a73ac957ff57a7af1df50bcab54b7ab119"
+}

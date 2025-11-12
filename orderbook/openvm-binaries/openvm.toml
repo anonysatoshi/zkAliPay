@@ -1,0 +1,13 @@
+# OpenVM configuration for PDF verification
+# Using standard extensions for cryptographic operations
+
+[app_vm_config.rv32i]
+[app_vm_config.rv32m]
+[app_vm_config.io]
+
+# Hash functions used by PDF signature verification
+[app_vm_config.keccak]
+[app_vm_config.sha256]
+
+# Big integer operations for RSA signature verification
+[app_vm_config.bigint]

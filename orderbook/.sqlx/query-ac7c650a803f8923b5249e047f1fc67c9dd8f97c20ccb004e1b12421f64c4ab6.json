@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE trades SET \"settlementTxHash\" = $1 WHERE \"tradeId\" = $2",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "ac7c650a803f8923b5249e047f1fc67c9dd8f97c20ccb004e1b12421f64c4ab6"
+}

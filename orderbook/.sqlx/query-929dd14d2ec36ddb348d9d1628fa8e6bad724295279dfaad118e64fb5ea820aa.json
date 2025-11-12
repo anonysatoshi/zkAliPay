@@ -1,0 +1,74 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT \n            \"orderId\", \"seller\", \"token\", \"totalAmount\"::text, \"remainingAmount\"::text,\n            \"exchangeRate\", \"alipayId\", \"alipayName\", \n            \"createdAt\", \"syncedAt\"\n        FROM orders\n        ORDER BY \"createdAt\" DESC\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "orderId",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "seller",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "token",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "totalAmount",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "remainingAmount",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 5,
+        "name": "exchangeRate",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 6,
+        "name": "alipayId",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 7,
+        "name": "alipayName",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 8,
+        "name": "createdAt",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 9,
+        "name": "syncedAt",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      null,
+      null,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "929dd14d2ec36ddb348d9d1628fa8e6bad724295279dfaad118e64fb5ea820aa"
+}
