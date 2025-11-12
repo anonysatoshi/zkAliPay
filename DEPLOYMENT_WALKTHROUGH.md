@@ -82,7 +82,7 @@ git push -u origin main
 ### 1.3 Add Repository Description
 ```
 On GitHub repo page, add description:
-"Peer-to-peer CNY ↔ Crypto exchange with zkPDF proofs. Beta on Base Sepolia."
+"Peer-to-peer CNY ↔ Crypto exchange powered by zkVM. Beta on Base Sepolia."
 ```
 
 ✅ **Checkpoint:** Your code is now on GitHub anonymously
