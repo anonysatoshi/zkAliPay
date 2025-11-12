@@ -15,9 +15,9 @@
         "mockUsdc": "0x984f2D79d020f31323fa6BDd364CF625035Cc3B5"
       },
       "relayWallet": {
-        "address": "0x5B9719f72b654fb07Fd95eae61087B261E4e01fe",
-        "privateKey": "0x62fe1a033a8b98f006ac1895572967d6319944fd0a2eac34f3f746418a4106e0",
-        "note": "⚠️ TEST ONLY - Never use on mainnet!"
+        "address": "SET_IN_ENV_FILE",
+        "privateKey": "SET_IN_ENV_FILE",
+        "note": "⚠️ Store in .env file, never commit private keys!"
       }
     },
     "base-sepolia": {
@@ -37,9 +37,9 @@
         "verifier": "0xE1859d7071eD3CE7F1AB592c76c3A6D342140A87"
       },
       "relayWallet": {
-        "address": "0x5B9719f72b654fb07Fd95eae61087B261E4e01fe",
-        "privateKey": "0x62fe1a033a8b98f006ac1895572967d6319944fd0a2eac34f3f746418a4106e0",
-        "note": "⚠️ TEST ONLY - Same wallet as Sepolia for testing"
+        "address": "SET_IN_ENV_FILE",
+        "privateKey": "SET_IN_ENV_FILE",
+        "note": "⚠️ Store in .env file, never commit private keys!"
       }
     },
     "base-mainnet": {
@@ -61,9 +61,9 @@
   },
   
   "axiom": {
-    "apiKey": "key_01k8v8egack3pe2e4fehh2epam",
-    "configId": "cfg_01k3w1spnpnxzry017g5jzcy97",
-    "programId": "prg_01k8vn94vy3hwve3np6dxgkgz8",
+    "apiKey": "SET_IN_ENV_FILE",
+    "configId": "SET_IN_ENV_FILE",
+    "programId": "SET_IN_ENV_FILE",
     "programHash": "004b0a628c0a43a8474d07d7d7f5e3651bae5ddd73f66fc6680c2afd14b8986b",
     "openvmVersion": "v1.4.1",
     "note": "Axiom Proving API configuration for zkPDF proofs",
@@ -72,8 +72,8 @@
   },
   
   "walletConnect": {
-    "projectId": "21fef48091f12692cad574a6f7753643",
-    "note": "⚠️ TEMPORARY TEST ID - Get your own from https://cloud.walletconnect.com for production use"
+    "projectId": "SET_IN_ENV_FILE_OR_GET_YOUR_OWN",
+    "note": "⚠️ Get your own from https://cloud.walletconnect.com - store in .env file"
   },
   
   "database": {

@@ -72,11 +72,11 @@ The application uses a **relay wallet** to execute blockchain transactions on be
 ### Test Relay Wallet (Base Sepolia Testnet Only)
 
 ```
-Address: 0x5B9719f72b654fb07Fd95eae61087B261E4e01fe
-Private Key: 62fe1a033a8b98f006ac1895572967d6319944fd0a2eac34f3f746418a4106e0
+Address: [SET IN .env FILE]
+Private Key: [SET IN .env FILE - NEVER COMMIT TO GIT]
 ```
 
-⚠️ **IMPORTANT:** This wallet is for **TESTING ONLY** on Base Sepolia testnet. Never use this wallet on mainnet!
+⚠️ **IMPORTANT:** Store private keys ONLY in `.env` files (which are gitignored). Never commit private keys to git!
 
 ### What the Relay Wallet Does:
 
@@ -131,7 +131,7 @@ export DATABASE_URL="postgresql://zkalipay:zkalipay_dev_password@localhost:5432/
 export SEPOLIA_RPC_URL="https://sepolia.base.org"
 export ESCROW_CONTRACT_ADDRESS="0xe03C7b74A7c4338E397c65d8B60b18FAF56E3546"
 export MOCK_USDC_ADDRESS="0xd4B280FFB336e2061cB39347Bd599cB88FF1617A"
-export RELAYER_PRIVATE_KEY="0x62fe1a033a8b98f006ac1895572967d6319944fd0a2eac34f3f746418a4106e0"
+export RELAYER_PRIVATE_KEY="YOUR_PRIVATE_KEY_HERE"
 export CHAIN_ID=84532
 
 ./target/release/api-server > /tmp/zkalipay_api.log 2>&1 &
@@ -156,7 +156,7 @@ export DATABASE_URL="postgresql://zkalipay:zkalipay_dev_password@localhost:5432/
 export SEPOLIA_RPC_URL="https://sepolia.base.org"
 export ESCROW_CONTRACT_ADDRESS="0xe03C7b74A7c4338E397c65d8B60b18FAF56E3546"
 export MOCK_USDC_ADDRESS="0xd4B280FFB336e2061cB39347Bd599cB88FF1617A"
-export RELAYER_PRIVATE_KEY="0x62fe1a033a8b98f006ac1895572967d6319944fd0a2eac34f3f746418a4106e0"
+export RELAYER_PRIVATE_KEY="YOUR_PRIVATE_KEY_HERE"
 export CHAIN_ID=84532
 
 ./target/release/auto-cancel-service > /tmp/zkalipay_autocancel.log 2>&1 &
