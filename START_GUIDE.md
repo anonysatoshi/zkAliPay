@@ -32,7 +32,7 @@ The frontend uses RainbowKit which requires a WalletConnect Cloud project ID.
    ```
 6. Regenerate environment files:
    ```bash
-   cd /Users/yinuo/Desktop/zkAliPay
+   cd /path/to/zkAliPay
    node scripts/generate-env.js base-sepolia
    ```
 
@@ -102,7 +102,7 @@ The relay wallet is configured via the `RELAYER_PRIVATE_KEY` environment variabl
 ### Step 1: Start Database & Event Listener
 
 ```bash
-cd /Users/yinuo/Desktop/zkAliPay/orderbook
+cd /path/to/zkAliPay/orderbook
 
 # Start PostgreSQL container
 docker-compose up -d postgres
@@ -148,7 +148,7 @@ echo "✅ Database and Event Listener started!"
 ### Step 2: Start Auto-Cancel Service
 
 ```bash
-cd /Users/yinuo/Desktop/zkAliPay/orderbook
+cd /path/to/zkAliPay/orderbook
 
 # Use same environment variables as API server
 export RUST_LOG=info
@@ -170,7 +170,7 @@ echo "✅ Auto-Cancel Service started!"
 ### Step 3: Start Frontend
 
 ```bash
-cd /Users/yinuo/Desktop/zkAliPay/frontend
+cd /path/to/zkAliPay/frontend
 
 # Start Next.js development server
 PORT=3002 npm run dev > /tmp/zkalipay_frontend.log 2>&1 &
@@ -258,7 +258,7 @@ pkill -f auto-cancel-service
 pkill -f "npm run dev"
 
 # Stop PostgreSQL (optional - keeps data)
-cd /Users/yinuo/Desktop/zkAliPay/orderbook
+cd /path/to/zkAliPay/orderbook
 docker-compose down
 
 # Or just stop without removing container
@@ -291,7 +291,7 @@ export DATABASE_URL="postgresql://zkalipay:zkalipay_dev_password@localhost:5432/
 
 # 4. Restart the API server
 pkill -f api-server
-cd /Users/yinuo/Desktop/zkAliPay/orderbook
+cd /path/to/zkAliPay/orderbook
 # ... (re-run Step 1 start command with correct DATABASE_URL)
 ```
 
@@ -324,7 +324,7 @@ docker exec zkalipay-postgres psql -U zkalipay -d zkalipay_orderbook -c \
 
 # Restart API server
 pkill -f api-server
-cd /Users/yinuo/Desktop/zkAliPay/orderbook
+cd /path/to/zkAliPay/orderbook
 # ... (re-run Step 1 start command)
 ```
 
@@ -337,7 +337,7 @@ lsof -ti:3002
 lsof -ti:3002 | xargs kill -9
 
 # Restart frontend
-cd /Users/yinuo/Desktop/zkAliPay/frontend
+cd /path/to/zkAliPay/frontend
 PORT=3002 npm run dev
 ```
 
@@ -357,7 +357,7 @@ If you moved or renamed the project directory, the compiled binaries have the ol
 
 ```bash
 # Clean and rebuild binaries with correct path
-cd /Users/yinuo/Desktop/zkAliPay/orderbook
+cd /path/to/zkAliPay/orderbook
 cargo clean
 cargo build --release --bins
 
@@ -479,10 +479,10 @@ zkAliPay/
 ### Daily Development Start
 ```bash
 # Quick start (if database already exists)
-cd /Users/yinuo/Desktop/zkAliPay/orderbook
+cd /path/to/zkAliPay/orderbook
 docker-compose start postgres
 ./target/release/api-server > /tmp/zkalipay_api.log 2>&1 &
-cd ../frontend
+cd /path/to/zkAliPay/frontend
 PORT=3002 npm run dev > /tmp/zkalipay_frontend.log 2>&1 &
 ```
 
@@ -490,7 +490,7 @@ PORT=3002 npm run dev > /tmp/zkalipay_frontend.log 2>&1 &
 ```bash
 # Stop everything
 pkill -f api-server && pkill -f "npm run dev"
-cd /Users/yinuo/Desktop/zkAliPay/orderbook
+cd /path/to/zkAliPay/orderbook
 docker-compose down -v
 
 # Start fresh (follow Step 1-3 above)
