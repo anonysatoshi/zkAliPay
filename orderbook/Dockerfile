@@ -12,8 +12,8 @@ COPY openvm-binaries ./openvm-binaries
 COPY .sqlx ./.sqlx
 
 # Build with release profile (--locked ensures Cargo.lock is respected)
-# Use offline mode for SQLx to use prepared query cache instead of live DB
-ENV SQLX_OFFLINE=true
+# Skip compile-time verification - SQLx will use runtime verification
+ENV SQLX_OFFLINE=false
 RUN cargo build --release --locked --bin api-server
 
 # Runtime stage - smaller image
