@@ -21,7 +21,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .unwrap_or_else(|_| "postgres://zkalipay:zkalipay_dev_password@localhost:5432/zkalipay_orderbook".to_string());
     
     let host = env::var("API_HOST").unwrap_or_else(|_| "0.0.0.0".to_string());
-    let port = env::var("API_PORT").unwrap_or_else(|_| "3000".to_string());
+    // Railway provides PORT, but we also support API_PORT for local development
+    let port = env::var("PORT")
+        .or_else(|_| env::var("API_PORT"))
+        .unwrap_or_else(|_| "3000".to_string());
     let addr = format!("{}:{}", host, port);
 
     tracing::info!("Starting zkAliPay Order Book API Server");
