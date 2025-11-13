@@ -10,8 +10,8 @@ COPY abi ./abi
 COPY migrations ./migrations
 COPY openvm-binaries ./openvm-binaries
 
-# Build with release profile
-RUN cargo build --release --bin api-server
+# Build with release profile (--locked ensures Cargo.lock is respected)
+RUN cargo build --release --locked --bin api-server
 
 # Runtime stage - smaller image
 FROM debian:bookworm-slim
