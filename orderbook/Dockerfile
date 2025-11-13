@@ -27,8 +27,9 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Copy the built binary
+# Copy the built binary to multiple locations for Railway compatibility
 COPY --from=builder /app/target/release/api-server /app/api-server
+COPY --from=builder /app/target/release/api-server /usr/local/bin/api-server
 COPY --from=builder /app/openvm-binaries /app/openvm-binaries
 
 # Set environment
