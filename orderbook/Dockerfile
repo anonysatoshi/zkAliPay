@@ -11,8 +11,8 @@ COPY migrations ./migrations
 COPY .sqlx ./.sqlx
 
 # Build with release profile (--locked ensures Cargo.lock is respected)
-# Skip compile-time verification - SQLx will use runtime verification
-ENV SQLX_OFFLINE=false
+# Use SQLx offline mode with cached query data
+ENV SQLX_OFFLINE=true
 RUN cargo build --release --locked --bin api-server
 
 # Runtime stage - smaller image
