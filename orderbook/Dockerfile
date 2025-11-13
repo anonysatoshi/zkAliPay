@@ -1,5 +1,5 @@
-# Use Rust nightly with all needed tools
-FROM rust:1.81.0 as builder
+# Use Rust 1.84.0 with edition2024 support
+FROM rust:1.84.0 as builder
 
 WORKDIR /app
 
