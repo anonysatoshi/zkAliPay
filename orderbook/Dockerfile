@@ -9,8 +9,11 @@ COPY src ./src
 COPY abi ./abi
 COPY migrations ./migrations
 COPY openvm-binaries ./openvm-binaries
+COPY .sqlx ./.sqlx
 
 # Build with release profile (--locked ensures Cargo.lock is respected)
+# Use offline mode for SQLx to use prepared query cache instead of live DB
+ENV SQLX_OFFLINE=true
 RUN cargo build --release --locked --bin api-server
 
 # Runtime stage - smaller image
