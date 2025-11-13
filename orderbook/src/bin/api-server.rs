@@ -45,18 +45,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         
         // Hardcoded Base Sepolia configuration
         let rpc_url = "https://sepolia.base.org";
-        let usdc_addr = "0xd4B280FFB336e2061cB39347Bd599cB88FF1617A"; // MockUSDC on Base Sepolia
         let chain_id: u64 = 84532; // Base Sepolia Chain ID
         
-        // Parse addresses
+        // Parse escrow address
         let escrow_address: ethers::types::Address = escrow_addr.parse()?;
-        let usdc_address: ethers::types::Address = usdc_addr.parse()?;
         
         match EthereumClient::new(
             &rpc_url,
             &relayer_key,
             escrow_address,
-            usdc_address,
             chain_id,
         ).await {
             Ok(eth_client) => {

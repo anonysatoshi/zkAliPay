@@ -30,7 +30,6 @@ impl EthereumClient {
         rpc_url: &str,
         private_key: &str,
         escrow_address: Address,
-        _usdc_address: Address,  // Reserved for future use
         chain_id: u64,
     ) -> Result<Self, EthereumClientError> {
         // Create provider

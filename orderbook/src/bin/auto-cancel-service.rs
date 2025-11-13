@@ -34,12 +34,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let rpc_url = "https://sepolia.base.org";
     let chain_id: u64 = 84532; // Base Sepolia Chain ID
 
-    // Parse addresses
+    // Parse escrow address
     let escrow_address: ethers::types::Address = escrow_address.parse()
         .expect("Invalid ESCROW_CONTRACT_ADDRESS");
-    
-    // USDC address is not used by auto-cancel service, pass dummy address
-    let dummy_address: ethers::types::Address = "0x0000000000000000000000000000000000000000".parse().unwrap();
 
     // Initialize database
     info!("📊 Connecting to database...");
@@ -53,7 +50,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             &rpc_url,
             &relayer_private_key,
             escrow_address,
-            dummy_address,  // Not used by auto-cancel service
             chain_id,
         )
         .await?
