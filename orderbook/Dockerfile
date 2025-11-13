@@ -8,7 +8,6 @@ COPY Cargo.toml Cargo.lock ./
 COPY src ./src
 COPY abi ./abi
 COPY migrations ./migrations
-COPY openvm-binaries ./openvm-binaries
 COPY .sqlx ./.sqlx
 
 # Build with release profile (--locked ensures Cargo.lock is respected)
@@ -30,7 +29,6 @@ WORKDIR /app
 # Copy the built binary to multiple locations for Railway compatibility
 COPY --from=builder /app/target/release/api-server /app/api-server
 COPY --from=builder /app/target/release/api-server /usr/local/bin/api-server
-COPY --from=builder /app/openvm-binaries /app/openvm-binaries
 
 # Copy startup script
 COPY start.sh /app/start.sh
