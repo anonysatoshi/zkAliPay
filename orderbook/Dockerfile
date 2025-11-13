@@ -13,7 +13,7 @@ COPY .sqlx ./.sqlx
 # Build with release profile (--locked ensures Cargo.lock is respected)
 # Use SQLx offline mode with cached query data
 ENV SQLX_OFFLINE=true
-RUN cargo build --release --locked --bin api-server
+RUN cargo build --release --locked --bin api-server --bin auto-cancel-service
 
 # Runtime stage - smaller image
 FROM debian:bookworm-slim
@@ -29,6 +29,8 @@ WORKDIR /app
 # Copy the built binary to multiple locations for Railway compatibility
 COPY --from=builder /app/target/release/api-server /app/api-server
 COPY --from=builder /app/target/release/api-server /usr/local/bin/api-server
+COPY --from=builder /app/target/release/auto-cancel-service /app/auto-cancel-service
+COPY --from=builder /app/target/release/auto-cancel-service /usr/local/bin/auto-cancel-service
 
 # Copy startup script
 COPY start.sh /app/start.sh
