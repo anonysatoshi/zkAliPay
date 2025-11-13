@@ -49,7 +49,7 @@ impl PostgresOrderRepository {
                 "syncedAt" as "synced_at!"
             FROM orders
             WHERE "remainingAmount" > 0
-            ORDER BY "exchangeRate" ASC, "createdAt" ASC
+            ORDER BY CAST("exchangeRate" AS NUMERIC) ASC, "createdAt" ASC
             LIMIT $1
             "#,
             limit
@@ -83,7 +83,7 @@ impl PostgresOrderRepository {
             FROM orders
             WHERE "remainingAmount" > 0
             AND LOWER(token) = $1
-            ORDER BY "exchangeRate" ASC, "createdAt" ASC
+            ORDER BY CAST("exchangeRate" AS NUMERIC) ASC, "createdAt" ASC
             LIMIT $2
             "#
         )
