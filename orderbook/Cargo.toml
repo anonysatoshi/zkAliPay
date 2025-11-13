@@ -60,6 +60,5 @@ rand = "0.8"
 name = "api-server"
 path = "src/bin/api-server.rs"
 
-# Patch problematic dependency that requires edition2024
 [patch.crates-io]
-base64ct = { version = "=1.6.0" }
+base64ct = { git = "https://github.com/RustCrypto/formats.git", tag = "base64ct-v1.6.0" }
