@@ -24,20 +24,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let database_url = env::var("DATABASE_URL")
         .expect("DATABASE_URL must be set");
     
-    // Support both modern (RPC_URL) and legacy (SEPOLIA_RPC_URL) env var names
-    let rpc_url = env::var("RPC_URL")
-        .or_else(|_| env::var("SEPOLIA_RPC_URL"))
-        .expect("RPC_URL must be set");
-    
     let escrow_address = env::var("ESCROW_CONTRACT_ADDRESS")
         .expect("ESCROW_CONTRACT_ADDRESS must be set");
     
-    // MOCK_USDC_ADDRESS is legacy - not actually needed by auto-cancel service
-    // but keep for backwards compatibility
-    let _usdc_address = env::var("MOCK_USDC_ADDRESS").ok();
-    
     let relayer_private_key = env::var("RELAYER_PRIVATE_KEY")
         .expect("RELAYER_PRIVATE_KEY must be set");
+
+    // Hardcoded Base Sepolia configuration
+    let rpc_url = "https://sepolia.base.org";
+    let chain_id: u64 = 84532; // Base Sepolia Chain ID
 
     // Parse addresses
     let escrow_address: ethers::types::Address = escrow_address.parse()
@@ -53,9 +48,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Initialize blockchain client
     info!("⛓️  Connecting to blockchain...");
-    let chain_id: u64 = env::var("CHAIN_ID")
-        .unwrap_or_else(|_| "84532".to_string())  // Default to Base Sepolia
-        .parse()?;
     let blockchain_client = Arc::new(
         EthereumClient::new(
             &rpc_url,

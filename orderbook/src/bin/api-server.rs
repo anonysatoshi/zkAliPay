@@ -37,17 +37,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing::info!("Application state initialized successfully");
 
     // Initialize blockchain client if environment variables are set
-    if let (Ok(rpc_url), Ok(escrow_addr), Ok(relayer_key)) = (
-        env::var("SEPOLIA_RPC_URL"),
+    if let (Ok(escrow_addr), Ok(relayer_key)) = (
         env::var("ESCROW_CONTRACT_ADDRESS"),
         env::var("RELAYER_PRIVATE_KEY"),
     ) {
         tracing::info!("Blockchain environment variables detected, initializing Ethereum client...");
         
-        let usdc_addr = env::var("MOCK_USDC_ADDRESS")?;
-        let chain_id: u64 = env::var("CHAIN_ID")
-            .unwrap_or_else(|_| "11155111".to_string())
-            .parse()?;
+        // Hardcoded Base Sepolia configuration
+        let rpc_url = "https://sepolia.base.org";
+        let usdc_addr = "0xd4B280FFB336e2061cB39347Bd599cB88FF1617A"; // MockUSDC on Base Sepolia
+        let chain_id: u64 = 84532; // Base Sepolia Chain ID
         
         // Parse addresses
         let escrow_address: ethers::types::Address = escrow_addr.parse()?;
@@ -96,7 +95,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     } else {
         tracing::info!("⚠️  Blockchain integration DISABLED (environment variables not set)");
-        tracing::info!("   Set SEPOLIA_RPC_URL, ESCROW_CONTRACT_ADDRESS, and RELAYER_PRIVATE_KEY to enable");
+        tracing::info!("   Set ESCROW_CONTRACT_ADDRESS and RELAYER_PRIVATE_KEY to enable");
     }
 
     // Create router
