@@ -32,12 +32,16 @@ COPY --from=builder /app/target/release/api-server /app/api-server
 COPY --from=builder /app/target/release/api-server /usr/local/bin/api-server
 COPY --from=builder /app/openvm-binaries /app/openvm-binaries
 
+# Copy startup script
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
 # Set environment
 ENV RUST_LOG=info
 
 # Expose port
 EXPOSE 3000
 
-# Run the binary
-CMD ["/app/api-server"]
+# Run the binary via startup script
+CMD ["/app/start.sh"]
 
