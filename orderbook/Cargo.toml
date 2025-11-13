@@ -59,6 +59,3 @@ rand = "0.8"
 [[bin]]
 name = "api-server"
 path = "src/bin/api-server.rs"
-
-[patch.crates-io]
-base64ct = { git = "https://github.com/RustCrypto/formats.git", tag = "base64ct/v1.6.0" }
