@@ -45,11 +45,14 @@ hex = "0.4"
 # Axiom API client
 reqwest = { version = "0.11", features = ["json"] }
 
-# PDF validation
-sha2 = "0.10"
-tempfile = "3.8"
-base64 = "0.21"
+# OpenVM serialization (for Axiom input streams)
 openvm = { git = "https://github.com/openvm-org/openvm.git", tag = "v1.4.1" }
+
+# Hashing (for local expected hash computation)
+sha2 = "0.10"
+
+# Temporary files (for testing)
+tempfile = "3.8"
 
 [dev-dependencies]
 # Testing
@@ -59,3 +62,7 @@ rand = "0.8"
 [[bin]]
 name = "api-server"
 path = "src/bin/api-server.rs"
+
+[[bin]]
+name = "test-local-openvm"
+path = "test_local_openvm.rs"

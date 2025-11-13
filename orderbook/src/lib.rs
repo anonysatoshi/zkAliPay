@@ -1,7 +1,6 @@
 pub mod db;
 pub mod api;
 pub mod blockchain;
-pub mod pdf_validation;
 pub mod axiom_prover;
 
 pub use db::{Database, DbError, DbResult};

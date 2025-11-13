@@ -24,14 +24,66 @@ impl AxiomProver {
         }
     }
     
+    /// Execute program (fast validation mode) - returns output hash only
+    pub async fn execute_program(&self, trade_id: &str, input_streams: Vec<String>) -> Result<Vec<u8>> {
+        tracing::info!("⚡ [{}] Starting Axiom program execution (validation mode)", trade_id);
+        tracing::info!("📋 [{}] Input streams count: {}", trade_id, input_streams.len());
+        
+        // Step 1: Submit execution request
+        let execution_id = self.submit_execution_request(input_streams).await?;
+        tracing::info!("📤 [{}] Execution request submitted, execution_id: {}", trade_id, execution_id);
+        
+        // Step 2: Poll for completion
+        self.poll_execution_status(&execution_id).await?;
+        tracing::info!("✅ [{}] Execution completed: {}", trade_id, execution_id);
+        
+        // Step 3: Get execution result
+        let result = self.get_execution_result(&execution_id).await?;
+        
+        // Log the full response for debugging
+        tracing::debug!("📊 [{}] Full execution result: {}", trade_id, serde_json::to_string_pretty(&result).unwrap_or_else(|_| "Failed to serialize".to_string()));
+        
+        // Step 4: Extract public_values (32 bytes)
+        // Check if public_values is null (execution failed or no output)
+        if result["public_values"].is_null() {
+            let error_msg = result["error_message"]
+                .as_str()
+                .unwrap_or("No error message provided");
+            let status = result["status"]
+                .as_str()
+                .unwrap_or("Unknown");
+            return Err(anyhow!("Execution failed with status '{}': {}", status, error_msg));
+        }
+        
+        // public_values can be either a hex string or an array of numbers
+        let public_values = if let Some(hex_str) = result["public_values"].as_str() {
+            // It's a hex string
+            hex::decode(hex_str.trim_start_matches("0x"))?
+        } else if let Some(array) = result["public_values"].as_array() {
+            // It's an array of numbers (bytes)
+            array.iter()
+                .map(|v| v.as_u64().ok_or_else(|| anyhow!("Invalid byte value in public_values array")))
+                .collect::<Result<Vec<_>, _>>()?
+                .into_iter()
+                .map(|v| v as u8)
+                .collect()
+        } else {
+            return Err(anyhow!("public_values is neither a string nor an array. Value: {:?}", result["public_values"]));
+        };
+        
+        if public_values.len() != 32 {
+            return Err(anyhow!("Invalid public_values size: expected 32 bytes, got {}", public_values.len()));
+        }
+        
+        tracing::info!("📥 [{}] Execution result: {} bytes", trade_id, public_values.len());
+        
+        Ok(public_values)
+    }
+    
     /// Generate EVM proof - orchestrates the full flow
     pub async fn generate_evm_proof(&self, trade_id: &str, input_streams: Vec<String>) -> Result<GeneratedProof> {
         tracing::info!("🚀 [{}] Starting Axiom EVM proof generation", trade_id);
-        
-        // Validate input (44 streams for 4-line PDF verification)
-        if input_streams.len() != 44 {
-            return Err(anyhow!("Expected 44 input streams, got {}", input_streams.len()));
-        }
+        tracing::info!("📋 [{}] Input streams count: {}", trade_id, input_streams.len());
         
         // Step 1: Submit proof request
         let proof_id = self.submit_proof_request(input_streams).await?;
@@ -265,4 +317,127 @@ fn parse_evm_proof(proof_id: String, evm_proof: EvmProof) -> Result<GeneratedPro
         app_vm_commit,
         full_json,
     })
+}
+
+// ============================================================================
+// Execution API Methods (for fast validation)
+// ============================================================================
+
+impl AxiomProver {
+    /// Submit an execution request to Axiom (fast validation mode)
+    async fn submit_execution_request(&self, input_streams: Vec<String>) -> Result<String> {
+        let request_body = serde_json::json!({
+            "input": input_streams,
+        });
+        
+        let response = self.client
+            .post(format!("{}/v1/executions", AXIOM_API_BASE))
+            .query(&[
+                ("program_id", self.program_id.as_str()),
+                ("mode", "pure"),  // pure mode = only public values
+            ])
+            .header("Axiom-API-Key", &self.api_key)
+            .header("Content-Type", "application/json")
+            .json(&request_body)
+            .send()
+            .await?;
+        
+        if !response.status().is_success() {
+            let status = response.status();
+            let error_text = response.text().await?;
+            return Err(anyhow!("Failed to submit execution request ({}): {}", status, error_text));
+        }
+        
+        let response_text = response.text().await?;
+        tracing::debug!("Axiom Execution API response: {}", response_text);
+        
+        let submit_response: serde_json::Value = serde_json::from_str(&response_text)
+            .map_err(|e| anyhow!("Failed to parse Axiom response: {}. Response: {}", e, response_text))?;
+        
+        let execution_id = submit_response["id"]
+            .as_str()
+            .ok_or_else(|| anyhow!("Missing 'id' field in execution response"))?;
+        
+        Ok(execution_id.to_string())
+    }
+    
+    /// Poll execution status until completion or timeout
+    async fn poll_execution_status(&self, execution_id: &str) -> Result<()> {
+        let max_attempts = 60; // 60 attempts * 10 seconds = 10 minutes max
+        let mut attempt = 0;
+        let mut delay_secs = 10;
+        
+        loop {
+            attempt += 1;
+            if attempt > max_attempts {
+                return Err(anyhow!("Execution timed out after {} attempts", max_attempts));
+            }
+            
+            let response = self.client
+                .get(format!("{}/v1/executions/{}", AXIOM_API_BASE, execution_id))
+                .header("Axiom-API-Key", &self.api_key)
+                .send()
+                .await?;
+            
+            if !response.status().is_success() {
+                let status = response.status();
+                let error_text = response.text().await?;
+                return Err(anyhow!("Failed to poll execution status ({}): {}", status, error_text));
+            }
+            
+            let response_text = response.text().await?;
+            let status_response: serde_json::Value = serde_json::from_str(&response_text)
+                .map_err(|e| anyhow!("Failed to parse execution status: {}. Response: {}", e, response_text))?;
+            
+            // Axiom uses "status" field, not "state"
+            let status = status_response["status"].as_str().unwrap_or("Unknown");
+            
+            // Log full response for debugging
+            tracing::debug!("📊 Execution status response (attempt {}): {}", attempt, response_text);
+            
+            match status {
+                "Succeeded" => {
+                    tracing::info!("✅ Execution completed after {} attempts", attempt);
+                    return Ok(());
+                }
+                "Failed" => {
+                    let error_msg = status_response["error_message"]
+                        .as_str()
+                        .unwrap_or("Unknown error");
+                    return Err(anyhow!("Execution failed: {}", error_msg));
+                }
+                // In-progress states
+                "Queued" | "Executing" | "Executed" | "Running" | "Pending" => {
+                    tracing::info!("⏳ Execution status: {} (attempt {}/{})", status, attempt, max_attempts);
+                    sleep(Duration::from_secs(delay_secs)).await;
+                    
+                    // Exponential backoff (cap at 30 seconds)
+                    if delay_secs < 30 {
+                        delay_secs = (delay_secs * 3 / 2).min(30);
+                    }
+                }
+                _ => {
+                    tracing::warn!("⚠️  Unknown execution status: {} - Full response: {}", status, response_text);
+                    sleep(Duration::from_secs(delay_secs)).await;
+                }
+            }
+        }
+    }
+    
+    /// Get execution result (includes public_values)
+    async fn get_execution_result(&self, execution_id: &str) -> Result<serde_json::Value> {
+        let response = self.client
+            .get(format!("{}/v1/executions/{}", AXIOM_API_BASE, execution_id))
+            .header("Axiom-API-Key", &self.api_key)
+            .send()
+            .await?;
+        
+        if !response.status().is_success() {
+            let status = response.status();
+            let error_text = response.text().await?;
+            return Err(anyhow!("Failed to get execution result ({}): {}", status, error_text));
+        }
+        
+        Ok(response.json().await?)
+    }
 }

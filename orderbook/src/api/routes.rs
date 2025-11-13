@@ -34,10 +34,10 @@ pub fn create_router(state: AppState) -> Router {
         // PDF endpoints
         .route("/api/trades/:trade_id/pdf", post(handlers::upload_pdf_handler))
         .route("/api/trades/:trade_id/pdf", get(handlers::get_pdf_handler))
-        .route("/api/validate-pdf", post(handlers::validate_pdf_handler))
         
         // Proof endpoints
         .route("/api/trades/:trade_id/proof", get(handlers::get_proof_handler))
+        .route("/api/validate-pdf-axiom", post(handlers::validate_pdf_axiom_handler))
         .route("/api/generate-proof", post(handlers::generate_proof_handler))
         .route("/api/submit-blockchain-proof", post(handlers::submit_blockchain_proof_handler))
         

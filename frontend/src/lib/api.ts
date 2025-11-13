@@ -155,23 +155,16 @@ export const api = {
     return `${API_BASE}/api/trades/${tradeId}/pdf`;
   },
 
-  // Validate PDF before proof generation
-  // If pdfBase64 is not provided, the backend will read the PDF from the database
-  async validatePdf(tradeId: string, pdfBase64?: string): Promise<{
+  // Validate PDF using Axiom Execute Mode (fast validation)
+  async validatePdfAxiom(tradeId: string): Promise<{
     is_valid: boolean;
     expected_hash: string;
     actual_hash: string;
     details: string;
   }> {
-    const payload: { trade_id: string; pdf_base64?: string } = {
+    const response = await axios.post(`${API_BASE}/api/validate-pdf-axiom`, {
       trade_id: tradeId,
-    };
-    
-    if (pdfBase64) {
-      payload.pdf_base64 = pdfBase64;
-    }
-    
-    const response = await axios.post(`${API_BASE}/api/validate-pdf`, payload);
+    });
     return response.data;
   },
 

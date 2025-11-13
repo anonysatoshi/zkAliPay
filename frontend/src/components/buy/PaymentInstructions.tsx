@@ -152,12 +152,28 @@ export function PaymentInstructions({ trades, onAllSettled }: PaymentInstruction
         return updated;
       });
 
-      // Step 2: Validate PDF using OpenVM
-      console.log('Starting PDF validation...');
+      // Step 2: Validate PDF using Axiom Execute Mode (remote validation)
+      console.log('⚡ Starting PDF validation via Axiom execute mode...');
+      
+      setTradeStatuses((prev) => {
+        const updated = new Map(prev);
+        updated.set(tradeId, {
+          ...prev.get(tradeId)!,
+          status: 'validating',
+          uploadedFilename: file.name,
+        });
+        return updated;
+      });
       
       // Note: PDF is already saved in database from Step 1
-      // Backend will read it from there, no need to send it again
-      const validationResponse = await api.validatePdf(tradeId);
+      // Backend will:
+      //   1. Compute expected hash locally (fast)
+      //   2. Generate 46 input streams
+      //   3. Cache input streams for reuse in proof generation
+      //   4. Send to Axiom API in execute mode (fast validation)
+      //   5. Get actual output hash from Axiom
+      //   6. Compare hashes
+      const validationResponse = await api.validatePdfAxiom(tradeId);
       console.log('Validation result:', validationResponse);
       
       if (validationResponse.is_valid) {
@@ -176,13 +192,12 @@ export function PaymentInstructions({ trades, onAllSettled }: PaymentInstruction
         });
         
         // ============================================================================
-        // ⚠️ AXIOM API TEMPORARILY DISABLED FOR CODEBASE CLEANUP
-        // TODO: Uncomment the code below after Base migration is complete
+        // Step 3 & 4: Proof Generation & Blockchain Submission (COMMENTED FOR NOW)
+        // TODO: Uncomment after Step 2 validation is tested and working
         // ============================================================================
         
-        /* COMMENTED OUT FOR CLEANUP - RESTORE AFTER BASE MIGRATION
+        /* COMMENTED OUT - TESTING STEP 2 ONLY
         
-        // Step 3: Generate Axiom proof (this takes time - up to 20 minutes)
         console.log('Starting Axiom proof generation...');
         
         setTradeStatuses((prev) => {
@@ -280,8 +295,8 @@ export function PaymentInstructions({ trades, onAllSettled }: PaymentInstruction
         
         END OF COMMENTED CODE */
         
-        // Temporary: Just mark as complete for testing
-        console.log('⚠️ Axiom API temporarily disabled - skipping proof generation');
+        // Temporary: Just show validation success for testing Step 2
+        console.log('✅ Step 2 validation complete - Steps 3 & 4 are commented out for testing');
         
       } else {
         // PDF is invalid - show error

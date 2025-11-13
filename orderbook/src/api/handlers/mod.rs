@@ -19,12 +19,12 @@ pub use admin::{
     get_config_handler, pause_contract_handler, unpause_contract_handler, update_config_handler,
     update_verifier_handler, update_zkpdf_config_handler,
 };
-pub use buyer::{execute_fill_handler, get_trade_handler, get_trades_by_buyer_handler, submit_proof_handler, validate_pdf_handler, submit_blockchain_proof_handler};
+pub use buyer::{execute_fill_handler, get_trade_handler, get_trades_by_buyer_handler, submit_proof_handler, submit_blockchain_proof_handler};
 pub use debug::get_database_dump;
 pub use orders::{get_active_orders, get_order, match_buy_intent_handler};
 pub use pdf::{upload_pdf_handler, get_pdf_handler};
 pub use proof::get_proof_handler;
-pub use generate_proof::generate_proof_handler;
+pub use generate_proof::{generate_proof_handler, validate_pdf_axiom_handler};
 
 /// Health check endpoint
 pub async fn health_check(State(state): State<AppState>) -> ApiResult<Json<HealthResponse>> {

@@ -66,19 +66,20 @@ impl PostgresOrderRepository {
         let limit = limit.unwrap_or(100);
         let token_lower = token_address.to_lowercase();
         
-        let orders = sqlx::query_as::<_, DbOrder>(
+        // Use runtime query validation (no compile-time verification)
+        let rows = sqlx::query(
             r#"
             SELECT 
-                "orderId" as "order_id",
-                seller as "seller",
-                token as "token",
-                "totalAmount"::TEXT as "total_amount",
-                "remainingAmount"::TEXT as "remaining_amount",
-                "exchangeRate"::TEXT as "exchange_rate",
-                "alipayId" as "alipay_id",
-                "alipayName" as "alipay_name",
-                "createdAt" as "created_at",
-                "syncedAt" as "synced_at"
+                "orderId",
+                seller,
+                token,
+                "totalAmount"::TEXT,
+                "remainingAmount"::TEXT,
+                "exchangeRate"::TEXT,
+                "alipayId",
+                "alipayName",
+                "createdAt",
+                "syncedAt"
             FROM orders
             WHERE "remainingAmount" > 0
             AND LOWER(token) = $1
@@ -90,6 +91,26 @@ impl PostgresOrderRepository {
         .bind(limit)
         .fetch_all(&self.pool)
         .await?;
+        
+        // Manually map to DbOrder structs
+        let orders: Vec<DbOrder> = rows
+            .into_iter()
+            .map(|row| {
+                use sqlx::Row;
+                DbOrder {
+                    order_id: row.get("orderId"),
+                    seller: row.get("seller"),
+                    token: row.get("token"),
+                    total_amount: row.get::<Option<String>, _>("totalAmount").unwrap_or_default(),
+                    remaining_amount: row.get::<Option<String>, _>("remainingAmount").unwrap_or_default(),
+                    exchange_rate: row.get::<Option<String>, _>("exchangeRate").unwrap_or_default(),
+                    alipay_id: row.get("alipayId"),
+                    alipay_name: row.get("alipayName"),
+                    created_at: row.get("createdAt"),
+                    synced_at: row.get("syncedAt"),
+                }
+            })
+            .collect();
         
         Ok(orders)
     }
