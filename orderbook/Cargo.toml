@@ -59,3 +59,7 @@ rand = "0.8"
 [[bin]]
 name = "api-server"
 path = "src/bin/api-server.rs"
+
+# Patch problematic dependency that requires edition2024
+[patch.crates-io]
+base64ct = { version = "=1.6.0" }
