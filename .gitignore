@@ -69,3 +69,8 @@ env/
 # Turbo
 .turbo
 
+
+# Internal documentation (keep local only)
+START_GUIDE.md
+DEPLOYMENT_INFO.txt
+DEPLOYMENT_WALKTHROUGH.md
