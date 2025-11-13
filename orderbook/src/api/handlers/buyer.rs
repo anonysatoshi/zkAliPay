@@ -374,7 +374,7 @@ pub async fn get_trades_by_buyer_handler(
     tracing::info!("Fetching trades for buyer: {}", buyer_addr);
     
     // Query trades table with JOIN to get token from orders
-    let trades = sqlx::query!(
+    let trades = sqlx::query(
         r#"
         SELECT 
             t."tradeId",
@@ -403,9 +403,9 @@ pub async fn get_trades_by_buyer_handler(
         INNER JOIN orders o ON t."orderId" = o."orderId"
         WHERE LOWER(REPLACE(t.buyer, '0x', '')) = $1
         ORDER BY t."createdAt" DESC
-        "#,
-        buyer_addr
+        "#
     )
+    .bind(&buyer_addr)
     .fetch_all(state.db.pool())
     .await
     .map_err(|e| ApiError::Database(e.to_string()))?;
@@ -413,29 +413,32 @@ pub async fn get_trades_by_buyer_handler(
     // Map to DbTrade structs
     let db_trades: Vec<crate::db::models::DbTrade> = trades
         .into_iter()
-        .map(|row| crate::db::models::DbTrade {
-            trade_id: row.tradeId,
-            order_id: row.orderId,
-            buyer: row.buyer,
-            token_amount: row.tokenAmount.unwrap_or_default(),
-            cny_amount: row.cnyAmount.unwrap_or_default(),
-            payment_nonce: row.paymentNonce,
-            created_at: row.createdAt,
-            expires_at: row.expiresAt,
-            status: row.status,
-            escrow_tx_hash: row.escrowTxHash,
-            settlement_tx_hash: row.settlementTxHash,
-            synced_at: row.syncedAt,
-            pdf_file: row.pdf_file,
-            pdf_filename: row.pdf_filename,
-            pdf_uploaded_at: row.pdf_uploaded_at,
-            proof_user_public_values: row.proof_user_public_values,
-            proof_accumulator: row.proof_accumulator,
-            proof_data: row.proof_data,
-            axiom_proof_id: row.axiom_proof_id,
-            proof_generated_at: row.proof_generated_at,
-            proof_json: row.proof_json,
-            token: Some(row.token),
+        .map(|row| {
+            use sqlx::Row;
+            crate::db::models::DbTrade {
+                trade_id: row.get("tradeId"),
+                order_id: row.get("orderId"),
+                buyer: row.get("buyer"),
+                token_amount: row.get("tokenAmount"),
+                cny_amount: row.get("cnyAmount"),
+                payment_nonce: row.get("paymentNonce"),
+                created_at: row.get("createdAt"),
+                expires_at: row.get("expiresAt"),
+                status: row.get("status"),
+                escrow_tx_hash: row.get("escrowTxHash"),
+                settlement_tx_hash: row.get("settlementTxHash"),
+                synced_at: row.get("syncedAt"),
+                pdf_file: row.get("pdf_file"),
+                pdf_filename: row.get("pdf_filename"),
+                pdf_uploaded_at: row.get("pdf_uploaded_at"),
+                proof_user_public_values: row.get("proof_user_public_values"),
+                proof_accumulator: row.get("proof_accumulator"),
+                proof_data: row.get("proof_data"),
+                axiom_proof_id: row.get("axiom_proof_id"),
+                proof_generated_at: row.get("proof_generated_at"),
+                proof_json: row.get("proof_json"),
+                token: Some(row.get("token")),
+            }
         })
         .collect();
     

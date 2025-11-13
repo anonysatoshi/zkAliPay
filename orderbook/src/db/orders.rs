@@ -66,29 +66,28 @@ impl PostgresOrderRepository {
         let limit = limit.unwrap_or(100);
         let token_lower = token_address.to_lowercase();
         
-        let orders = sqlx::query_as!(
-            DbOrder,
+        let orders = sqlx::query_as::<_, DbOrder>(
             r#"
             SELECT 
-                "orderId" as "order_id!",
-                seller as "seller!",
-                token as "token!",
-                "totalAmount"::TEXT as "total_amount!",
-                "remainingAmount"::TEXT as "remaining_amount!",
-                "exchangeRate"::TEXT as "exchange_rate!",
-                "alipayId" as "alipay_id!",
-                "alipayName" as "alipay_name!",
-                "createdAt" as "created_at!",
-                "syncedAt" as "synced_at!"
+                "orderId" as "order_id",
+                seller as "seller",
+                token as "token",
+                "totalAmount"::TEXT as "total_amount",
+                "remainingAmount"::TEXT as "remaining_amount",
+                "exchangeRate"::TEXT as "exchange_rate",
+                "alipayId" as "alipay_id",
+                "alipayName" as "alipay_name",
+                "createdAt" as "created_at",
+                "syncedAt" as "synced_at"
             FROM orders
             WHERE "remainingAmount" > 0
             AND LOWER(token) = $1
             ORDER BY "exchangeRate" ASC, "createdAt" ASC
             LIMIT $2
-            "#,
-            token_lower,
-            limit
+            "#
         )
+        .bind(&token_lower)
+        .bind(limit)
         .fetch_all(&self.pool)
         .await?;
         
