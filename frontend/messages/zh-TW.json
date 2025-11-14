@@ -131,6 +131,92 @@
     "tabs": {
       "create": "創建訂單",
       "manage": "我的訂單"
+    },
+    "createOrder": {
+      "title": "創建出售訂單",
+      "subtitle": "鎖定您的代幣並設定匯率以開始賺取收益",
+      "workflow": {
+        "title": "運作原理：",
+        "description": "鎖定您的加密貨幣在託管中，買家通過支付寶付款給您，提交零知識證明，並自動接收加密貨幣。您的資金受智能合約保護。"
+      },
+      "connectWallet": {
+        "title": "連接您的錢包",
+        "subtitle": "請連接您的錢包以創建出售訂單",
+        "prompt": "點擊右上角的 <strong>連接錢包</strong> 按鈕開始"
+      },
+      "section1": {
+        "title": "您要出售什麼？",
+        "selectToken": "選擇代幣",
+        "amount": "數量",
+        "balance": "餘額："
+      },
+      "section2": {
+        "title": "您的匯率",
+        "exchangeRate": "匯率（每 {symbol} 的人民幣）",
+        "youWillReceive": "您將收到：",
+        "cny": "人民幣"
+      },
+      "section3": {
+        "title": "您的支付寶詳情",
+        "alipayId": "您的支付寶 ID",
+        "alipayIdPlaceholder": "11位手機號碼",
+        "alipayIdWarning": "<strong>⚠️ 重要：</strong>目前測試版僅支持中國大陸手機號碼的支付寶 ID。",
+        "alipayIdNote": "買家將向此支付寶賬戶發送人民幣。",
+        "alipayName": "您的支付寶姓名",
+        "alipayNameNote": "ℹ️ 必須與您的支付寶賬戶上的姓名匹配"
+      },
+      "steps": {
+        "approving": "<strong>步驟 1/2：</strong>批準 {symbol} 支出...",
+        "creating": "<strong>步驟 2/2：</strong>創建並鎖定訂單...",
+        "transaction": "交易："
+      },
+      "buttons": {
+        "createOrder": "創建訂單",
+        "approving": "批準 {symbol} 中...",
+        "creating": "創建訂單中..."
+      },
+      "note": {
+        "title": "📋 注意：",
+        "description": "您需要確認兩筆交易：",
+        "step1": "批準 {symbol} 支出給託管合約",
+        "step2": "創建並鎖定您的出售訂單"
+      },
+      "success": {
+        "title": "訂單創建成功！",
+        "subtitle": "您的訂單現已在市場上線",
+        "amount": "數量：",
+        "rate": "匯率：",
+        "totalValue": "總價值：",
+        "txHash": "交易哈希：",
+        "viewOnBaseScan": "在 BaseScan 查看",
+        "info": "您的訂單將在交易確認並同步後出現在主頁上。",
+        "infoTime": "這通常需要 10-30 秒。",
+        "viewMyOrders": "查看我的訂單",
+        "createAnother": "創建另一個訂單"
+      }
+    },
+    "myOrders": {
+      "loading": "載入您的訂單中...",
+      "error": "載入訂單失敗。請重試。",
+      "empty": "您還沒有任何訂單。創建一個開始吧！",
+      "activeOrders": "活躍訂單",
+      "completedOrders": "已完成訂單",
+      "orderPrefix": "訂單：",
+      "created": "創建於",
+      "completed": "已完成",
+      "totalLocked": "總鎖定",
+      "remaining": "剩餘",
+      "exchangeRate": "匯率",
+      "estValue": "預估人民幣價值",
+      "withdrawAmount": "提取數量（{symbol}）",
+      "available": "可用：",
+      "withdraw": "提取",
+      "withdrawing": "提取中...",
+      "allFundsWithdrawn": "此訂單的所有資金已被提取或填充。",
+      "withdrawSuccess": "提取成功！",
+      "viewOnExplorer": "在瀏覽器查看",
+      "noActiveOrders": "您沒有活躍訂單。所有訂單均已完成，或您尚未創建任何訂單。",
+      "noCompletedOrders": "您還沒有已完成的訂單。"
     }
   },
   "telegram": {

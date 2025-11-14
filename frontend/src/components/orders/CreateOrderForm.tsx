@@ -13,6 +13,7 @@ import { Loader2, CheckCircle2, AlertCircle, ExternalLink, Coins, TrendingUp, Us
 import { useCreateOrder, CreateOrderParams } from '@/hooks/useCreateOrder';
 import { getTokenInfo, type TokenInfo, SUPPORTED_TOKENS } from '@/lib/tokens';
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 const BASESCAN_URL = 'https://sepolia.basescan.org/tx';
 
@@ -22,6 +23,7 @@ interface CreateOrderFormProps {
 
 export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {}) {
   const { address, isConnected } = useAccount();
+  const t = useTranslations('sell.createOrder');
   
   const [selectedToken, setSelectedToken] = useState<string>(SUPPORTED_TOKENS[0]);
   const [tokenInfo, setTokenInfo] = useState<TokenInfo>(getTokenInfo(SUPPORTED_TOKENS[0]));
@@ -122,16 +124,14 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
           <div className="mx-auto mb-4 w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center">
             <AlertCircle className="h-8 w-8 text-white" />
           </div>
-          <CardTitle className="text-2xl">Connect Your Wallet</CardTitle>
+          <CardTitle className="text-2xl">{t('connectWallet.title')}</CardTitle>
           <CardDescription className="text-base">
-            Please connect your wallet to create a sell order
+            {t('connectWallet.subtitle')}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Alert className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30">
-            <AlertDescription className="text-center">
-              Click the <strong>Connect Wallet</strong> button in the top right corner to get started
-            </AlertDescription>
+            <AlertDescription className="text-center" dangerouslySetInnerHTML={{ __html: t('connectWallet.prompt') }} />
           </Alert>
         </CardContent>
       </Card>
@@ -160,10 +160,10 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
             {/* Success Message */}
             <div>
               <h2 className="text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400">
-                Order Created Successfully!
+                {t('success.title')}
               </h2>
               <p className="text-gray-600 dark:text-gray-400">
-                Your order is now live on the marketplace
+                {t('success.subtitle')}
               </p>
             </div>
 
@@ -171,21 +171,21 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
             <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-2xl p-6 border border-blue-200/50 dark:border-blue-800/50">
               <div className="space-y-3 text-left">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Amount:</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">{t('success.amount')}</span>
                   <span className="font-semibold text-gray-900 dark:text-white">
                     {amount} {tokenInfo.symbol}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Rate:</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">{t('success.rate')}</span>
                   <span className="font-semibold text-gray-900 dark:text-white">
                     ¥{exchangeRate}/{tokenInfo.symbol}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Total Value:</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">{t('success.totalValue')}</span>
                   <span className="font-semibold text-gray-900 dark:text-white">
-                    ¥{calculateCnyAmount()} CNY
+                    ¥{calculateCnyAmount()} {t('success.cny') || 'CNY'}
                   </span>
                 </div>
               </div>
@@ -194,7 +194,7 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
             {/* Transaction Hash */}
             {createHash && (
               <div className="space-y-3">
-                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Transaction Hash:</p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('success.txHash')}</p>
                 <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
                   <p className="text-xs font-mono break-all text-gray-600 dark:text-gray-400">{createHash}</p>
                 </div>
@@ -204,7 +204,7 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
                   onClick={() => window.open(`${BASESCAN_URL}/${createHash}`, '_blank')}
                 >
                   <ExternalLink className="mr-2 h-4 w-4" />
-                  View on BaseScan
+                  {t('success.viewOnBaseScan')}
                 </Button>
               </div>
             )}
@@ -212,9 +212,9 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
             {/* Info Alert */}
             <Alert className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30">
               <AlertDescription className="text-sm text-center">
-                Your order will appear on the homepage once the transaction is confirmed and synced.
+                {t('success.info')}
                 <br />
-                <strong>This usually takes 10-30 seconds.</strong>
+                <strong>{t('success.infoTime')}</strong>
               </AlertDescription>
             </Alert>
 
@@ -225,7 +225,7 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
                 className="flex-1"
                 onClick={() => onSwitchToManage && onSwitchToManage()}
               >
-                View My Orders
+                {t('success.viewMyOrders')}
               </Button>
               <Button
                 className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
@@ -238,7 +238,7 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
                   setOrderParams(null);
                 }}
               >
-                Create Another Order
+                {t('success.createAnother')}
               </Button>
             </div>
           </CardContent>
@@ -250,16 +250,15 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
   return (
     <Card className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-xl">
       <CardHeader>
-        <CardTitle className="text-2xl">Create Sell Order</CardTitle>
+        <CardTitle className="text-2xl">{t('title')}</CardTitle>
         <CardDescription className="text-base">
-          Lock your tokens and set your exchange rate to start earning
+          {t('subtitle')}
         </CardDescription>
         
         {/* Workflow Description */}
         <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-xl border border-blue-200/50 dark:border-blue-800/50">
           <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-            <strong className="text-blue-600 dark:text-blue-400">How it works:</strong> Lock your crypto in escrow, buyers pay you via Alipay, 
-            submit zero-knowledge proof, and receive crypto automatically. Your funds are protected by smart contracts.
+            <strong className="text-blue-600 dark:text-blue-400">{t('workflow.title')}</strong> {t('workflow.description')}
           </p>
         </div>
       </CardHeader>
@@ -280,14 +279,14 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
               <div>
                 <h3 className="font-semibold text-lg flex items-center gap-2">
                   <Coins className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                  What are you selling?
+                  {t('section1.title')}
                 </h3>
               </div>
             </div>
 
             {/* Token Selection */}
             <div className="space-y-2">
-              <Label htmlFor="token">Select Token</Label>
+              <Label htmlFor="token">{t('section1.selectToken')}</Label>
               <Select
                 value={selectedToken}
                 onValueChange={(value) => {
@@ -314,7 +313,7 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
 
             {/* Amount Input */}
             <div className="space-y-2">
-              <Label htmlFor="amount">{tokenInfo.symbol} Amount</Label>
+              <Label htmlFor="amount">{tokenInfo.symbol} {t('section1.amount')}</Label>
               <div className="flex gap-2">
                 <Input
                   id="amount"
@@ -338,7 +337,7 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
               </div>
               {tokenBalance && (
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Balance: <strong>{formatUnits(tokenBalance.value, tokenInfo.decimals)} {tokenInfo.symbol}</strong>
+                  {t('section1.balance')} <strong>{formatUnits(tokenBalance.value, tokenInfo.decimals)} {tokenInfo.symbol}</strong>
                 </p>
               )}
             </div>
@@ -358,13 +357,13 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
               <div>
                 <h3 className="font-semibold text-lg flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                  Your exchange rate
+                  {t('section2.title')}
                 </h3>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="exchangeRate">Exchange Rate (CNY per {tokenInfo.symbol})</Label>
+              <Label htmlFor="exchangeRate">{t('section2.exchangeRate').replace('{symbol}', tokenInfo.symbol)}</Label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-lg font-semibold">¥</span>
                 <Input
@@ -380,9 +379,9 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
               </div>
               {amount && exchangeRate && (
                 <div className="mt-3 p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 rounded-xl border border-green-200/50 dark:border-green-800/50">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">You'll receive:</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('section2.youWillReceive')}</p>
                   <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                    ¥{calculateCnyAmount()} <span className="text-base font-normal">CNY</span>
+                    ¥{calculateCnyAmount()} <span className="text-base font-normal">{t('section2.cny') || 'CNY'}</span>
                   </p>
                 </div>
               )}
@@ -403,35 +402,33 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
               <div>
                 <h3 className="font-semibold text-lg flex items-center gap-2">
                   <User className="h-5 w-5 text-pink-600 dark:text-pink-400" />
-                  Your Alipay details
+                  {t('section3.title')}
                 </h3>
               </div>
             </div>
 
             {/* Alipay ID */}
             <div className="space-y-2">
-              <Label htmlFor="alipayId">Your Alipay ID</Label>
+              <Label htmlFor="alipayId">{t('section3.alipayId')}</Label>
               <Input
                 id="alipayId"
                 type="text"
-                placeholder="11-digit cell number"
+                placeholder={t('section3.alipayIdPlaceholder')}
                 value={alipayId}
                 onChange={(e) => setAlipayId(e.target.value)}
                 disabled={currentStep !== 'idle'}
                 className="h-12"
               />
               <Alert className="border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/30">
-                <AlertDescription className="text-xs">
-                  <strong>⚠️ Important:</strong> Only Chinese mainland cell phone numbered Alipay IDs are supported in this beta release.
-                  <br />
-                  Buyers will send CNY to this Alipay account.
+                <AlertDescription className="text-xs" dangerouslySetInnerHTML={{ __html: t('section3.alipayIdWarning') }}>
                 </AlertDescription>
               </Alert>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('section3.alipayIdNote')}</p>
             </div>
 
             {/* Alipay Name */}
             <div className="space-y-2">
-              <Label htmlFor="alipayName">Your Alipay Name</Label>
+              <Label htmlFor="alipayName">{t('section3.alipayName')}</Label>
               <Input
                 id="alipayName"
                 type="text"
@@ -442,7 +439,7 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
                 className="h-12"
               />
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                ℹ️ Must match the name on your Alipay account
+                {t('section3.alipayNameNote')}
               </p>
             </div>
           </motion.div>
@@ -459,24 +456,14 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
           {currentStep === 'approving' && (
             <Alert className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30">
               <Loader2 className="h-4 w-4 animate-spin" />
-              <AlertDescription>
-                <strong>Step 1/2:</strong> Approving {tokenInfo.symbol} spending...
-                {approveHash && (
-                  <span className="block text-xs mt-1 font-mono">Tx: {approveHash.slice(0, 10)}...</span>
-                )}
-              </AlertDescription>
+              <AlertDescription dangerouslySetInnerHTML={{ __html: t('steps.approving').replace('{symbol}', tokenInfo.symbol) + (approveHash ? `<br/><span class="text-xs mt-1 font-mono block">${t('steps.transaction')} ${approveHash.slice(0, 10)}...</span>` : '') }} />
             </Alert>
           )}
 
           {currentStep === 'creating' && (
             <Alert className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30">
               <Loader2 className="h-4 w-4 animate-spin" />
-              <AlertDescription>
-                <strong>Step 2/2:</strong> Creating and locking order...
-                {createHash && (
-                  <span className="block text-xs mt-1 font-mono">Tx: {createHash.slice(0, 10)}...</span>
-                )}
-              </AlertDescription>
+              <AlertDescription dangerouslySetInnerHTML={{ __html: t('steps.creating') + (createHash ? `<br/><span class="text-xs mt-1 font-mono block">${t('steps.transaction')} ${createHash.slice(0, 10)}...</span>` : '') }} />
             </Alert>
           )}
 
@@ -486,17 +473,17 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
             className="w-full h-14 text-lg bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 shadow-lg hover:shadow-xl transition-all duration-300"
             disabled={!isFormValid() || currentStep !== 'idle'}
           >
-            {currentStep === 'idle' && 'Create Order'}
+            {currentStep === 'idle' && t('buttons.createOrder')}
             {currentStep === 'approving' && (
               <>
                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                Approving {tokenInfo.symbol}...
+                {t('buttons.approving').replace('{symbol}', tokenInfo.symbol)}
               </>
             )}
             {currentStep === 'creating' && (
               <>
                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                Creating Order...
+                {t('buttons.creating')}
               </>
             )}
           </Button>
@@ -504,10 +491,10 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
           {/* Info Box */}
           <Alert className="border-gray-200 dark:border-gray-700">
             <AlertDescription className="text-sm">
-              <strong>📋 Note:</strong> You will need to confirm two transactions:
+              <strong>{t('note.title')}</strong> {t('note.description')}
               <ol className="list-decimal list-inside mt-2 space-y-1 ml-2">
-                <li>Approve {tokenInfo.symbol} spending for the escrow contract</li>
-                <li>Create and lock your sell order</li>
+                <li>{t('note.step1').replace('{symbol}', tokenInfo.symbol)}</li>
+                <li>{t('note.step2')}</li>
               </ol>
             </AlertDescription>
           </Alert>
