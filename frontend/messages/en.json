@@ -131,6 +131,93 @@
     "tabs": {
       "create": "Create Order",
       "manage": "My Orders"
+    },
+    "createOrder": {
+      "title": "Create Sell Order",
+      "subtitle": "Lock your tokens and set your exchange rate to start earning",
+      "workflow": {
+        "title": "How it works:",
+        "description": "Lock your crypto in escrow, buyers pay you via Alipay, submit zero-knowledge proof, and receive crypto automatically. Your funds are protected by smart contracts."
+      },
+      "connectWallet": {
+        "title": "Connect Your Wallet",
+        "subtitle": "Please connect your wallet to create a sell order",
+        "prompt": "Click the <strong>Connect Wallet</strong> button in the top right corner to get started"
+      },
+      "section1": {
+        "title": "What are you selling?",
+        "selectToken": "Select Token",
+        "amount": "Amount",
+        "balance": "Balance:"
+      },
+      "section2": {
+        "title": "Your exchange rate",
+        "exchangeRate": "Exchange Rate (CNY per {symbol})",
+        "youWillReceive": "You'll receive:",
+        "cny": "CNY"
+      },
+      "section3": {
+        "title": "Your Alipay details",
+        "alipayId": "Your Alipay ID",
+        "alipayIdPlaceholder": "11-digit cell number",
+        "alipayIdWarning": "<strong>⚠️ Important:</strong> Only Chinese mainland cell phone numbered Alipay IDs are supported in this beta release.",
+        "alipayIdNote": "Buyers will send CNY to this Alipay account.",
+        "alipayName": "Your Alipay Name",
+        "alipayNameNote": "ℹ️ Must match the name on your Alipay account"
+      },
+      "steps": {
+        "approving": "<strong>Step 1/2:</strong> Approving {symbol} spending...",
+        "creating": "<strong>Step 2/2:</strong> Creating and locking order...",
+        "transaction": "Tx:"
+      },
+      "buttons": {
+        "createOrder": "Create Order",
+        "approving": "Approving {symbol}...",
+        "creating": "Creating Order..."
+      },
+      "note": {
+        "title": "📋 Note:",
+        "description": "You will need to confirm two transactions:",
+        "step1": "Approve {symbol} spending for the escrow contract",
+        "step2": "Create and lock your sell order"
+      },
+      "success": {
+        "title": "Order Created Successfully!",
+        "subtitle": "Your order is now live on the marketplace",
+        "amount": "Amount:",
+        "rate": "Rate:",
+        "totalValue": "Total Value:",
+        "cny": "CNY",
+        "txHash": "Transaction Hash:",
+        "viewOnBaseScan": "View on BaseScan",
+        "info": "Your order will appear on the homepage once the transaction is confirmed and synced.",
+        "infoTime": "This usually takes 10-30 seconds.",
+        "viewMyOrders": "View My Orders",
+        "createAnother": "Create Another Order"
+      }
+    },
+    "myOrders": {
+      "loading": "Loading your orders...",
+      "error": "Failed to load orders. Please try again.",
+      "empty": "You don't have any orders. Create one to get started!",
+      "activeOrders": "Active Orders",
+      "completedOrders": "Completed Orders",
+      "orderPrefix": "Order:",
+      "created": "Created",
+      "completed": "Completed",
+      "totalLocked": "Total Locked",
+      "remaining": "Remaining",
+      "exchangeRate": "Exchange Rate",
+      "estValue": "Est. CNY Value",
+      "withdrawAmount": "Withdraw Amount ({symbol})",
+      "available": "Available:",
+      "withdraw": "Withdraw",
+      "withdrawing": "Withdrawing...",
+      "allFundsWithdrawn": "All funds from this order have been withdrawn or filled.",
+      "withdrawSuccess": "Withdrawal successful!",
+      "viewOnExplorer": "View on Explorer",
+      "noActiveOrders": "You have no active orders. All your orders have been completed or you haven't created any yet.",
+      "noCompletedOrders": "You have no completed orders yet."
     }
   },
   "telegram": {
