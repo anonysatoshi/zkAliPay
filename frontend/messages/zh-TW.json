@@ -64,6 +64,32 @@
       "subtitle": "加入去中心化金融的未來。無需註冊。",
       "button": "立即開始交易"
     }
+  },
+  "buy": {
+    "title": "購買代幣",
+    "subtitle": "通過支付寶使用人民幣購買代幣",
+    "tabs": {
+      "newOrder": "新訂單",
+      "myTrades": "我的交易",
+      "connectWallet": "（連接錢包）"
+    },
+    "settled": {
+      "emoji": "🎉",
+      "title": "您的交易已完成！",
+      "subtitle": "您的代幣已發送到您的錢包。",
+      "settlementTx": "結算交易：",
+      "viewTx": "在區塊鏈瀏覽器查看結算交易",
+      "newPurchase": "開始新購買"
+    },
+    "connectPrompt": "請連接您的錢包以查看您的交易"
+  },
+  "sell": {
+    "title": "賣家儀表板",
+    "subtitle": "創建出售訂單並管理您的資金",
+    "tabs": {
+      "create": "創建訂單",
+      "manage": "我的訂單"
+    }
   }
 }
 

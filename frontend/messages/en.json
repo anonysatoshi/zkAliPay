@@ -64,6 +64,32 @@
       "subtitle": "Join the future of decentralized finance. No registration required.",
       "button": "Start Trading Now"
     }
+  },
+  "buy": {
+    "title": "Buy Tokens",
+    "subtitle": "Purchase tokens with CNY via Alipay",
+    "tabs": {
+      "newOrder": "New Order",
+      "myTrades": "My Trades",
+      "connectWallet": "(Connect Wallet)"
+    },
+    "settled": {
+      "emoji": "🎉",
+      "title": "Your Trade is Complete!",
+      "subtitle": "Your tokens have been sent to your wallet.",
+      "settlementTx": "Settlement Transactions:",
+      "viewTx": "View Settlement TX on Explorer",
+      "newPurchase": "Start New Purchase"
+    },
+    "connectPrompt": "Please connect your wallet to view your trades"
+  },
+  "sell": {
+    "title": "Seller Dashboard",
+    "subtitle": "Create sell orders and manage your funds",
+    "tabs": {
+      "create": "Create Order",
+      "manage": "My Orders"
+    }
   }
 }
 
