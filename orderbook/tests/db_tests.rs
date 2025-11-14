@@ -1,4 +1,4 @@
-// zkAliPay Orderbook - Database Tests
+// zkAlipay Orderbook - Database Tests
 // Tests for database event synchronization and data integrity
 
 use sqlx::PgPool;

@@ -16,7 +16,7 @@ const baseSepoliaWithCustomRpc = {
 };
 
 export const config = getDefaultConfig({
-  appName: 'zkAliPay',
+  appName: 'zkAlipay',
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '',
   chains: [baseSepoliaWithCustomRpc],
   transports: {

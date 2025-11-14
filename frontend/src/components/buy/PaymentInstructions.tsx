@@ -756,7 +756,7 @@ export function PaymentInstructions({ trades, onAllSettled }: PaymentInstruction
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex-1">
                         <p className="text-sm font-semibold text-blue-900 mb-1">
-                          First time using zkAliPay?
+                          First time using zkAlipay?
                         </p>
                         <p className="text-xs text-blue-700">
                           Follow our step-by-step guide with screenshots to complete your payment successfully.

@@ -7,7 +7,7 @@ import { Navigation } from "@/components/Navigation";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "zkAliPay - Buy Crypto with Alipay",
+  title: "zkAlipay - Buy Crypto with Alipay",
   description: "The world's first decentralized crypto exchange powered by zero-knowledge virtual machine",
 };
 

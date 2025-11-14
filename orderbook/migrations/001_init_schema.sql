@@ -1,8 +1,8 @@
 -- ============================================================================
--- zkAliPay Orderbook Database Schema
+-- zkAlipay Orderbook Database Schema
 -- Version: 3.0 (Multi-Token Support + Rebrand)
 -- Date: 2025-11-12
--- Purpose: Complete database schema for zkAliPay escrow with multi-token support
+-- Purpose: Complete database schema for zkAlipay escrow with multi-token support
 -- ============================================================================
 
 -- ============================================================================

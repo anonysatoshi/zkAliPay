@@ -22,7 +22,7 @@ export function Navigation() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="text-xl font-bold">
-            zkAliPay
+            zkAlipay
           </Link>
 
           {/* Navigation Links */}

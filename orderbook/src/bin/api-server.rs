@@ -27,7 +27,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .unwrap_or_else(|_| "3000".to_string());
     let addr = format!("{}:{}", host, port);
 
-    tracing::info!("Starting zkAliPay Order Book API Server");
+    tracing::info!("Starting zkAlipay Order Book API Server");
     tracing::info!("Database: {}", database_url);
     tracing::info!("Listening on: {}", addr);
 

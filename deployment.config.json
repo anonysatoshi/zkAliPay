@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft-07/schema#",
-  "title": "zkAliPay Deployment Configuration",
+  "title": "zkAlipay Deployment Configuration",
   "description": "Centralized configuration for all deployment environments",
   
   "networks": {
