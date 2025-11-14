@@ -11,7 +11,6 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useCreateOrder, CreateOrderParams } from '@/hooks/useCreateOrder';
-import { USDC_ADDRESS } from '@/lib/contracts';
 import { getTokenInfo, type TokenInfo, SUPPORTED_TOKENS } from '@/lib/tokens';
 
 export function CreateOrderForm() {

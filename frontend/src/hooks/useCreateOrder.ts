@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useWriteContract, useWaitForTransactionReceipt, usePublicClient } from 'wagmi';
 import { parseUnits, Address, getAddress } from 'viem';
-import { ESCROW_ABI, ESCROW_ADDRESS, USDC_ABI, USDC_ADDRESS } from '@/lib/contracts';
+import { ESCROW_ABI, ESCROW_ADDRESS, USDC_ABI } from '@/lib/contracts';
 
 export interface CreateOrderParams {
   tokenAddress: string; // ERC20 token address

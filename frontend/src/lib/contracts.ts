@@ -1,20 +1,24 @@
 import { getAddress as viemGetAddress } from 'viem';
 
-// Contract addresses - MUST be set via environment variables from deployment.config.json
-// No fallback values to ensure proper configuration
+// ============================================================================
+// Network Configuration (Hardcoded for Base Sepolia)
+// ============================================================================
+
+export const CHAIN_ID = 84532; // Base Sepolia
+export const RPC_URL = 'https://sepolia.base.org';
+export const BLOCK_EXPLORER_URL = 'https://sepolia.basescan.org';
+export const CHAIN_NAME = 'Base Sepolia';
+
+// ============================================================================
+// Contract Addresses
+// ============================================================================
+
+// Escrow contract - MUST be set via environment variable
 if (!process.env.NEXT_PUBLIC_ESCROW_ADDRESS) {
   throw new Error('NEXT_PUBLIC_ESCROW_ADDRESS must be set in environment variables');
 }
-if (!process.env.NEXT_PUBLIC_USDC_ADDRESS) {
-  throw new Error('NEXT_PUBLIC_USDC_ADDRESS must be set in environment variables');
-}
-if (!process.env.NEXT_PUBLIC_BLOCK_EXPLORER) {
-  throw new Error('NEXT_PUBLIC_BLOCK_EXPLORER must be set in environment variables');
-}
 
 export const ESCROW_ADDRESS = process.env.NEXT_PUBLIC_ESCROW_ADDRESS as `0x${string}`;
-export const USDC_ADDRESS = process.env.NEXT_PUBLIC_USDC_ADDRESS as `0x${string}`;
-export const BLOCK_EXPLORER_URL = process.env.NEXT_PUBLIC_BLOCK_EXPLORER;
 
 // Re-export getAddress for convenience
 export const getAddress = viemGetAddress;

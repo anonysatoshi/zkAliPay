@@ -1,0 +1,25 @@
+# Environment Variables for Vercel Deployment
+# Copy these into Vercel Dashboard → Settings → Environment Variables
+
+# Railway Backend API URL (IMPORTANT: Use your Railway URL)
+NEXT_PUBLIC_API_URL=https://zkalipay-production.up.railway.app
+
+# Network Configuration (Base Sepolia)
+NEXT_PUBLIC_CHAIN_ID=84532
+NEXT_PUBLIC_RPC_URL=https://sepolia.base.org
+NEXT_PUBLIC_BLOCK_EXPLORER=https://sepolia.basescan.org
+NEXT_PUBLIC_CHAIN_NAME=Base Sepolia
+
+# Contract Addresses (from DEPLOYMENT_INFO.txt)
+NEXT_PUBLIC_ESCROW_ADDRESS=0xe03C7b74A7c4338E397c65d8B60b18FAF56E3546
+NEXT_PUBLIC_USDC_ADDRESS=0xd4B280FFB336e2061cB39347Bd599cB88FF1617A
+
+# WalletConnect Project ID (GET YOUR OWN from https://cloud.walletconnect.com)
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=YOUR_WALLETCONNECT_PROJECT_ID_HERE
+
+# Feature Flags
+# DO NOT SET NEXT_PUBLIC_ENABLE_DEBUG (debug panel should be disabled in production)
+
+# Axiom Configuration (if using Axiom for proof generation)
+NEXT_PUBLIC_AXIOM_ENABLED=true
+
