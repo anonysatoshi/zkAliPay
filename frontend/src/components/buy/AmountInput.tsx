@@ -14,6 +14,7 @@ import { api } from '@/lib/api';
 import { BuyFlowData } from '@/app/buy/page';
 import { parseContractError } from '@/lib/contractErrors';
 import { getTokenInfo, type TokenInfo, SUPPORTED_TOKENS } from '@/lib/tokens';
+import { useTranslations } from 'next-intl';
 
 interface AmountInputProps {
   flowData: BuyFlowData;
@@ -23,6 +24,7 @@ interface AmountInputProps {
 
 export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountInputProps) {
   const { address, isConnected } = useAccount();
+  const t = useTranslations('buy.amountInput');
   const [selectedToken, setSelectedToken] = useState<string>(SUPPORTED_TOKENS[0]);
   const [tokenInfo, setTokenInfo] = useState<TokenInfo>(getTokenInfo(SUPPORTED_TOKENS[0]));
   const [amount, setAmount] = useState(flowData.amount || '');
@@ -52,14 +54,14 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
     // Validate address format FIRST (more specific error)
     if (buyerAddress && !isAddress(buyerAddress)) {
       console.log('Address validation failed!');
-      setError('This address is not valid. Please enter a valid Ethereum address (42 characters starting with 0x).');
+      setError(t('errors.invalidAddress'));
       return;
     }
     
     // Then validate address exists
     if (!buyerAddress) {
       console.log('No address provided');
-      setError('Please connect your wallet or enter a receive address');
+      setError(t('errors.noAddress'));
       return;
     }
     
@@ -67,7 +69,7 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
 
     const amountNum = parseFloat(amount);
     if (!amount || amountNum <= 0) {
-      setError('Please enter a valid amount greater than 0');
+      setError(t('errors.invalidAmount'));
       return;
     }
 
@@ -77,7 +79,7 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
     if (maxRate) {
       const maxRateNum = parseFloat(maxRate);
       if (maxRateNum <= 0) {
-        setError('Max rate must be greater than 0');
+        setError(t('errors.invalidMaxRate'));
         return;
       }
     }
@@ -85,12 +87,11 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
     // Confirmation for manual address
     if (useManualAddress || !isConnected) {
       const shortened = `${buyerAddress.slice(0, 6)}...${buyerAddress.slice(-4)}`;
-      const confirmed = window.confirm(
-        `⚠️ IMPORTANT: Confirm Receive Address\n\n` +
-        `Tokens will be sent to:\n${buyerAddress}\n(${shortened})\n\n` +
-        `This address CANNOT be changed later. Please verify it's correct.\n\n` +
-        `Click OK to continue or Cancel to go back.`
-      );
+      const confirmMessage = t('errors.confirmAddress')
+        .replace('{address}', buyerAddress)
+        .replace('{shortened}', shortened);
+      
+      const confirmed = window.confirm(confirmMessage);
       
       if (!confirmed) {
         return;
@@ -114,10 +115,13 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
       console.log('Match plan received:', matchPlan);
 
       if (!matchPlan.fully_fillable) {
-        setError(
-          `Only ${(parseFloat(matchPlan.total_filled) / Math.pow(10, tokenInfo.decimals)).toFixed(2)} ${tokenInfo.symbol} available. ` +
-          `Requested ${amountNum} ${tokenInfo.symbol}.`
-        );
+        const filled = (parseFloat(matchPlan.total_filled) / Math.pow(10, tokenInfo.decimals)).toFixed(2);
+        const requested = amountNum.toString();
+        const errorMsg = t('errors.partialFill')
+          .replace('{filled}', filled)
+          .replace('{symbol}', tokenInfo.symbol)
+          .replace('{requested}', requested);
+        setError(errorMsg);
         setIsLoading(false);
         return;
       }
@@ -144,15 +148,15 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Enter Buy Order Info</CardTitle>
+        <CardTitle>{t('title')}</CardTitle>
         <CardDescription>
-          Select token and specify how much you want to buy with CNY via Alipay
+          {t('description')}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Token Selection */}
         <div className="space-y-2">
-          <Label htmlFor="token">Select Token</Label>
+          <Label htmlFor="token">{t('selectToken')}</Label>
           <Select
             value={selectedToken}
             onValueChange={(value) => {
@@ -179,7 +183,7 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
 
         {/* Address Selection */}
         <div className="space-y-3 border rounded-lg p-4 bg-muted/50">
-          <Label>Receive Tokens At:</Label>
+          <Label>{t('receiveAt')}</Label>
           
           {/* Show connected wallet address */}
           {isConnected && !useManualAddress && (
@@ -187,7 +191,7 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
               <div className="flex-1 font-mono text-sm bg-background p-2 rounded border">
                 {address}
               </div>
-              <span className="text-xs text-green-600 font-semibold">✓ Connected</span>
+              <span className="text-xs text-green-600 font-semibold">{t('connected')}</span>
             </div>
           )}
           
@@ -202,7 +206,7 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
                 className="h-4 w-4 cursor-pointer"
               />
               <Label htmlFor="useManual" className="font-normal cursor-pointer text-sm">
-                Send to a different address
+                {t('differentAddress')}
               </Label>
             </div>
           )}
@@ -212,7 +216,7 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
             <div className="space-y-2">
               <Input
                 type="text"
-                placeholder="0x... (Ethereum address)"
+                placeholder={t('addressPlaceholder')}
                 value={manualAddress}
                 onChange={(e) => {
                   setManualAddress(e.target.value);
@@ -227,8 +231,7 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
               <Alert>
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription className="text-xs">
-                  <strong>Warning:</strong> Double-check this address! Tokens will be sent here after payment. 
-                  Funds sent to wrong address cannot be recovered.
+                  <strong>Warning:</strong> {t('addressWarning')}
                 </AlertDescription>
               </Alert>
             </div>
@@ -237,7 +240,7 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
           {/* Helper text */}
           {!isConnected && !manualAddress && (
             <p className="text-xs text-muted-foreground">
-              💡 Tip: You can connect your wallet or enter any Ethereum address to receive tokens
+              {t('addressTip')}
             </p>
           )}
         </div>
@@ -245,12 +248,12 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
         {/* Amount Input */}
         <div className="space-y-2">
           <Label htmlFor="amount">
-            {tokenInfo.symbol} Amount <span className="text-destructive">*</span>
+            {tokenInfo.symbol} {t('amountLabel')} <span className="text-destructive">{t('required')}</span>
           </Label>
           <Input
             id="amount"
             type="number"
-            placeholder="100"
+            placeholder={t('amountPlaceholder')}
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             disabled={isLoading}
@@ -258,19 +261,19 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
             min="0.01"
           />
           <p className="text-xs text-muted-foreground">
-            Enter the amount of {tokenInfo.symbol} you want to purchase. Minimum trade limits will be validated based on the CNY amount after matching.
+            {t('amountHelp')}
           </p>
         </div>
 
         {/* Max Rate Input (Optional) */}
         <div className="space-y-2">
           <Label htmlFor="maxRate">
-            Maximum Exchange Rate (Optional)
+            {t('maxRate')}
           </Label>
           <Input
             id="maxRate"
             type="number"
-            placeholder="7.50"
+            placeholder={t('maxRatePlaceholder')}
             value={maxRate}
             onChange={(e) => setMaxRate(e.target.value)}
             disabled={isLoading}
@@ -278,7 +281,7 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
             min="0"
           />
           <p className="text-xs text-muted-foreground">
-            Only match with orders at or below this rate (CNY per {tokenInfo.symbol})
+            {t('maxRateHelp')}
           </p>
         </div>
 
@@ -300,23 +303,23 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Finding Best Match...
+              {t('finding')}
             </>
           ) : (
-            'Get Match'
+            t('getMatch')
           )}
         </Button>
 
         {/* Info Box */}
         <div className="bg-muted p-4 rounded-lg text-sm space-y-2">
-          <p className="font-semibold">How it works:</p>
+          <p className="font-semibold">{t('howItWorks')}</p>
           <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
-            <li>Select the token you want to buy</li>
-            <li>Enter the amount you want to purchase</li>
-            <li>We'll match you with the best exchange rates</li>
-            <li>Review the match plan and confirm</li>
-            <li>Send CNY via Alipay to the seller</li>
-            <li>Submit payment proof and receive tokens!</li>
+            <li>{t('step1')}</li>
+            <li>{t('step2')}</li>
+            <li>{t('step3')}</li>
+            <li>{t('step4')}</li>
+            <li>{t('step5')}</li>
+            <li>{t('step6')}</li>
           </ol>
         </div>
       </CardContent>
