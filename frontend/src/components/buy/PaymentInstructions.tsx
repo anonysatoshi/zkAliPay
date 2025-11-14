@@ -10,7 +10,10 @@ import {
   CheckCircle2, 
   ExternalLink,
   Loader2,
-  RotateCcw
+  RotateCcw,
+  ChevronRight,
+  ChevronLeft,
+  X
 } from 'lucide-react';
 import { api } from '@/lib/api';
 import { getTransactionUrl } from '@/lib/contracts';
@@ -44,6 +47,322 @@ interface TradeStatus {
   actualHash?: string;
 }
 
+// Tutorial Modal Component
+function PaymentTutorialModal({ 
+  isOpen, 
+  onClose, 
+  paymentNonce, 
+  alipayId, 
+  alipayName, 
+  amount 
+}: { 
+  isOpen: boolean; 
+  onClose: () => void; 
+  paymentNonce: string;
+  alipayId: string;
+  alipayName: string;
+  amount: string;
+}) {
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const steps = [
+    {
+      title: "Step 1: Open Alipay Transfer",
+      description: "Open your Alipay app and navigate to the transfer/payment section.",
+      content: (
+        <div className="space-y-4">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h4 className="font-semibold text-blue-900 mb-2">📱 Instructions:</h4>
+            <ol className="list-decimal list-inside space-y-2 text-sm text-blue-800">
+              <li>Open your <strong>Alipay (支付宝)</strong> mobile app</li>
+              <li>Tap on <strong>"Transfer" (转账)</strong> or <strong>"Friends" (朋友)</strong></li>
+              <li>Select <strong>"Transfer to Alipay Account"</strong></li>
+            </ol>
+          </div>
+          <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-3">
+            <p className="text-sm text-yellow-800">
+              ⚠️ <strong>Important:</strong> Make sure you're transferring to an Alipay account, not a bank account.
+            </p>
+          </div>
+        </div>
+      )
+    },
+    {
+      title: "Step 2: Enter Payment Details",
+      description: "Enter the recipient's Alipay account and the payment amount.",
+      content: (
+        <div className="space-y-4">
+          <div className="bg-muted/50 rounded-lg p-4 space-y-3">
+            <div>
+              <label className="text-xs text-muted-foreground">Recipient Alipay ID</label>
+              <div className="font-mono font-bold text-lg mt-1">{alipayId}</div>
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground">Recipient Name</label>
+              <div className="font-bold text-lg mt-1">{alipayName}</div>
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground">Amount to Transfer</label>
+              <div className="font-bold text-2xl text-green-600 mt-1">¥{amount}</div>
+            </div>
+          </div>
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+            <p className="text-sm text-red-800">
+              🔴 <strong>Critical:</strong> Double-check the recipient information matches exactly!
+            </p>
+          </div>
+        </div>
+      )
+    },
+    {
+      title: "Step 3: Add Payment Note (CRITICAL)",
+      description: "This is the most important step! You MUST include the exact payment note.",
+      content: (
+        <div className="space-y-4">
+          <div className="bg-gradient-to-r from-red-100 to-orange-100 border-2 border-red-400 rounded-lg p-4">
+            <h4 className="font-bold text-red-900 text-lg mb-2">🚨 CRITICAL STEP 🚨</h4>
+            <p className="text-sm text-red-800 mb-3">
+              You MUST add this exact payment note. Without it, your payment cannot be verified!
+            </p>
+            <div className="bg-white rounded-lg p-4 border-2 border-red-500">
+              <label className="text-xs font-semibold text-red-700 uppercase">Payment Note (留言/备注)</label>
+              <div className="font-mono font-bold text-3xl text-red-600 mt-2 tracking-wider">
+                {paymentNonce}
+              </div>
+            </div>
+          </div>
+
+          {/* Screenshot showing where to add note */}
+          <div className="space-y-2">
+            <h5 className="text-sm font-semibold">📸 Example Screenshot:</h5>
+            <div className="border-2 border-gray-300 rounded-lg overflow-hidden">
+              <img 
+                src="/tutorial/alipay-note.jpg" 
+                alt="Alipay payment note example" 
+                className="w-full h-auto"
+              />
+            </div>
+            <p className="text-xs text-muted-foreground italic">
+              Screenshot shows where to add the payment note in the Alipay transfer screen
+            </p>
+          </div>
+
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <p className="text-sm text-blue-800">
+              💡 <strong>Tip:</strong> Look for "留言" (message) or "备注" (note) field in your Alipay transfer screen and paste this exact number.
+            </p>
+          </div>
+        </div>
+      )
+    },
+    {
+      title: "Step 4: Complete the Transfer",
+      description: "Review all details and complete the payment.",
+      content: (
+        <div className="space-y-4">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h4 className="font-semibold text-blue-900 mb-2">✅ Final Checklist:</h4>
+            <ul className="space-y-2 text-sm text-blue-800">
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                <span>Recipient Alipay ID: <strong>{alipayId}</strong></span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                <span>Amount: <strong>¥{amount}</strong></span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                <span>Payment Note: <strong className="font-mono">{paymentNonce}</strong></span>
+              </li>
+            </ul>
+          </div>
+          <div className="space-y-2">
+            <p className="text-sm">After verifying all details:</p>
+            <ol className="list-decimal list-inside space-y-1 text-sm text-muted-foreground">
+              <li>Tap <strong>"Confirm Transfer"</strong> or <strong>"确认转账"</strong></li>
+              <li>Complete the payment authentication (password/fingerprint/face ID)</li>
+              <li>Wait for the success confirmation</li>
+            </ol>
+          </div>
+        </div>
+      )
+    },
+    {
+      title: "Step 5: Request Payment Receipt",
+      description: "After payment, you need to download the official PDF receipt from Alipay.",
+      content: (
+        <div className="space-y-4">
+          <div className="bg-gradient-to-r from-purple-100 to-blue-100 border border-purple-300 rounded-lg p-4">
+            <h4 className="font-bold text-purple-900 mb-2">📄 Getting Your Receipt</h4>
+            <p className="text-sm text-purple-800 mb-3">
+              You need an official Alipay PDF receipt to complete the verification.
+            </p>
+          </div>
+
+          <div className="bg-muted/50 rounded-lg p-4">
+            <h5 className="font-semibold mb-2 text-sm">🔍 How to Find the Receipt Portal:</h5>
+            <ol className="list-decimal list-inside space-y-2 text-sm">
+              <li>In Alipay, go to <strong>"Me" (我的)</strong> → <strong>"Bills" (账单)</strong></li>
+              <li>Find your recent transfer to <strong>{alipayName}</strong></li>
+              <li>Tap on the transaction to view details</li>
+              <li>Look for <strong>"Electronic Receipt" (电子回单)</strong> or <strong>"Receipt" (回单)</strong></li>
+              <li>Tap it and select <strong>"Download PDF"</strong> or <strong>"Save"</strong></li>
+            </ol>
+          </div>
+
+          {/* Screenshot showing receipt portal */}
+          <div className="space-y-2">
+            <h5 className="text-sm font-semibold">📸 Receipt Portal Screenshot:</h5>
+            <div className="border-2 border-gray-300 rounded-lg overflow-hidden">
+              <img 
+                src="/tutorial/alipay-receipt.jpg" 
+                alt="Alipay receipt download portal" 
+                className="w-full h-auto"
+              />
+            </div>
+            <p className="text-xs text-muted-foreground italic">
+              Screenshot shows where to request the electronic receipt (电子回单) in Alipay
+            </p>
+          </div>
+
+          <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-3">
+            <p className="text-sm text-yellow-800">
+              ⏱️ <strong>Note:</strong> It may take a few minutes for Alipay to generate the PDF receipt. If it's not available immediately, wait 1-2 minutes and try again.
+            </p>
+          </div>
+        </div>
+      )
+    },
+    {
+      title: "Step 6: Upload Receipt",
+      description: "Upload the PDF receipt to complete your trade.",
+      content: (
+        <div className="space-y-4">
+          <div className="bg-green-50 border border-green-300 rounded-lg p-4">
+            <h4 className="font-bold text-green-900 mb-2">🎉 Almost Done!</h4>
+            <p className="text-sm text-green-800">
+              Once you have the PDF receipt downloaded to your device:
+            </p>
+          </div>
+
+          <div className="bg-muted/50 rounded-lg p-4">
+            <ol className="list-decimal list-inside space-y-2 text-sm">
+              <li>Close this tutorial</li>
+              <li>Click the <strong>"Choose File"</strong> button below the payment details</li>
+              <li>Select the Alipay PDF receipt you just downloaded</li>
+              <li>Wait for the automated verification to complete</li>
+              <li>If successful, your crypto will be released automatically! 🚀</li>
+            </ol>
+          </div>
+
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <p className="text-sm text-blue-800">
+              ℹ️ <strong>Info:</strong> Our system uses zero-knowledge proofs to verify your payment without revealing sensitive information. The entire process is trustless and secure!
+            </p>
+          </div>
+
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+            <p className="text-sm text-red-800">
+              ⏰ <strong>Reminder:</strong> Make sure to upload the receipt before the timer expires, or your trade will be cancelled!
+            </p>
+          </div>
+        </div>
+      )
+    }
+  ];
+
+  const currentStepData = steps[currentStep];
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Payment Instructions</h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              Step {currentStep + 1} of {steps.length}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-muted-foreground hover:text-gray-900 transition-colors"
+          >
+            <X className="h-6 w-6" />
+          </button>
+        </div>
+
+        {/* Progress Bar */}
+        <div className="px-6 pt-4">
+          <div className="flex items-center gap-2">
+            {steps.map((_, index) => (
+              <div
+                key={index}
+                className={`h-2 flex-1 rounded-full transition-all ${
+                  index <= currentStep ? 'bg-primary' : 'bg-gray-200'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+          <div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">
+              {currentStepData.title}
+            </h3>
+            <p className="text-muted-foreground text-sm">
+              {currentStepData.description}
+            </p>
+          </div>
+          <div className="mt-4">
+            {currentStepData.content}
+          </div>
+        </div>
+
+        {/* Footer Navigation */}
+        <div className="flex items-center justify-between p-6 border-t bg-gray-50">
+          <Button
+            variant="outline"
+            onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
+            disabled={currentStep === 0}
+            className="gap-2"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Previous
+          </Button>
+          
+          <div className="text-sm text-muted-foreground">
+            {currentStep + 1} / {steps.length}
+          </div>
+
+          {currentStep < steps.length - 1 ? (
+            <Button
+              onClick={() => setCurrentStep(Math.min(steps.length - 1, currentStep + 1))}
+              className="gap-2"
+            >
+              Next
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          ) : (
+            <Button
+              onClick={onClose}
+              className="gap-2 bg-green-600 hover:bg-green-700"
+            >
+              <CheckCircle2 className="h-4 w-4" />
+              Got it!
+            </Button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function PaymentInstructions({ trades, onAllSettled }: PaymentInstructionsProps) {
   const [tradeStatuses, setTradeStatuses] = useState<Map<string, TradeStatus>>(
     new Map(
@@ -56,6 +375,9 @@ export function PaymentInstructions({ trades, onAllSettled }: PaymentInstruction
       ])
     )
   );
+
+  // Tutorial modal state
+  const [tutorialOpen, setTutorialOpen] = useState<string | null>(null);
 
   // Expose trade statuses to parent via window (for completion screen)
   useEffect(() => {
@@ -435,6 +757,31 @@ export function PaymentInstructions({ trades, onAllSettled }: PaymentInstruction
                 </div>
               </div>
 
+              {/* Tutorial Button - Only show for pending trades */}
+              {status.status === 'pending' && status.timeRemaining > 0 && (
+                <Alert className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-300">
+                  <AlertDescription>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-blue-900 mb-1">
+                          First time using zkAliPay?
+                        </p>
+                        <p className="text-xs text-blue-700">
+                          Follow our step-by-step guide with screenshots to complete your payment successfully.
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() => setTutorialOpen(trade.trade_id)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white flex-shrink-0"
+                        size="sm"
+                      >
+                        📚 How to Pay
+                      </Button>
+                    </div>
+                  </AlertDescription>
+                </Alert>
+              )}
+
               {/* Trade Info */}
               <div className="text-xs text-muted-foreground space-y-1">
                 <p>
@@ -803,6 +1150,18 @@ export function PaymentInstructions({ trades, onAllSettled }: PaymentInstruction
           </Card>
         );
       })}
+
+      {/* Tutorial Modal */}
+      {tutorialOpen && trades.find((t) => t.trade_id === tutorialOpen) && (
+        <PaymentTutorialModal
+          isOpen={!!tutorialOpen}
+          onClose={() => setTutorialOpen(null)}
+          paymentNonce={trades.find((t) => t.trade_id === tutorialOpen)!.payment_nonce}
+          alipayId={trades.find((t) => t.trade_id === tutorialOpen)!.alipay_id}
+          alipayName={trades.find((t) => t.trade_id === tutorialOpen)!.alipay_name}
+          amount={(parseFloat(trades.find((t) => t.trade_id === tutorialOpen)!.cny_amount) / 100).toFixed(2)}
+        />
+      )}
     </div>
   );
 }
