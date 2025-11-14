@@ -1,11 +1,11 @@
 <svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- "zk" in Alipay blue -->
-  <text x="0" y="40" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="32" font-weight="700" fill="#1677FF">
+  <!-- "zk" in dark -->
+  <text x="0" y="40" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="32" font-weight="700" fill="#0A2540">
     zk
   </text>
   
-  <!-- "Alipay" in dark -->
-  <text x="50" y="40" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="32" font-weight="600" fill="#0A2540">
+  <!-- "Alipay" in Alipay blue -->
+  <text x="50" y="40" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="32" font-weight="600" fill="#1677FF">
     Alipay
   </text>
   
@@ -16,6 +16,6 @@
       <stop offset="100%" style="stop-color:#6C5CE7;stop-opacity:1" />
     </linearGradient>
   </defs>
-  <rect x="0" y="48" width="50" height="3" rx="1.5" fill="url(#accentGradient)"/>
+  <rect x="50" y="48" width="150" height="3" rx="1.5" fill="url(#accentGradient)"/>
 </svg>
 
