@@ -1,6 +1,7 @@
 'use client';
 
 import { OrderList } from '@/components/orders/OrderList';
+import { TelegramWidget } from '@/components/TelegramWidget';
 import { motion } from 'framer-motion';
 import { ArrowRight, Shield, Zap, Globe, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -309,6 +310,21 @@ export default function HomePage() {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <OrderList />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Telegram Community */}
+      <section className="py-16 bg-gray-50 dark:bg-gray-900">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="max-w-3xl mx-auto"
+          >
+            <TelegramWidget />
           </motion.div>
         </div>
       </section>

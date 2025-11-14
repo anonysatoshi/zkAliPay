@@ -132,6 +132,13 @@
       "create": "Create Order",
       "manage": "My Orders"
     }
+  },
+  "telegram": {
+    "title": "Join Our Telegram Community",
+    "description": "Get real-time updates, technical support, and connect with the zkAlipay community.",
+    "joinButton": "Join Channel",
+    "members": "Members",
+    "online": "Online"
   }
 }
 

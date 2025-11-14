@@ -132,6 +132,13 @@
       "create": "創建訂單",
       "manage": "我的訂單"
     }
+  },
+  "telegram": {
+    "title": "加入我們的 Telegram 社群",
+    "description": "獲取實時更新、技術支持，並與 zkAlipay 社群互動。",
+    "joinButton": "加入頻道",
+    "members": "成員",
+    "online": "在線"
   }
 }
 
