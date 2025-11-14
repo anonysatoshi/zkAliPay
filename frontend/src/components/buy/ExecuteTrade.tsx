@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
-import { ArrowLeft, Loader2, CheckCircle2, AlertCircle, ExternalLink, Rocket, Database, Clock } from 'lucide-react';
+import { ArrowLeft, Loader2, CheckCircle2, AlertCircle, ExternalLink, Rocket, Database, Clock, ArrowRight } from 'lucide-react';
 import { BuyFlowData } from '@/app/buy/page';
 import { api, TradeResultWithCNY, FillWithCNY } from '@/lib/api';
 import { parseContractError } from '@/lib/contractErrors';
@@ -115,10 +115,7 @@ export function ExecuteTrade({ flowData, updateFlowData, goBack, goToNextStep }:
       setProgress(100);
       setStatus('success');
 
-      // Navigate to payment page after 2 seconds
-      setTimeout(() => {
-        goToNextStep();
-      }, 2000);
+      // Don't auto-redirect - let user click Continue button
     } catch (err: any) {
       console.error('Execute trade error:', err);
       // Use the contract error decoder to get a human-readable message
@@ -246,16 +243,6 @@ export function ExecuteTrade({ flowData, updateFlowData, goBack, goToNextStep }:
                   </p>
                 </div>
               </div>
-
-              {/* What's Happening */}
-              <Alert className="bg-gradient-to-br from-muted/30 to-muted/50 border border-muted">
-                <Rocket className="h-4 w-4" />
-                <AlertDescription className="text-sm">
-                  <strong>What's happening:</strong> The relayer is calling the smart contract to
-                  create your trades. This locks the USDC from the seller's orders and generates
-                  payment instructions for you.
-                </AlertDescription>
-              </Alert>
             </>
           )}
 
@@ -329,18 +316,11 @@ export function ExecuteTrade({ flowData, updateFlowData, goBack, goToNextStep }:
               {/* Action Buttons */}
               <div className="flex gap-4 pt-4">
                 <Button
-                  variant="outline"
-                  onClick={() => (window.location.href = '/buy')}
-                  className="flex-1 h-14 text-base border-2"
+                  onClick={goToNextStep}
+                  className="flex-1 h-14 text-base bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg"
                 >
-                  Start New Purchase
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => (window.location.href = '/debug')}
-                  className="flex-1 h-14 text-base border-2"
-                >
-                  View Database
+                  <ArrowRight className="mr-2 h-5 w-5" />
+                  Continue to Payment
                 </Button>
               </div>
             </>

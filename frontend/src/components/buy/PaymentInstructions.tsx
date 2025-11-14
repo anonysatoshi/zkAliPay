@@ -339,13 +339,6 @@ function PaymentTutorialModal({
             </ol>
           </div>
 
-          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-5">
-            <p className="text-sm text-blue-900 dark:text-blue-100 flex items-start gap-2">
-              <span className="text-xl">ℹ️</span>
-              <span><strong>Info:</strong> Our system uses zero-knowledge proofs to verify your payment without revealing sensitive information. The entire process is trustless and secure!</span>
-            </p>
-          </div>
-
           <div className="bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-950/20 dark:to-pink-950/20 border-2 border-red-300 dark:border-red-700 rounded-2xl p-5">
             <p className="text-sm text-red-900 dark:text-red-100 flex items-start gap-2">
               <span className="text-xl">⏰</span>
