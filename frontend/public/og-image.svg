@@ -12,9 +12,12 @@
   <circle cx="100" cy="100" r="150" fill="white" opacity="0.05"/>
   <circle cx="1100" cy="530" r="200" fill="white" opacity="0.05"/>
   
-  <!-- Main logo centered -->
-  <text x="600" y="280" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="120" font-weight="700" fill="white" text-anchor="middle">
-    zkAlipay
+  <!-- Main logo centered with new colors -->
+  <text x="450" y="280" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="100" font-weight="600" fill="#94A3B8" text-anchor="middle">
+    zk
+  </text>
+  <text x="750" y="280" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="100" font-weight="600" fill="white" text-anchor="middle">
+    Alipay
   </text>
   
   <!-- Tagline -->
