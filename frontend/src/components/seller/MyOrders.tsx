@@ -109,11 +109,11 @@ export function MyOrders() {
         const isCompleted = view === 'completed';
 
         return (
-          <Card key={order.order_id} className={isCompleted ? 'opacity-70' : ''}>
+          <Card key={order.order_id} className={`bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-lg transition-all hover:shadow-xl ${isCompleted ? 'opacity-70' : ''}`}>
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle className="text-sm font-mono">
+                  <CardTitle className="text-sm font-mono text-gray-700 dark:text-gray-300">
                     Order: {formatAddress(order.order_id)}
                   </CardTitle>
                   <CardDescription>
@@ -121,7 +121,7 @@ export function MyOrders() {
                   </CardDescription>
                 </div>
                 {isCompleted && (
-                  <div className="flex items-center text-sm text-muted-foreground">
+                  <div className="flex items-center text-sm text-green-600 dark:text-green-400 font-semibold">
                     <CheckCircle2 className="h-4 w-4 mr-1" />
                     Completed
                   </div>
@@ -130,31 +130,31 @@ export function MyOrders() {
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Order Info */}
-              <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="grid grid-cols-2 gap-4 text-sm p-4 bg-gradient-to-br from-gray-50 to-blue-50/30 dark:from-gray-800/50 dark:to-blue-900/10 rounded-xl border border-gray-200/50 dark:border-gray-700/50">
                 <div>
-                  <p className="text-muted-foreground">Total Locked</p>
-                  <p className="font-semibold">{totalAmount} {tokenInfo.symbol}</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-xs">Total Locked</p>
+                  <p className="font-semibold text-base">{totalAmount} {tokenInfo.symbol}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">Remaining</p>
-                  <p className="font-semibold text-green-600">
+                  <p className="text-gray-600 dark:text-gray-400 text-xs">Remaining</p>
+                  <p className="font-semibold text-base text-green-600 dark:text-green-400">
                     {remainingAmount} {tokenInfo.symbol}
                   </p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">Exchange Rate</p>
-                  <p className="font-semibold">{exchangeRate.toFixed(2)} {getExchangeRateLabel(order.token)}</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-xs">Exchange Rate</p>
+                  <p className="font-semibold text-base">¥{exchangeRate.toFixed(2)}/{tokenInfo.symbol}</p>
                 </div>
                 <div>
-                  <p className="text-muted-foreground">Est. CNY Value</p>
-                  <p className="font-semibold">¥{estimatedCNY.toFixed(2)}</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-xs">Est. CNY Value</p>
+                  <p className="font-semibold text-base">¥{estimatedCNY.toFixed(2)}</p>
                 </div>
               </div>
 
               {/* Withdraw Section */}
               {!isCompleted && parseFloat(remainingAmount) > 0 && (
-                <div className="pt-4 border-t space-y-3">
-                  <Label htmlFor={`withdraw-${order.order_id}`}>
+                <div className="pt-4 border-t border-gray-200 dark:border-gray-700 space-y-3">
+                  <Label htmlFor={`withdraw-${order.order_id}`} className="text-sm font-medium">
                     Withdraw Amount ({tokenInfo.symbol})
                   </Label>
                   <div className="flex gap-2">
@@ -167,11 +167,13 @@ export function MyOrders() {
                       max={remainingAmount}
                       step="any"
                       disabled={isWithdrawing}
+                      className="h-11"
                     />
                     <Button
                       variant="outline"
                       onClick={() => setWithdrawAmount(order.order_id, remainingAmount)}
                       disabled={isWithdrawing}
+                      className="h-11 px-6"
                     >
                       Max
                     </Button>
@@ -183,6 +185,7 @@ export function MyOrders() {
                         parseFloat(withdrawAmount) <= 0 ||
                         parseFloat(withdrawAmount) > parseFloat(remainingAmount)
                       }
+                      className="h-11 px-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                     >
                       {isWithdrawing && selectedOrder === order.order_id ? (
                         <>
@@ -194,16 +197,16 @@ export function MyOrders() {
                       )}
                     </Button>
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    Available: {remainingAmount} {tokenInfo.symbol}
+                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                    Available: <strong>{remainingAmount} {tokenInfo.symbol}</strong>
                   </p>
                 </div>
               )}
 
               {/* No funds available */}
               {isCompleted && (
-                <div className="pt-4 border-t">
-                  <Alert>
+                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <Alert className="border-gray-200 dark:border-gray-700">
                     <AlertDescription>
                       All funds from this order have been withdrawn or filled.
                     </AlertDescription>
@@ -251,27 +254,33 @@ export function MyOrders() {
       )}
 
       {/* Toggle Buttons */}
-      <div className="flex gap-2 border-b">
+      <div className="flex gap-3">
         <Button
-          variant={view === 'active' ? 'default' : 'ghost'}
+          size="lg"
           onClick={() => setView('active')}
-          className="rounded-b-none"
+          className={view === 'active'
+            ? "flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg rounded-xl transition-all duration-300"
+            : "flex-1 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 rounded-xl transition-all duration-300"
+          }
         >
           Active Orders
           {activeOrders.length > 0 && (
-            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-primary-foreground text-primary">
+            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-white/20 text-white font-semibold">
               {activeOrders.length}
             </span>
           )}
         </Button>
         <Button
-          variant={view === 'completed' ? 'default' : 'ghost'}
+          size="lg"
           onClick={() => setView('completed')}
-          className="rounded-b-none"
+          className={view === 'completed'
+            ? "flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg rounded-xl transition-all duration-300"
+            : "flex-1 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 rounded-xl transition-all duration-300"
+          }
         >
           Completed Orders
           {completedOrders.length > 0 && (
-            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-primary-foreground text-primary">
+            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-white/20 text-white font-semibold">
               {completedOrders.length}
             </span>
           )}

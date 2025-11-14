@@ -9,9 +9,12 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Loader2, CheckCircle2, AlertCircle, ExternalLink, Coins, TrendingUp, User } from 'lucide-react';
 import { useCreateOrder, CreateOrderParams } from '@/hooks/useCreateOrder';
 import { getTokenInfo, type TokenInfo, SUPPORTED_TOKENS } from '@/lib/tokens';
+import { motion } from 'framer-motion';
+
+const BASESCAN_URL = 'https://sepolia.basescan.org/tx';
 
 export function CreateOrderForm() {
   const { address, isConnected } = useAccount();
@@ -53,27 +56,14 @@ export function CreateOrderForm() {
 
   // Handle approval success
   useEffect(() => {
-    console.log('Approval status check:', { 
-      isApproveSuccess, 
-      orderParams: !!orderParams, 
-      currentStep 
-    });
-    
     if (isApproveSuccess && orderParams && currentStep === 'approving') {
-      console.log('Approval confirmed! Moving to create order step...');
       handleApprovalSuccess(orderParams);
     }
   }, [isApproveSuccess, orderParams, currentStep, handleApprovalSuccess]);
 
   // Handle create success
   useEffect(() => {
-    console.log('Create status check:', { 
-      isCreateSuccess, 
-      currentStep 
-    });
-    
     if (isCreateSuccess && currentStep === 'creating') {
-      console.log('Order creation confirmed! Moving to success...');
       handleCreateSuccess();
     }
   }, [isCreateSuccess, currentStep, handleCreateSuccess]);
@@ -123,16 +113,20 @@ export function CreateOrderForm() {
 
   if (!isConnected) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Create Sell Order</CardTitle>
-          <CardDescription>Please connect your wallet to create an order</CardDescription>
+      <Card className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-xl">
+        <CardHeader className="text-center pb-8">
+          <div className="mx-auto mb-4 w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center">
+            <AlertCircle className="h-8 w-8 text-white" />
+          </div>
+          <CardTitle className="text-2xl">Connect Your Wallet</CardTitle>
+          <CardDescription className="text-base">
+            Please connect your wallet to create a sell order
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <Alert>
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              Connect your wallet using the button in the top right corner
+          <Alert className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30">
+            <AlertDescription className="text-center">
+              Click the <strong>Connect Wallet</strong> button in the top right corner to get started
             </AlertDescription>
           </Alert>
         </CardContent>
@@ -142,153 +136,313 @@ export function CreateOrderForm() {
 
   if (currentStep === 'success') {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <CheckCircle2 className="h-6 w-6 text-green-500" />
-            Order Created Successfully!
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="rounded-lg bg-muted p-4 space-y-2">
-            <p className="text-sm font-medium">Transaction Hash:</p>
-            <p className="text-xs font-mono break-all">{createHash}</p>
-          </div>
-          <Alert>
-            <AlertDescription>
-              Your order will appear on the homepage once the transaction is confirmed and synced.
-              This usually takes 10-30 seconds.
-            </AlertDescription>
-          </Alert>
-          <Button onClick={() => {
-            resetState();
-            setAmount('');
-            setExchangeRate('');
-            setAlipayId('');
-            setAlipayName('');
-            setOrderParams(null);
-          }} className="w-full">
-            Create Another Order
-          </Button>
-        </CardContent>
-      </Card>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Card className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-xl">
+          <CardContent className="pt-12 pb-12 text-center space-y-6">
+            {/* Success Icon */}
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+              className="mx-auto w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center"
+            >
+              <CheckCircle2 className="h-12 w-12 text-white" />
+            </motion.div>
+
+            {/* Success Message */}
+            <div>
+              <h2 className="text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400">
+                Order Created Successfully!
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400">
+                Your order is now live on the marketplace
+              </p>
+            </div>
+
+            {/* Order Details */}
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-2xl p-6 border border-blue-200/50 dark:border-blue-800/50">
+              <div className="space-y-3 text-left">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Amount:</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">
+                    {amount} {tokenInfo.symbol}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Rate:</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">
+                    ¥{exchangeRate}/{tokenInfo.symbol}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">Total Value:</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">
+                    ¥{calculateCnyAmount()} CNY
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Transaction Hash */}
+            {createHash && (
+              <div className="space-y-3">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Transaction Hash:</p>
+                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
+                  <p className="text-xs font-mono break-all text-gray-600 dark:text-gray-400">{createHash}</p>
+                </div>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => window.open(`${BASESCAN_URL}/${createHash}`, '_blank')}
+                >
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  View on BaseScan
+                </Button>
+              </div>
+            )}
+
+            {/* Info Alert */}
+            <Alert className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30">
+              <AlertDescription className="text-sm text-center">
+                Your order will appear on the homepage once the transaction is confirmed and synced.
+                <br />
+                <strong>This usually takes 10-30 seconds.</strong>
+              </AlertDescription>
+            </Alert>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3 pt-4">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => setActiveView && setActiveView('manage')}
+              >
+                <ListOrdered className="mr-2 h-4 w-4" />
+                View My Orders
+              </Button>
+              <Button
+                className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                onClick={() => {
+                  resetState();
+                  setAmount('');
+                  setExchangeRate('');
+                  setAlipayId('');
+                  setAlipayName('');
+                  setOrderParams(null);
+                }}
+              >
+                Create Another Order
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
     );
   }
 
   return (
-    <Card>
+    <Card className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-xl">
       <CardHeader>
-        <CardTitle>Create Sell Order</CardTitle>
-        <CardDescription>
-          Lock your tokens and set your exchange rate to start selling
+        <CardTitle className="text-2xl">Create Sell Order</CardTitle>
+        <CardDescription className="text-base">
+          Lock your tokens and set your exchange rate to start earning
         </CardDescription>
+        
+        {/* Workflow Description */}
+        <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-xl border border-blue-200/50 dark:border-blue-800/50">
+          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+            <strong className="text-blue-600 dark:text-blue-400">How it works:</strong> Lock your crypto in escrow, buyers pay you via Alipay, 
+            submit zero-knowledge proof, and receive crypto automatically. Your funds are protected by smart contracts.
+          </p>
+        </div>
       </CardHeader>
+      
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Token Selection */}
-          <div className="space-y-2">
-            <Label htmlFor="token">Select Token</Label>
-            <Select
-              value={selectedToken}
-              onValueChange={(value) => {
-                setSelectedToken(value);
-                setAmount(''); // Reset amount when token changes
-              }}
-              disabled={currentStep !== 'idle'}
-            >
-              <SelectTrigger id="token">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {SUPPORTED_TOKENS.map((tokenAddr) => {
-                  const info = getTokenInfo(tokenAddr);
-                  return (
-                    <SelectItem key={tokenAddr} value={tokenAddr}>
-                      {info.symbol} - {info.name}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Section 1: What are you selling? */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="space-y-4 p-6 bg-gradient-to-br from-gray-50 to-blue-50/30 dark:from-gray-800/50 dark:to-blue-900/10 rounded-2xl border border-gray-200/50 dark:border-gray-700/50"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold">
+                1
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg flex items-center gap-2">
+                  <Coins className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                  What are you selling?
+                </h3>
+              </div>
+            </div>
 
-          {/* Token Amount */}
-          <div className="space-y-2">
-            <Label htmlFor="amount">{tokenInfo.symbol} Amount</Label>
-            <div className="flex gap-2">
-              <Input
-                id="amount"
-                type="number"
-                step="any"
-                placeholder="100.00"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                disabled={currentStep !== 'idle'}
-              />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleMaxClick}
+            {/* Token Selection */}
+            <div className="space-y-2">
+              <Label htmlFor="token">Select Token</Label>
+              <Select
+                value={selectedToken}
+                onValueChange={(value) => {
+                  setSelectedToken(value);
+                  setAmount('');
+                }}
                 disabled={currentStep !== 'idle'}
               >
-                Max
-              </Button>
+                <SelectTrigger id="token" className="h-12">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {SUPPORTED_TOKENS.map((tokenAddr) => {
+                    const info = getTokenInfo(tokenAddr);
+                    return (
+                      <SelectItem key={tokenAddr} value={tokenAddr}>
+                        {info.symbol} - {info.name}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
             </div>
-            {tokenBalance && (
-              <p className="text-sm text-muted-foreground">
-                Balance: {formatUnits(tokenBalance.value, tokenInfo.decimals)} {tokenInfo.symbol}
+
+            {/* Amount Input */}
+            <div className="space-y-2">
+              <Label htmlFor="amount">{tokenInfo.symbol} Amount</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="amount"
+                  type="number"
+                  step="any"
+                  placeholder="100.00"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  disabled={currentStep !== 'idle'}
+                  className="h-12 text-lg"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleMaxClick}
+                  disabled={currentStep !== 'idle'}
+                  className="h-12 px-6"
+                >
+                  Max
+                </Button>
+              </div>
+              {tokenBalance && (
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Balance: <strong>{formatUnits(tokenBalance.value, tokenInfo.decimals)} {tokenInfo.symbol}</strong>
+                </p>
+              )}
+            </div>
+          </motion.div>
+
+          {/* Section 2: Your exchange rate */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="space-y-4 p-6 bg-gradient-to-br from-gray-50 to-purple-50/30 dark:from-gray-800/50 dark:to-purple-900/10 rounded-2xl border border-gray-200/50 dark:border-gray-700/50"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold">
+                2
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                  Your exchange rate
+                </h3>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="exchangeRate">Exchange Rate (CNY per {tokenInfo.symbol})</Label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-lg font-semibold">¥</span>
+                <Input
+                  id="exchangeRate"
+                  type="number"
+                  step="0.01"
+                  placeholder="7.30"
+                  value={exchangeRate}
+                  onChange={(e) => setExchangeRate(e.target.value)}
+                  disabled={currentStep !== 'idle'}
+                  className="h-12 text-lg pl-9"
+                />
+              </div>
+              {amount && exchangeRate && (
+                <div className="mt-3 p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 rounded-xl border border-green-200/50 dark:border-green-800/50">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">You'll receive:</p>
+                  <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                    ¥{calculateCnyAmount()} <span className="text-base font-normal">CNY</span>
+                  </p>
+                </div>
+              )}
+            </div>
+          </motion.div>
+
+          {/* Section 3: Your Alipay details */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="space-y-4 p-6 bg-gradient-to-br from-gray-50 to-pink-50/30 dark:from-gray-800/50 dark:to-pink-900/10 rounded-2xl border border-gray-200/50 dark:border-gray-700/50"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl flex items-center justify-center text-white font-bold">
+                3
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg flex items-center gap-2">
+                  <User className="h-5 w-5 text-pink-600 dark:text-pink-400" />
+                  Your Alipay details
+                </h3>
+              </div>
+            </div>
+
+            {/* Alipay ID */}
+            <div className="space-y-2">
+              <Label htmlFor="alipayId">Your Alipay ID</Label>
+              <Input
+                id="alipayId"
+                type="text"
+                placeholder="13800138000"
+                value={alipayId}
+                onChange={(e) => setAlipayId(e.target.value)}
+                disabled={currentStep !== 'idle'}
+                className="h-12"
+              />
+              <Alert className="border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/30">
+                <AlertDescription className="text-xs">
+                  <strong>⚠️ Important:</strong> Only Chinese mainland cell phone numbered Alipay IDs are supported in this beta release.
+                  <br />
+                  Buyers will send CNY to this Alipay account.
+                </AlertDescription>
+              </Alert>
+            </div>
+
+            {/* Alipay Name */}
+            <div className="space-y-2">
+              <Label htmlFor="alipayName">Your Alipay Name</Label>
+              <Input
+                id="alipayName"
+                type="text"
+                placeholder="王健 (Wang Jian)"
+                value={alipayName}
+                onChange={(e) => setAlipayName(e.target.value)}
+                disabled={currentStep !== 'idle'}
+                className="h-12"
+              />
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                ℹ️ Must match the name on your Alipay account
               </p>
-            )}
-          </div>
-
-          {/* Exchange Rate */}
-          <div className="space-y-2">
-            <Label htmlFor="exchangeRate">Exchange Rate (CNY per {tokenInfo.symbol})</Label>
-            <Input
-              id="exchangeRate"
-              type="number"
-              step="0.01"
-              placeholder="7.30"
-              value={exchangeRate}
-              onChange={(e) => setExchangeRate(e.target.value)}
-              disabled={currentStep !== 'idle'}
-            />
-            <p className="text-sm text-muted-foreground">
-              You will receive: ¥{calculateCnyAmount()} CNY
-            </p>
-          </div>
-
-          {/* Alipay ID */}
-          <div className="space-y-2">
-            <Label htmlFor="alipayId">Your Alipay ID</Label>
-            <Input
-              id="alipayId"
-              type="text"
-              placeholder="seller@alipay.cn or phone number"
-              value={alipayId}
-              onChange={(e) => setAlipayId(e.target.value)}
-              disabled={currentStep !== 'idle'}
-            />
-            <p className="text-sm text-muted-foreground">
-              Buyers will send CNY to this Alipay account
-            </p>
-          </div>
-
-          {/* Alipay Name */}
-          <div className="space-y-2">
-            <Label htmlFor="alipayName">Your Alipay Name</Label>
-            <Input
-              id="alipayName"
-              type="text"
-              placeholder="Wang Jian"
-              value={alipayName}
-              onChange={(e) => setAlipayName(e.target.value)}
-              disabled={currentStep !== 'idle'}
-            />
-            <p className="text-sm text-muted-foreground">
-              Must match the name on your Alipay account
-            </p>
-          </div>
+            </div>
+          </motion.div>
 
           {/* Error Display */}
           {error && (
@@ -300,10 +454,10 @@ export function CreateOrderForm() {
 
           {/* Transaction Status */}
           {currentStep === 'approving' && (
-            <Alert>
+            <Alert className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30">
               <Loader2 className="h-4 w-4 animate-spin" />
               <AlertDescription>
-                Step 1/2: Approving {tokenInfo.symbol} spending...
+                <strong>Step 1/2:</strong> Approving {tokenInfo.symbol} spending...
                 {approveHash && (
                   <span className="block text-xs mt-1 font-mono">Tx: {approveHash.slice(0, 10)}...</span>
                 )}
@@ -312,10 +466,10 @@ export function CreateOrderForm() {
           )}
 
           {currentStep === 'creating' && (
-            <Alert>
+            <Alert className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30">
               <Loader2 className="h-4 w-4 animate-spin" />
               <AlertDescription>
-                Step 2/2: Creating and locking order...
+                <strong>Step 2/2:</strong> Creating and locking order...
                 {createHash && (
                   <span className="block text-xs mt-1 font-mono">Tx: {createHash.slice(0, 10)}...</span>
                 )}
@@ -326,29 +480,29 @@ export function CreateOrderForm() {
           {/* Submit Button */}
           <Button
             type="submit"
-            className="w-full"
+            className="w-full h-14 text-lg bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 shadow-lg hover:shadow-xl transition-all duration-300"
             disabled={!isFormValid() || currentStep !== 'idle'}
           >
             {currentStep === 'idle' && 'Create Order'}
             {currentStep === 'approving' && (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                 Approving {tokenInfo.symbol}...
               </>
             )}
             {currentStep === 'creating' && (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                 Creating Order...
               </>
             )}
           </Button>
 
           {/* Info Box */}
-          <Alert>
+          <Alert className="border-gray-200 dark:border-gray-700">
             <AlertDescription className="text-sm">
-              <strong>Note:</strong> You will need to confirm two transactions:
-              <ol className="list-decimal list-inside mt-2 space-y-1">
+              <strong>📋 Note:</strong> You will need to confirm two transactions:
+              <ol className="list-decimal list-inside mt-2 space-y-1 ml-2">
                 <li>Approve {tokenInfo.symbol} spending for the escrow contract</li>
                 <li>Create and lock your sell order</li>
               </ol>
@@ -359,4 +513,3 @@ export function CreateOrderForm() {
     </Card>
   );
 }
-
