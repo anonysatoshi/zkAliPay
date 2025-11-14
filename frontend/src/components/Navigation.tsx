@@ -6,6 +6,8 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
+const ENABLE_DEBUG = process.env.NEXT_PUBLIC_ENABLE_DEBUG === 'true';
+
 export function Navigation() {
   const pathname = usePathname();
 
@@ -32,11 +34,13 @@ export function Navigation() {
                 Sell Tokens
               </Button>
             </Link>
-            <Link href="/debug">
-              <Button variant={isActive('/debug') ? 'default' : 'ghost'} size="sm">
-                Debug
-              </Button>
-            </Link>
+            {ENABLE_DEBUG && (
+              <Link href="/debug">
+                <Button variant={isActive('/debug') ? 'default' : 'ghost'} size="sm">
+                  Debug
+                </Button>
+              </Link>
+            )}
 
             {/* Theme Toggle */}
             <ThemeToggle />
