@@ -1,0 +1,23 @@
+{
+  "name": "zkAlipay - Buy Crypto with Alipay",
+  "short_name": "zkAlipay",
+  "description": "Decentralized fiat gateway powered by zero-knowledge virtual machine",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1677FF",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "32x32",
+      "type": "image/svg+xml"
+    }
+  ]
+}
+
