@@ -7,15 +7,20 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { LanguageSelector } from '@/components/LanguageSelector';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 const ENABLE_DEBUG = process.env.NEXT_PUBLIC_ENABLE_DEBUG === 'true';
 
 export function Navigation() {
   const pathname = usePathname();
+  const locale = useLocale();
   const t = useTranslations('nav');
 
   const isActive = (path: string) => pathname === path;
+  
+  // Choose logo based on language
+  const logoSrc = locale === 'zh-TW' ? '/logo-compact-zh.svg' : '/logo-compact.svg';
+  const logoWidth = locale === 'zh-TW' ? 140 : 120;
 
   return (
     <nav className="border-b">
@@ -24,9 +29,9 @@ export function Navigation() {
           {/* Logo */}
           <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
             <Image 
-              src="/logo-compact.svg" 
+              src={logoSrc}
               alt="zkAlipay" 
-              width={120} 
+              width={logoWidth}
               height={40}
               priority
             />
