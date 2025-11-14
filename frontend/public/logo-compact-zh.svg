@@ -4,9 +4,14 @@
     zk
   </text>
   
-  <!-- "支付宝" in Alipay blue -->
-  <text x="35" y="28" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="24" font-weight="600" fill="#1677FF">
-    支付宝
+  <!-- Space between zk and 支付寶 -->
+  <text x="35" y="28" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="24" font-weight="300" fill="#475569">
+     
+  </text>
+  
+  <!-- "支付寶" in Alipay blue -->
+  <text x="42" y="28" font-family="-apple-system, BlinkMacSystemFont, 'PingFang TC', 'Microsoft JhengHei', sans-serif" font-size="24" font-weight="600" fill="#1677FF">
+    支付寶
   </text>
   
   <!-- Accent underline -->
@@ -16,6 +21,6 @@
       <stop offset="100%" style="stop-color:#6C5CE7;stop-opacity:1" />
     </linearGradient>
   </defs>
-  <rect x="35" y="32" width="105" height="2" rx="1" fill="url(#compactGradientZh)"/>
+  <rect x="42" y="32" width="105" height="2" rx="1" fill="url(#compactGradientZh)"/>
 </svg>
 
