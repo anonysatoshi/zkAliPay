@@ -13,7 +13,13 @@ import {
   RotateCcw,
   ChevronRight,
   ChevronLeft,
-  X
+  X,
+  Upload,
+  Shield,
+  Zap,
+  Send,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { api } from '@/lib/api';
 import { getTransactionUrl } from '@/lib/contracts';
@@ -363,6 +369,109 @@ function PaymentTutorialModal({
   );
 }
 
+// Phase Progress Component
+function PhaseProgress({ 
+  phase, 
+  title, 
+  description, 
+  status, 
+  icon: Icon,
+  estimatedTime,
+  details
+}: {
+  phase: number;
+  title: string;
+  description: string;
+  status: 'pending' | 'in_progress' | 'completed' | 'failed';
+  icon: any;
+  estimatedTime?: string;
+  details?: React.ReactNode;
+}) {
+  const [isExpanded, setIsExpanded] = useState(status === 'in_progress');
+
+  useEffect(() => {
+    if (status === 'in_progress') {
+      setIsExpanded(true);
+    }
+  }, [status]);
+
+  const bgColor = 
+    status === 'completed' ? 'bg-green-50 border-green-200' :
+    status === 'in_progress' ? 'bg-blue-50 border-blue-300' :
+    status === 'failed' ? 'bg-red-50 border-red-200' :
+    'bg-gray-50 border-gray-200';
+
+  const iconColor = 
+    status === 'completed' ? 'text-green-600' :
+    status === 'in_progress' ? 'text-blue-600' :
+    status === 'failed' ? 'text-red-600' :
+    'text-gray-400';
+
+  const textColor = 
+    status === 'completed' ? 'text-green-800' :
+    status === 'in_progress' ? 'text-blue-800' :
+    status === 'failed' ? 'text-red-800' :
+    'text-gray-500';
+
+  return (
+    <div className={`border-2 rounded-lg overflow-hidden transition-all ${bgColor}`}>
+      {/* Header */}
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full p-4 flex items-center justify-between hover:bg-black/5 transition-colors"
+      >
+        <div className="flex items-center gap-3">
+          {/* Phase Number Badge */}
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+            status === 'completed' ? 'bg-green-200 text-green-800' :
+            status === 'in_progress' ? 'bg-blue-200 text-blue-800' :
+            status === 'failed' ? 'bg-red-200 text-red-800' :
+            'bg-gray-200 text-gray-500'
+          }`}>
+            {status === 'completed' ? '✓' : phase}
+          </div>
+
+          {/* Icon */}
+          {status === 'in_progress' ? (
+            <Loader2 className={`h-5 w-5 animate-spin ${iconColor}`} />
+          ) : status === 'completed' ? (
+            <CheckCircle2 className={`h-5 w-5 ${iconColor}`} />
+          ) : (
+            <Icon className={`h-5 w-5 ${iconColor}`} />
+          )}
+
+          {/* Title & Description */}
+          <div className="text-left">
+            <div className={`font-semibold ${textColor}`}>{title}</div>
+            <div className="text-xs text-muted-foreground">{description}</div>
+          </div>
+        </div>
+
+        {/* Right Side */}
+        <div className="flex items-center gap-2">
+          {estimatedTime && status === 'in_progress' && (
+            <span className="text-xs font-semibold bg-white/60 px-2 py-1 rounded">
+              ~{estimatedTime}
+            </span>
+          )}
+          {isExpanded ? (
+            <ChevronUp className="h-4 w-4 text-gray-500" />
+          ) : (
+            <ChevronDown className="h-4 w-4 text-gray-500" />
+          )}
+        </div>
+      </button>
+
+      {/* Expanded Details */}
+      {isExpanded && details && (
+        <div className="px-4 pb-4 border-t border-current/10">
+          <div className="pt-3 text-sm">{details}</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function PaymentInstructions({ trades, onAllSettled }: PaymentInstructionsProps) {
   const [tradeStatuses, setTradeStatuses] = useState<Map<string, TradeStatus>>(
     new Map(
@@ -695,31 +804,34 @@ export function PaymentInstructions({ trades, onAllSettled }: PaymentInstruction
         const cnyAmount = (parseFloat(trade.cny_amount) / 100).toFixed(2);
 
         return (
-          <Card key={trade.trade_id}>
-            <CardHeader>
+          <Card 
+            key={trade.trade_id}
+            className="border-2 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50"
+          >
+            <CardHeader className="border-b bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-lg">
-                  Payment: ¥{cnyAmount} CNY
+                <CardTitle className="text-lg font-bold">
+                  💸 Payment: ¥{cnyAmount} CNY
                 </CardTitle>
                 <div className="flex items-center gap-2">
                   {status.status === 'pending' && status.timeRemaining > 0 && (
-                    <div className="flex items-center gap-1 text-sm font-semibold text-orange-600">
+                    <div className="flex items-center gap-1 text-sm font-semibold text-orange-600 bg-orange-50 px-3 py-1 rounded-full">
                       <Clock className="h-4 w-4" />
                       {formatTime(status.timeRemaining)}
                     </div>
                   )}
                   {status.status === 'expired' && (
-                    <span className="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full font-semibold">
+                    <span className="text-xs px-3 py-1.5 bg-red-100 text-red-700 rounded-full font-semibold">
                       EXPIRED
                     </span>
                   )}
                   {status.status === 'proof_submitted' && (
-                    <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full font-semibold">
+                    <span className="text-xs px-3 py-1.5 bg-blue-100 text-blue-700 rounded-full font-semibold">
                       PROOF SUBMITTED
                     </span>
                   )}
                   {status.status === 'settled' && (
-                    <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full font-semibold flex items-center gap-1">
+                    <span className="text-xs px-3 py-1.5 bg-green-100 text-green-700 rounded-full font-semibold flex items-center gap-1">
                       <CheckCircle2 className="h-3 w-3" />
                       SETTLED
                     </span>
@@ -728,24 +840,24 @@ export function PaymentInstructions({ trades, onAllSettled }: PaymentInstruction
               </div>
             </CardHeader>
 
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 pt-6">
               {/* Payment Details */}
-              <div className="bg-muted/50 rounded-lg p-4 space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Alipay Account:</span>
-                  <span className="font-mono font-semibold">{trade.alipay_id}</span>
+              <div className="bg-gradient-to-br from-muted/30 to-muted/50 border border-muted rounded-xl p-4 space-y-3 text-sm shadow-sm">
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground font-medium">Alipay Account:</span>
+                  <span className="font-mono font-semibold bg-white dark:bg-gray-800 px-2 py-1 rounded">{trade.alipay_id}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Account Name:</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground font-medium">Account Name:</span>
                   <span className="font-semibold">{trade.alipay_name}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Amount:</span>
-                  <span className="font-semibold text-lg">¥{cnyAmount}</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground font-medium">Amount:</span>
+                  <span className="font-bold text-lg text-primary">¥{cnyAmount}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Payment Note:</span>
-                  <span className="font-mono text-lg font-bold">{trade.payment_nonce}</span>
+                <div className="flex justify-between items-center border-t pt-2 mt-2">
+                  <span className="text-muted-foreground font-medium">Payment Note:</span>
+                  <span className="font-mono text-base font-bold bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 px-2 py-1 rounded">{trade.payment_nonce}</span>
                 </div>
               </div>
 
@@ -844,182 +956,158 @@ export function PaymentInstructions({ trades, onAllSettled }: PaymentInstruction
                 </>
               )}
 
-              {status.status === 'uploading' && (
-                <Button disabled className="w-full">
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Uploading PDF...
-                </Button>
-              )}
+              {/* Phase-Based Progress Display - Only show after user uploads */}
+              {(status.status !== 'pending' && status.status !== 'expired' && status.status !== 'settled') && (
+                <div className="space-y-3 pt-4">
+                  {/* Phase 1: Upload & Validation */}
+                  <PhaseProgress
+                    phase={1}
+                    title="Upload & Validate Payment"
+                    description="Upload PDF and verify payment details"
+                    status={
+                      ['settled', 'submitting_to_blockchain', 'blockchain_submitted', 'proof_submitted', 'generating_proof', 'proof_ready', 'valid'].includes(status.status)
+                        ? 'completed'
+                        : ['uploading', 'validating'].includes(status.status)
+                        ? 'in_progress'
+                        : status.status === 'invalid'
+                        ? 'failed'
+                        : 'pending'
+                    }
+                    icon={Upload}
+                    estimatedTime="10-30s"
+                    details={
+                      <div className="space-y-2">
+                        {status.uploadedFilename && (
+                          <div className="p-2 bg-white/60 rounded text-xs">
+                            <span className="text-muted-foreground">File:</span> 
+                            <span className="font-mono ml-2">{status.uploadedFilename}</span>
+                          </div>
+                        )}
+                        {status.status === 'uploading' && (
+                          <p className="text-xs text-blue-700">📤 Uploading PDF to server...</p>
+                        )}
+                        {status.status === 'validating' && (
+                          <p className="text-xs text-blue-700">🔍 Validating payment details with Axiom Execute mode...</p>
+                        )}
+                        {['valid', 'generating_proof', 'proof_ready', 'submitting_to_blockchain', 'blockchain_submitted', 'proof_submitted', 'settled'].includes(status.status) && (
+                          <div className="space-y-2">
+                            <p className="text-xs text-green-700 font-semibold">✅ Validation complete!</p>
+                            {status.validationDetails && (
+                              <p className="text-xs text-green-700">{status.validationDetails}</p>
+                            )}
+                            {status.expectedHash && status.actualHash && (
+                              <div className="p-2 bg-white/60 rounded text-xs font-mono space-y-1">
+                                <div>
+                                  <span className="text-muted-foreground">Expected:</span>
+                                  <div className="break-all text-[10px]">{status.expectedHash.slice(0, 32)}...</div>
+                                </div>
+                                <div>
+                                  <span className="text-muted-foreground">Actual:</span>
+                                  <div className="break-all text-[10px]">{status.actualHash.slice(0, 32)}...</div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    }
+                  />
 
-              {status.status === 'validating' && (
-                <Alert>
-                  <AlertDescription className="text-sm">
-                    <div className="flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <span>Validating PDF with OpenVM...</span>
-                    </div>
-                    {status.uploadedFilename && (
-                      <span className="block mt-2 font-mono text-xs text-muted-foreground">
-                        File: {status.uploadedFilename}
-                      </span>
-                    )}
-                    <p className="mt-2 text-xs text-muted-foreground">
-                      This verifies your payment details match the PDF signature and content.
-                    </p>
-                  </AlertDescription>
-                </Alert>
-              )}
+                  {/* Phase 2: Generate Proof */}
+                  <PhaseProgress
+                    phase={2}
+                    title="Generate Zero-Knowledge Proof"
+                    description="Create cryptographic proof via Axiom network"
+                    status={
+                      ['settled', 'submitting_to_blockchain', 'blockchain_submitted', 'proof_submitted', 'proof_ready'].includes(status.status)
+                        ? 'completed'
+                        : status.status === 'generating_proof'
+                        ? 'in_progress'
+                        : status.status === 'proof_failed'
+                        ? 'failed'
+                        : 'pending'
+                    }
+                    icon={Zap}
+                    estimatedTime="5-10 min"
+                    details={
+                      <div className="space-y-2">
+                        {status.status === 'generating_proof' && (
+                          <>
+                            <p className="text-xs text-blue-700">
+                              ⚡ Generating EVM-compatible zero-knowledge proof via Axiom OpenVM proving network...
+                            </p>
+                            <div className="mt-2 space-y-1 text-xs">
+                              <div className="flex items-center gap-2">
+                                <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                                <span>Generating proof on remote server</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <div className="w-2 h-2 rounded-full bg-gray-300"></div>
+                                <span>Downloading proof for verification</span>
+                              </div>
+                            </div>
+                            <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded">
+                              <p className="text-xs text-yellow-800">
+                                ⏰ <strong>Please wait:</strong> This process may take 5-10 minutes. Do not close this page.
+                              </p>
+                            </div>
+                          </>
+                        )}
+                        {['proof_ready', 'submitting_to_blockchain', 'blockchain_submitted', 'proof_submitted', 'settled'].includes(status.status) && (
+                          <p className="text-xs text-green-700 font-semibold">
+                            ✅ Zero-knowledge proof generated successfully!
+                          </p>
+                        )}
+                      </div>
+                    }
+                  />
 
-              {status.status === 'valid' && (
-                <Alert className="bg-green-50 border-green-200">
-                  <CheckCircle2 className="h-4 w-4 text-green-600" />
-                  <AlertDescription className="text-sm text-green-800">
-                    <div className="font-semibold mb-2">✅ PDF Validation Complete!</div>
-                    <p className="mb-2">{status.validationDetails}</p>
-                    {status.expectedHash && status.actualHash && (
-                      <div className="mt-2 p-2 bg-white/50 rounded text-xs font-mono space-y-1">
-                        <div>
-                          <span className="text-muted-foreground">Expected Hash:</span>
-                          <div className="break-all">{status.expectedHash}</div>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Actual Hash:</span>
-                          <div className="break-all">{status.actualHash}</div>
-                        </div>
+                  {/* Phase 3: Submit to Blockchain */}
+                  <PhaseProgress
+                    phase={3}
+                    title="Submit to Blockchain"
+                    description="Submit proof to smart contract for settlement"
+                    status={
+                      ['settled', 'proof_submitted'].includes(status.status)
+                        ? 'completed'
+                        : ['submitting_to_blockchain', 'blockchain_submitted', 'settling'].includes(status.status)
+                        ? 'in_progress'
+                        : 'pending'
+                    }
+                    icon={Send}
+                    estimatedTime="10-30s"
+                    details={
+                      <div className="space-y-2">
+                        {['submitting_to_blockchain', 'blockchain_submitted'].includes(status.status) && (
+                          <>
+                            <p className="text-xs text-blue-700">
+                              📤 Submitting proof to zkAlipay smart contract...
+                            </p>
+                            {status.blockchain_tx_hash && (
+                              <div className="p-2 bg-white/60 rounded">
+                                <p className="text-xs text-muted-foreground mb-1">Transaction Hash:</p>
+                                <a
+                                  href={getTransactionUrl(status.blockchain_tx_hash)}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-1 text-xs text-primary hover:underline break-all"
+                                >
+                                  {status.blockchain_tx_hash}
+                                  <ExternalLink className="h-3 w-3 flex-shrink-0" />
+                                </a>
+                              </div>
+                            )}
+                          </>
+                        )}
+                        {['proof_submitted', 'settled'].includes(status.status) && (
+                          <p className="text-xs text-green-700 font-semibold">
+                            ✅ Proof submitted! Waiting for settlement confirmation...
+                          </p>
+                        )}
                       </div>
-                    )}
-                    <div className="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded">
-                      <p className="text-xs text-yellow-800">
-                        ⚠️ <strong>Axiom API Disabled:</strong> Proof generation and blockchain submission are temporarily disabled for codebase cleanup.
-                      </p>
-                    </div>
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              {status.status === 'generating_proof' && (
-                <Alert className="bg-blue-50 border-blue-200">
-                  <AlertDescription className="text-sm text-blue-800">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Loader2 className="h-4 w-4 animate-spin text-blue-600" />
-                      <span className="font-semibold">🚀 Generating Zero-Knowledge Proof...</span>
-                    </div>
-                    <p className="mb-2">
-                      Your payment proof is being generated via Axiom OpenVM proving network.
-                    </p>
-                    <div className="mt-3 space-y-1 text-xs">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                        <span>✓ PDF uploaded & validated locally</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
-                        <span>⏳ Generating EVM proof (this may take 5-20 minutes)</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-gray-300"></div>
-                        <span>Proof ready for blockchain submission</span>
-                      </div>
-                    </div>
-                    <p className="mt-3 text-xs text-muted-foreground font-semibold">
-                      ⚠️ Please keep this page open. Do not refresh or navigate away.
-                    </p>
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              {status.status === 'proof_ready' && (
-                <Alert className="bg-green-50 border-green-200">
-                  <CheckCircle2 className="h-4 w-4 text-green-600" />
-                  <AlertDescription className="text-sm text-green-800">
-                    <div className="font-semibold mb-2">✅ Proof Generated Successfully!</div>
-                    <p className="mb-2">
-                      Your zero-knowledge proof has been generated and verified by Axiom.
-                    </p>
-                    <div className="mt-3 space-y-1 text-xs">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                        <span>✓ PDF validated</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                        <span>✓ EVM proof generated & downloaded</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
-                        <span>⏳ Submitting to blockchain for settlement...</span>
-                      </div>
-                    </div>
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              {status.status === 'submitting_to_blockchain' && (
-                <Alert className="bg-blue-50 border-blue-200">
-                  <Loader2 className="h-4 w-4 text-blue-600 animate-spin" />
-                  <AlertDescription className="text-sm text-blue-800">
-                    <div className="font-semibold mb-2">📤 Submitting Proof to Blockchain...</div>
-                    <p className="mb-2">
-                      Your proof is being submitted to the smart contract for settlement. This usually takes 10-30 seconds.
-                    </p>
-                    <div className="mt-3 space-y-1 text-xs">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                        <span>✓ PDF validated</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                        <span>✓ EVM proof generated</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
-                        <span>⏳ Calling smart contract...</span>
-                      </div>
-                    </div>
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              {status.status === 'blockchain_submitted' && (
-                <Alert className="bg-green-50 border-green-200">
-                  <CheckCircle2 className="h-4 w-4 text-green-600" />
-                  <AlertDescription className="text-sm text-green-800">
-                    <div className="font-semibold mb-2">🎉 Proof Submitted to Blockchain!</div>
-                    <p className="mb-2">
-                      Your proof has been successfully submitted. Waiting for blockchain confirmation...
-                    </p>
-                    {status.blockchain_tx_hash && (
-                      <div className="mt-2 p-2 bg-white/50 rounded">
-                        <p className="text-xs text-muted-foreground mb-1">Transaction Hash:</p>
-                        <div className="flex items-center gap-2">
-                          <code className="text-xs break-all">{status.blockchain_tx_hash}</code>
-                          <ExternalLink 
-                            className="h-3 w-3 flex-shrink-0 cursor-pointer text-blue-600"
-                            onClick={() => status.blockchain_tx_hash && window.open(getTransactionUrl(status.blockchain_tx_hash), '_blank')}
-                          />
-                        </div>
-                      </div>
-                    )}
-                    <div className="mt-3 space-y-1 text-xs">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                        <span>✓ PDF validated</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                        <span>✓ EVM proof generated</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                        <span>✓ Proof submitted to blockchain</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
-                        <span>⏳ Confirming settlement...</span>
-                      </div>
-                    </div>
-                  </AlertDescription>
-                </Alert>
+                    }
+                  />
+                </div>
               )}
 
               {status.status === 'proof_failed' && (
