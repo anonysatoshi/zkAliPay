@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "buyTokens": "Buy Tokens",
+    "sellTokens": "Sell Tokens",
+    "debug": "Debug"
+  },
+  "home": {
+    "betaBadge": "Beta Release - Base Sepolia Testnet",
+    "hero": {
+      "title": "Buy Crypto with Alipay",
+      "subtitle1": "The world's first",
+      "subtitle2": "decentralized crypto exchange",
+      "subtitle3": "powered by",
+      "subtitle4": "zero-knowledge virtual machine",
+      "tagline": "Trade CNY for crypto tokens instantly. No middlemen. No custodians. Just you, the blockchain, and math.",
+      "startTrading": "Start Trading",
+      "howItWorks": "How it Works"
+    },
+    "features": {
+      "title": "Trustless. Private.",
+      "titleHighlight": "Unstoppable.",
+      "subtitle": "Built on cutting-edge cryptography that makes traditional exchanges obsolete",
+      "zkProofs": {
+        "title": "Zero-Knowledge Proofs",
+        "description": "Verify payments without revealing sensitive information. Privacy by design."
+      },
+      "instantSettlement": {
+        "title": "Instant Settlement",
+        "description": "Smart contracts release funds automatically when proof is verified. No delays."
+      },
+      "decentralized": {
+        "title": "Truly Decentralized",
+        "description": "No central authority. No KYC. Trade peer-to-peer with anyone, anywhere."
+      },
+      "selfCustodial": {
+        "title": "Self-Custodial",
+        "description": "Your keys, your crypto. Funds never leave your wallet until trade completes."
+      }
+    },
+    "howItWorks": {
+      "title": "Simple. Elegant.",
+      "titleHighlight": "Revolutionary.",
+      "subtitle": "Three steps to trade with cryptographic certainty",
+      "step1": {
+        "title": "Find or Create an Order",
+        "description": "Browse available sell orders or create your own buy order. Set your rate and amount."
+      },
+      "step2": {
+        "title": "Pay with Alipay",
+        "description": "Transfer CNY via Alipay with a unique payment note. Upload your PDF receipt."
+      },
+      "step3": {
+        "title": "Receive Crypto Instantly",
+        "description": "Zero-knowledge proof is generated and verified. Tokens are released to your wallet automatically."
+      }
+    },
+    "orderList": {
+      "title": "Available",
+      "titleHighlight": "Orders",
+      "subtitle": "Start trading now with live peer-to-peer orders"
+    },
+    "cta": {
+      "title": "Ready to trade without borders?",
+      "subtitle": "Join the future of decentralized finance. No registration required.",
+      "button": "Start Trading Now"
+    }
+  }
+}
+

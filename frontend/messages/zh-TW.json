@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "buyTokens": "購買代幣",
+    "sellTokens": "出售代幣",
+    "debug": "調試"
+  },
+  "home": {
+    "betaBadge": "Beta 測試版 - Base Sepolia 測試網",
+    "hero": {
+      "title": "用支付寶購買加密貨幣",
+      "subtitle1": "全球首個",
+      "subtitle2": "去中心化加密貨幣交易所",
+      "subtitle3": "採用",
+      "subtitle4": "零知識虛擬機技術",
+      "tagline": "即時將人民幣兌換為加密代幣。無中介、無託管，只有您、區塊鏈和數學。",
+      "startTrading": "開始交易",
+      "howItWorks": "運作原理"
+    },
+    "features": {
+      "title": "無需信任。隱私保護。",
+      "titleHighlight": "勢不可擋。",
+      "subtitle": "建立在尖端密碼學之上，淘汰傳統交易所",
+      "zkProofs": {
+        "title": "零知識證明",
+        "description": "驗證支付而無需透露敏感信息。隱私至上的設計。"
+      },
+      "instantSettlement": {
+        "title": "即時結算",
+        "description": "當證明驗證通過後，智能合約自動釋放資金。無需等待。"
+      },
+      "decentralized": {
+        "title": "真正去中心化",
+        "description": "無中央機構。無需 KYC。與任何人、任何地點進行點對點交易。"
+      },
+      "selfCustodial": {
+        "title": "自主保管",
+        "description": "您的密鑰，您的加密貨幣。資金在交易完成前絕不離開您的錢包。"
+      }
+    },
+    "howItWorks": {
+      "title": "簡單。優雅。",
+      "titleHighlight": "革命性。",
+      "subtitle": "三步實現密碼學確定性交易",
+      "step1": {
+        "title": "尋找或創建訂單",
+        "description": "瀏覽可用的出售訂單或創建您自己的購買訂單。設置您的匯率和金額。"
+      },
+      "step2": {
+        "title": "使用支付寶付款",
+        "description": "通過支付寶轉帳人民幣並附上唯一付款備註。上傳您的 PDF 收據。"
+      },
+      "step3": {
+        "title": "即時收到加密貨幣",
+        "description": "零知識證明生成並驗證。代幣自動釋放到您的錢包。"
+      }
+    },
+    "orderList": {
+      "title": "可用",
+      "titleHighlight": "訂單",
+      "subtitle": "立即開始交易，查看實時點對點訂單"
+    },
+    "cta": {
+      "title": "準備好無國界交易了嗎？",
+      "subtitle": "加入去中心化金融的未來。無需註冊。",
+      "button": "立即開始交易"
+    }
+  }
+}
+

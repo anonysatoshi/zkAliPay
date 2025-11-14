@@ -4,8 +4,10 @@ import { OrderList } from '@/components/orders/OrderList';
 import { motion } from 'framer-motion';
 import { ArrowRight, Shield, Zap, Globe, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 export default function HomePage() {
+  const t = useTranslations('home');
   return (
     <div className="min-h-screen">
       {/* Hero Section - Apple Style */}
@@ -29,7 +31,7 @@ export default function HomePage() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                 </span>
-                Beta Release - Base Sepolia Testnet
+                {t('betaBadge')}
               </span>
             </motion.div>
 
@@ -41,7 +43,7 @@ export default function HomePage() {
               className="mb-6"
             >
               <h1 className="text-5xl md:text-7xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 leading-tight">
-                Buy Crypto with Alipay
+                {t('hero.title')}
               </h1>
             </motion.div>
 
@@ -52,8 +54,8 @@ export default function HomePage() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed"
             >
-              The world's first <span className="font-semibold text-gray-900 dark:text-white">decentralized crypto exchange</span><br />
-              powered by <span className="font-semibold text-gray-900 dark:text-white">zero-knowledge virtual machine</span>
+              {t('hero.subtitle1')} <span className="font-semibold text-gray-900 dark:text-white">{t('hero.subtitle2')}</span><br />
+              {t('hero.subtitle3')} <span className="font-semibold text-gray-900 dark:text-white">{t('hero.subtitle4')}</span>
             </motion.p>
 
             {/* Tagline */}
@@ -63,7 +65,7 @@ export default function HomePage() {
               transition={{ duration: 0.6, delay: 0.6 }}
               className="text-lg text-gray-500 dark:text-gray-400 mb-12 max-w-3xl mx-auto"
             >
-              Trade CNY for crypto tokens instantly. No middlemen. No custodians. Just you, the blockchain, and math.
+              {t('hero.tagline')}
             </motion.p>
 
             {/* CTA Buttons */}
@@ -80,7 +82,7 @@ export default function HomePage() {
                   document.getElementById('order-list')?.scrollIntoView({ behavior: 'smooth' });
                 }}
               >
-                Start Trading
+                {t('hero.startTrading')}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <Button
@@ -91,7 +93,7 @@ export default function HomePage() {
                   document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
                 }}
               >
-                How It Works
+                {t('hero.howItWorks')}
               </Button>
             </motion.div>
           </motion.div>
@@ -116,10 +118,10 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4 dark:text-white">
-              Trustless. Private. <span className="text-blue-600 dark:text-blue-400">Unstoppable.</span>
+              {t('features.title')} <span className="text-blue-600 dark:text-blue-400">{t('features.titleHighlight')}</span>
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Built on cutting-edge cryptography that makes traditional exchanges obsolete
+              {t('features.subtitle')}
             </p>
           </motion.div>
 
@@ -136,9 +138,9 @@ export default function HomePage() {
                 <div className="w-14 h-14 bg-blue-600 dark:bg-blue-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                   <Shield className="h-7 w-7 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 dark:text-white">Zero-Knowledge Proofs</h3>
+                <h3 className="text-xl font-bold mb-3 dark:text-white">{t('features.zkProofs.title')}</h3>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Verify payments without revealing sensitive information. Privacy by design.
+                  {t('features.zkProofs.description')}
                 </p>
               </div>
             </motion.div>
@@ -155,9 +157,9 @@ export default function HomePage() {
                 <div className="w-14 h-14 bg-purple-600 dark:bg-purple-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                   <Zap className="h-7 w-7 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 dark:text-white">Instant Settlement</h3>
+                <h3 className="text-xl font-bold mb-3 dark:text-white">{t('features.instantSettlement.title')}</h3>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Smart contracts release funds automatically when proof is verified. No delays.
+                  {t('features.instantSettlement.description')}
                 </p>
               </div>
             </motion.div>
@@ -174,9 +176,9 @@ export default function HomePage() {
                 <div className="w-14 h-14 bg-pink-600 dark:bg-pink-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                   <Globe className="h-7 w-7 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 dark:text-white">Truly Decentralized</h3>
+                <h3 className="text-xl font-bold mb-3 dark:text-white">{t('features.decentralized.title')}</h3>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  No central authority. No KYC. Trade peer-to-peer with anyone, anywhere.
+                  {t('features.decentralized.description')}
                 </p>
               </div>
             </motion.div>
@@ -193,9 +195,9 @@ export default function HomePage() {
                 <div className="w-14 h-14 bg-indigo-600 dark:bg-indigo-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                   <Lock className="h-7 w-7 text-white" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 dark:text-white">Self-Custodial</h3>
+                <h3 className="text-xl font-bold mb-3 dark:text-white">{t('features.selfCustodial.title')}</h3>
                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                  Your keys, your crypto. Funds never leave your wallet until trade completes.
+                  {t('features.selfCustodial.description')}
                 </p>
               </div>
             </motion.div>
@@ -214,10 +216,10 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4 dark:text-white">
-              Simple. Elegant. <span className="text-purple-600 dark:text-purple-400">Revolutionary.</span>
+              {t('howItWorks.title')} <span className="text-purple-600 dark:text-purple-400">{t('howItWorks.titleHighlight')}</span>
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Three steps to trade with cryptographic certainty
+              {t('howItWorks.subtitle')}
             </p>
           </motion.div>
 
@@ -234,9 +236,9 @@ export default function HomePage() {
                 1
               </div>
               <div className="flex-1 text-center md:text-left">
-                <h3 className="text-2xl font-bold mb-2 dark:text-white">Find or Create an Order</h3>
+                <h3 className="text-2xl font-bold mb-2 dark:text-white">{t('howItWorks.step1.title')}</h3>
                 <p className="text-gray-600 dark:text-gray-400 text-lg">
-                  Browse available sell orders or create your own buy order. Set your rate and amount.
+                  {t('howItWorks.step1.description')}
                 </p>
               </div>
             </motion.div>
@@ -253,9 +255,9 @@ export default function HomePage() {
                 2
               </div>
               <div className="flex-1 text-center md:text-right">
-                <h3 className="text-2xl font-bold mb-2 dark:text-white">Pay with Alipay</h3>
+                <h3 className="text-2xl font-bold mb-2 dark:text-white">{t('howItWorks.step2.title')}</h3>
                 <p className="text-gray-600 dark:text-gray-400 text-lg">
-                  Transfer CNY via Alipay with a unique payment note. Upload your PDF receipt.
+                  {t('howItWorks.step2.description')}
                 </p>
               </div>
             </motion.div>
@@ -272,9 +274,9 @@ export default function HomePage() {
                 3
               </div>
               <div className="flex-1 text-center md:text-left">
-                <h3 className="text-2xl font-bold mb-2 dark:text-white">Receive Crypto Instantly</h3>
+                <h3 className="text-2xl font-bold mb-2 dark:text-white">{t('howItWorks.step3.title')}</h3>
                 <p className="text-gray-600 dark:text-gray-400 text-lg">
-                  Zero-knowledge proof is generated and verified. Tokens are released to your wallet automatically.
+                  {t('howItWorks.step3.description')}
                 </p>
               </div>
             </motion.div>
@@ -293,10 +295,10 @@ export default function HomePage() {
             className="text-center mb-12"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4 dark:text-white">
-              Available <span className="text-blue-600 dark:text-blue-400">Orders</span>
+              {t('orderList.title')} <span className="text-blue-600 dark:text-blue-400">{t('orderList.titleHighlight')}</span>
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Start trading now with live peer-to-peer orders
+              {t('orderList.subtitle')}
             </p>
           </motion.div>
 
@@ -321,10 +323,10 @@ export default function HomePage() {
             transition={{ duration: 0.8 }}
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Ready to trade without borders?
+              {t('cta.title')}
             </h2>
             <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-              Join the future of decentralized finance. No registration required.
+              {t('cta.subtitle')}
             </p>
             <Button
               size="lg"
@@ -333,7 +335,7 @@ export default function HomePage() {
                 document.getElementById('order-list')?.scrollIntoView({ behavior: 'smooth' });
               }}
             >
-              Start Trading Now
+              {t('cta.button')}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </motion.div>
