@@ -53,10 +53,6 @@ export function OrderCard({ order }: OrderCardProps) {
             <span className="text-sm text-muted-foreground">Available:</span>
             <span className="text-lg font-semibold">{available} {tokenInfo.symbol}</span>
           </div>
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground">Seller:</span>
-            <span className="text-sm font-mono">{formatAddress(order.seller)}</span>
-          </div>
           <div className="pt-2 border-t">
             <div className="text-xs text-muted-foreground">
               Order ID: {order.order_id.slice(0, 10)}...
