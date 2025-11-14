@@ -3,12 +3,12 @@ FROM rust:1.84.0 as builder
 
 WORKDIR /app
 
-# Copy manifests
-COPY Cargo.toml Cargo.lock ./
-COPY src ./src
-COPY abi ./abi
-COPY migrations ./migrations
-COPY .sqlx ./.sqlx
+# Copy manifests (from orderbook/ subdirectory)
+COPY orderbook/Cargo.toml orderbook/Cargo.lock ./
+COPY orderbook/src ./src
+COPY orderbook/abi ./abi
+COPY orderbook/migrations ./migrations
+COPY orderbook/.sqlx ./.sqlx
 
 # Build with release profile (--locked ensures Cargo.lock is respected)
 # Use SQLx offline mode with cached query data
@@ -32,8 +32,8 @@ COPY --from=builder /app/target/release/api-server /usr/local/bin/api-server
 COPY --from=builder /app/target/release/auto-cancel-service /app/auto-cancel-service
 COPY --from=builder /app/target/release/auto-cancel-service /usr/local/bin/auto-cancel-service
 
-# Copy startup script
-COPY start.sh /app/start.sh
+# Copy startup script (from orderbook/ subdirectory)
+COPY orderbook/start.sh /app/start.sh
 RUN chmod +x /app/start.sh
 
 # Set environment
