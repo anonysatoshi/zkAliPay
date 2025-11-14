@@ -690,14 +690,6 @@ export function PaymentInstructions({ trades, onAllSettled }: PaymentInstruction
 
   return (
     <div className="space-y-6">
-      <Alert>
-        <AlertCircle className="h-4 w-4" />
-        <AlertDescription>
-          <strong>Production Mode:</strong> Upload your Alipay payment PDF below.
-          The PDF will be stored securely and used to generate a zkPDF proof for settlement.
-        </AlertDescription>
-      </Alert>
-
       {trades.map((trade) => {
         const status = tradeStatuses.get(trade.trade_id)!;
         const cnyAmount = (parseFloat(trade.cny_amount) / 100).toFixed(2);
