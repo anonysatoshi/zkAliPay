@@ -22,11 +22,6 @@ export function Navigation() {
 
           {/* Navigation Links */}
           <div className="flex items-center gap-4">
-            <Link href="/">
-              <Button variant={isActive('/') ? 'default' : 'ghost'}>
-                Orders
-              </Button>
-            </Link>
             <Link href="/buy">
               <Button variant={isActive('/buy') || pathname?.startsWith('/buy/') ? 'default' : 'ghost'}>
                 Buy Tokens
