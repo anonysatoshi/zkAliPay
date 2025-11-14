@@ -139,6 +139,22 @@
     "joinButton": "加入頻道",
     "members": "成員",
     "online": "在線"
+  },
+  "footer": {
+    "description": "全球首個基於零知識虛擬機的去中心化法幣網關。以密碼學確定性交易人民幣換取加密貨幣。",
+    "quickLinks": "快速鏈接",
+    "buy": "購買加密貨幣",
+    "sell": "出售加密貨幣",
+    "about": "關於",
+    "resources": "資源",
+    "docs": "文檔",
+    "telegram": {
+      "title": "加入我們的 Telegram",
+      "subtitle": "獲取更新、支持並與社群互動",
+      "join": "加入頻道"
+    },
+    "rights": "版權所有。",
+    "beta": "測試版"
   }
 }
 

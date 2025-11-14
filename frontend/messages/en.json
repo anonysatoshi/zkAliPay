@@ -139,6 +139,22 @@
     "joinButton": "Join Channel",
     "members": "Members",
     "online": "Online"
+  },
+  "footer": {
+    "description": "The world's first decentralized fiat gateway powered by zero-knowledge virtual machine. Trade CNY for crypto with cryptographic certainty.",
+    "quickLinks": "Quick Links",
+    "buy": "Buy Crypto",
+    "sell": "Sell Crypto",
+    "about": "About",
+    "resources": "Resources",
+    "docs": "Documentation",
+    "telegram": {
+      "title": "Join Our Telegram",
+      "subtitle": "Get updates, support, and connect with the community",
+      "join": "Join Channel"
+    },
+    "rights": "All rights reserved.",
+    "beta": "BETA"
   }
 }
 
