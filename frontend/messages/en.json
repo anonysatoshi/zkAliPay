@@ -108,6 +108,13 @@
         "confirmAddress": "⚠️ IMPORTANT: Confirm Receive Address\n\nTokens will be sent to:\n{address}\n({shortened})\n\nThis address CANNOT be changed later. Please verify it's correct.\n\nClick OK to continue or Cancel to go back."
       }
     },
+    "progress": {
+      "enterAmount": "Enter Amount",
+      "reviewMatch": "Review Match",
+      "createTrades": "Create Trades",
+      "submitProof": "Submit Proof",
+      "settled": "Settled"
+    },
     "settled": {
       "emoji": "🎉",
       "title": "Your Trade is Complete!",

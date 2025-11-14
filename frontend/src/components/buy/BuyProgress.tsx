@@ -1,6 +1,7 @@
 'use client';
 
 import { CheckCircle2, Circle, Clock } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export type BuyStep = 'amount' | 'review' | 'execute' | 'payment' | 'settled';
 
@@ -8,15 +9,17 @@ interface BuyProgressProps {
   currentStep: BuyStep;
 }
 
-const steps: { key: BuyStep; label: string }[] = [
-  { key: 'amount', label: 'Enter Amount' },
-  { key: 'review', label: 'Review Match' },
-  { key: 'execute', label: 'Create Trades' },
-  { key: 'payment', label: 'Submit Proof' },
-  { key: 'settled', label: 'Settled' },
-];
-
 export function BuyProgress({ currentStep }: BuyProgressProps) {
+  const t = useTranslations('buy.progress');
+  
+  const steps: { key: BuyStep; label: string }[] = [
+    { key: 'amount', label: t('enterAmount') },
+    { key: 'review', label: t('reviewMatch') },
+    { key: 'execute', label: t('createTrades') },
+    { key: 'payment', label: t('submitProof') },
+    { key: 'settled', label: t('settled') },
+  ];
+  
   const currentIndex = steps.findIndex((s) => s.key === currentStep);
 
   return (
