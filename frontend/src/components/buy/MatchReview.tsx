@@ -1,12 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { ArrowLeft, CheckCircle2, AlertCircle, TrendingUp, DollarSign, Users } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, TrendingUp, DollarSign, Users } from 'lucide-react';
 import { BuyFlowData } from '@/app/buy/page';
-import { api } from '@/lib/api';
 import { getTokenInfo, getExchangeRateLabel } from '@/lib/tokens';
 import { useTranslations } from 'next-intl';
 
@@ -20,59 +18,6 @@ interface MatchReviewProps {
 export function MatchReview({ flowData, goToNextStep, goBack }: MatchReviewProps) {
   const { matchPlan } = flowData;
   const t = useTranslations('buy.matchReview');
-  const [minTradeValueCNY, setMinTradeValueCNY] = useState<number | null>(null);
-  const [validationError, setValidationError] = useState<string | null>(null);
-
-  // Fetch contract configuration for validation only (non-blocking)
-  useEffect(() => {
-    const fetchConfig = async () => {
-      try {
-        const config = await api.getContractConfig();
-        const minCny = parseInt(config.min_trade_value_cny) / 100; // Convert cents to yuan
-        setMinTradeValueCNY(minCny);
-        
-        console.log('Contract config loaded:', {
-          minCny: minCny + ' CNY',
-        });
-      } catch (err) {
-        console.error('Failed to fetch contract config:', err);
-        // Use fallback value if fetch fails (non-blocking)
-        setMinTradeValueCNY(7); // Default: 7 CNY
-      }
-    };
-
-    fetchConfig();
-  }, []);
-
-  // Validate CNY amounts when config is loaded (but don't block UI)
-  useEffect(() => {
-    if (!matchPlan || minTradeValueCNY === null) {
-      return;
-    }
-
-    const tokenAddress = matchPlan.fills[0]?.token || '';
-    const tokenInfo = getTokenInfo(tokenAddress);
-
-    const invalidFills = matchPlan.fills.filter(fill => {
-      const fillAmount = parseFloat(fill.fill_amount) / Math.pow(10, tokenInfo.decimals);
-      const rate = parseFloat(fill.exchange_rate) / 100;
-      const fillCNY = fillAmount * rate;
-      return fillCNY < minTradeValueCNY;
-    });
-
-    if (invalidFills.length > 0) {
-      const fillAmount = parseFloat(invalidFills[0].fill_amount) / Math.pow(10, tokenInfo.decimals);
-      const rate = parseFloat(invalidFills[0].exchange_rate) / 100;
-      const fillCNY = fillAmount * rate;
-      setValidationError(
-        `One or more trades are below the minimum CNY amount. ` +
-        `Minimum: ¥${minTradeValueCNY.toFixed(2)} CNY, but a trade has only ¥${fillCNY.toFixed(2)} CNY. ` +
-        `Please increase your ${tokenInfo.symbol} amount or choose a higher exchange rate to meet the minimum.`
-      );
-    } else {
-      setValidationError(null);
-    }
-  }, [matchPlan, minTradeValueCNY]);
 
   if (!matchPlan) {
     return (
@@ -236,16 +181,6 @@ export function MatchReview({ flowData, goToNextStep, goBack }: MatchReviewProps
             </div>
           </div>
 
-          {/* Validation Error Alert */}
-          {validationError && (
-            <Alert variant="destructive" className="border-2">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>
-                <strong>Cannot proceed:</strong> {validationError}
-              </AlertDescription>
-            </Alert>
-          )}
-
           {/* Action Buttons */}
           <div className="flex gap-4 pt-4">
             <Button 
@@ -261,7 +196,6 @@ export function MatchReview({ flowData, goToNextStep, goBack }: MatchReviewProps
               onClick={goToNextStep} 
               className="flex-1 h-14 text-base bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg"
               size="lg"
-              disabled={!!validationError}
             >
               <CheckCircle2 className="mr-2 h-5 w-5" />
               Confirm Match
