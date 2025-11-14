@@ -9,10 +9,10 @@
     "hero": {
       "title": "Buy Crypto with Alipay",
       "subtitle1": "The world's first",
-      "subtitle2": "decentralized crypto exchange",
+      "subtitle2": "decentralized fiat gateway",
       "subtitle3": "powered by",
       "subtitle4": "zero-knowledge virtual machine",
-      "tagline": "Trade CNY for crypto tokens instantly. No middlemen. No custodians. Just you, the blockchain, and math.",
+      "tagline": "Trade CNY for crypto tokens with cryptographic certainty. Smart contracts enforce rules automatically - no human intermediaries can intervene.",
       "startTrading": "Start Trading",
       "howItWorks": "How it Works"
     },
@@ -25,16 +25,16 @@
         "description": "Verify payments without revealing sensitive information. Privacy by design."
       },
       "instantSettlement": {
-        "title": "Instant Settlement",
-        "description": "Smart contracts release funds automatically when proof is verified. No delays."
+        "title": "Automatic Settlement",
+        "description": "Smart contracts release funds automatically when cryptographic proof is verified. No waiting for manual approval."
       },
       "decentralized": {
-        "title": "Truly Decentralized",
-        "description": "No central authority. No KYC. Trade peer-to-peer with anyone, anywhere."
+        "title": "Peer-to-Peer Trading",
+        "description": "Trade directly with sellers worldwide. No company can block, freeze, or reverse your transactions."
       },
       "selfCustodial": {
-        "title": "Self-Custodial",
-        "description": "Your keys, your crypto. Funds never leave your wallet until trade completes."
+        "title": "Cryptographic Guarantees",
+        "description": "Audited smart contracts enforce trade rules. Only valid zero-knowledge proofs can release funds - no exceptions."
       }
     },
     "howItWorks": {
@@ -50,8 +50,8 @@
         "description": "Transfer CNY via Alipay with a unique payment note. Upload your PDF receipt."
       },
       "step3": {
-        "title": "Receive Crypto Instantly",
-        "description": "Zero-knowledge proof is generated and verified. Tokens are released to your wallet automatically."
+        "title": "Receive Crypto Automatically",
+        "description": "Zero-knowledge proof is verified on-chain. Smart contract releases tokens to your wallet immediately - no human approval needed."
       }
     },
     "orderList": {
