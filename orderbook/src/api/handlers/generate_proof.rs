@@ -268,11 +268,10 @@ pub async fn generate_proof_handler(
         .map_err(|e| ApiError::Internal(format!("Invalid CNY amount: {}", e)))?
         .round() as u64;
     
-    // TODO: TESTING ONLY - Remove hardcoded nonce in production
-    // In production, use: let payment_nonce = &trade.payment_nonce;
-    let payment_nonce = "18191527";
+    // Use actual payment nonce from trade
+    let payment_nonce = &trade.payment_nonce;
     
-    tracing::info!("📋 Trade details: name={}, id={}, amount={} cents, nonce={} (HARDCODED FOR TESTING)", 
+    tracing::info!("📋 Trade details: name={}, id={}, amount={} cents, nonce={}", 
         alipay_name, alipay_id, cny_amount_cents, payment_nonce);
     
     // Step 3: Get public key DER hash from contract
@@ -399,11 +398,10 @@ pub async fn validate_pdf_axiom_handler(
         .map_err(|e| ApiError::Internal(format!("Invalid CNY amount: {}", e)))?
         .round() as u64;
     
-    // TODO: TESTING ONLY - Remove hardcoded nonce in production
-    // In production, use: let payment_nonce = &trade.payment_nonce;
-    let payment_nonce = "18191527";
+    // Use actual payment nonce from trade
+    let payment_nonce = &trade.payment_nonce;
     
-    tracing::info!("📋 Trade details: name={}, id={}, amount={} cents, nonce={} (HARDCODED FOR TESTING)", 
+    tracing::info!("📋 Trade details: name={}, id={}, amount={} cents, nonce={}", 
         alipay_name, alipay_id, cny_amount_cents, payment_nonce);
     
     // Step 3: Get public key DER hash from contract
