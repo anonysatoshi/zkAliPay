@@ -7,12 +7,12 @@
   "home": {
     "betaBadge": "Beta Release - Base Sepolia Testnet",
     "hero": {
-      "title": "Buy Crypto with Alipay",
+      "title": "Trade Crypto with Alipay",
       "subtitle1": "The world's first",
-      "subtitle2": "decentralized fiat gateway",
+      "subtitle2": "peer-to-peer fiat gateway",
       "subtitle3": "powered by",
-      "subtitle4": "zero-knowledge virtual machine",
-      "tagline": "Trade CNY for crypto tokens with cryptographic certainty. Smart contracts enforce rules automatically - no human intermediaries can intervene.",
+      "subtitle4": "zero-knowledge cryptography",
+      "tagline": "A decentralized marketplace where anyone can buy or sell crypto with Alipay. Pure peer-to-peer. Cryptographically secured. No middlemen.",
       "startTrading": "Start Trading",
       "howItWorks": "How it Works"
     },
@@ -22,36 +22,36 @@
       "subtitle": "Built on cutting-edge cryptography that makes traditional exchanges obsolete",
       "zkProofs": {
         "title": "Zero-Knowledge Proofs",
-        "description": "Verify payments without revealing sensitive information. Privacy by design."
+        "description": "Verify Alipay payments cryptographically. Complete privacy - no personal information exposed on-chain."
       },
       "instantSettlement": {
         "title": "Automatic Settlement",
-        "description": "Smart contracts release funds automatically when cryptographic proof is verified. No waiting for manual approval."
+        "description": "Smart contracts execute trades instantly when proofs verify. No manual approval. No delays. Pure automation."
       },
       "decentralized": {
-        "title": "Peer-to-Peer Trading",
-        "description": "Trade directly with sellers worldwide. No company can block, freeze, or reverse your transactions."
+        "title": "Peer-to-Peer Marketplace",
+        "description": "Buyers and sellers trade directly. No company controls the platform. Your trades cannot be blocked or reversed."
       },
       "selfCustodial": {
         "title": "Cryptographic Guarantees",
-        "description": "Audited smart contracts enforce trade rules. Only valid zero-knowledge proofs can release funds - no exceptions."
+        "description": "Math enforces fairness. Smart contracts protect both buyers and sellers. Zero-knowledge proofs ensure payment validity."
       }
     },
     "howItWorks": {
       "title": "Simple. Elegant.",
       "titleHighlight": "Revolutionary.",
-      "subtitle": "Three steps to trade with cryptographic certainty",
+      "subtitle": "Trade with cryptographic certainty in three steps",
       "step1": {
-        "title": "Find or Create an Order",
-        "description": "Browse available sell orders or create your own buy order. Set your rate and amount."
+        "title": "Create or Fill Orders",
+        "description": "Sellers: Lock crypto and set your rate. Buyers: Browse orders and choose the best price. The marketplace matches you peer-to-peer."
       },
       "step2": {
-        "title": "Pay with Alipay",
-        "description": "Transfer CNY via Alipay with a unique payment note. Upload your PDF receipt."
+        "title": "Exchange via Alipay",
+        "description": "Buyer pays seller directly via Alipay with a unique reference code. Seller's crypto is held securely in smart contract escrow."
       },
       "step3": {
-        "title": "Receive Crypto Automatically",
-        "description": "Zero-knowledge proof is verified on-chain. Smart contract releases tokens to your wallet immediately - no human approval needed."
+        "title": "Automatic Settlement",
+        "description": "Buyer submits zero-knowledge proof of payment. Smart contract verifies and releases crypto instantly. Both parties protected by math."
       }
     },
     "orderList": {
