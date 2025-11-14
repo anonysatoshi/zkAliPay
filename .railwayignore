@@ -1,0 +1,19 @@
+# Railway Watch Paths
+# Only rebuild when files in orderbook/ change
+
+# Ignore frontend changes
+frontend/**
+contracts/**
+scripts/**
+
+# Ignore documentation
+*.md
+!orderbook/**/*.md
+
+# Ignore config files at root
+deployment.config.json
+DEPLOYMENT_INFO.txt
+DEPLOYMENT_WALKTHROUGH.md
+VERCEL_ENV_VARS.txt
+START_GUIDE.md
+

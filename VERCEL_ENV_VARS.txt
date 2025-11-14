@@ -1,25 +1,76 @@
-# Environment Variables for Vercel Deployment
+# ============================================================================
+# Environment Variables for Vercel Deployment (Base Sepolia)
+# ============================================================================
 # Copy these into Vercel Dashboard → Settings → Environment Variables
+#
+# Network configuration (Chain ID, RPC, Block Explorer) is HARDCODED in:
+# frontend/src/lib/contracts.ts
+#
+# Only 3 environment variables are required:
+# ============================================================================
 
-# Railway Backend API URL (IMPORTANT: Use your Railway URL)
+# 1. Backend API URL (REQUIRED)
+# --------------------------------
+# Your Railway backend API URL
 NEXT_PUBLIC_API_URL=https://zkalipay-production.up.railway.app
 
-# Network Configuration (Base Sepolia)
-NEXT_PUBLIC_CHAIN_ID=84532
-NEXT_PUBLIC_RPC_URL=https://sepolia.base.org
-NEXT_PUBLIC_BLOCK_EXPLORER=https://sepolia.basescan.org
-NEXT_PUBLIC_CHAIN_NAME=Base Sepolia
 
-# Contract Addresses (from DEPLOYMENT_INFO.txt)
+# 2. Escrow Contract Address (REQUIRED)
+# --------------------------------
+# The zkAliPay escrow contract address on Base Sepolia
 NEXT_PUBLIC_ESCROW_ADDRESS=0xe03C7b74A7c4338E397c65d8B60b18FAF56E3546
-NEXT_PUBLIC_USDC_ADDRESS=0xd4B280FFB336e2061cB39347Bd599cB88FF1617A
 
-# WalletConnect Project ID (GET YOUR OWN from https://cloud.walletconnect.com)
-NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=YOUR_WALLETCONNECT_PROJECT_ID_HERE
 
-# Feature Flags
-# DO NOT SET NEXT_PUBLIC_ENABLE_DEBUG (debug panel should be disabled in production)
+# 3. WalletConnect Project ID (REQUIRED)
+# --------------------------------
+# Get your own FREE project ID from: https://cloud.walletconnect.com
+# This is needed for wallet connections (MetaMask, Rainbow, etc.)
+# WITHOUT THIS, WALLET CONNECTION WILL FAIL!
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=YOUR_PROJECT_ID_HERE
 
-# Axiom Configuration (if using Axiom for proof generation)
+
+# ============================================================================
+# Optional Environment Variables
+# ============================================================================
+
+# Enable Axiom proof generation (default: false)
 NEXT_PUBLIC_AXIOM_ENABLED=true
 
+
+# ============================================================================
+# IMPORTANT NOTES
+# ============================================================================
+#
+# ✅ Network configuration is hardcoded (no env vars needed):
+#    - CHAIN_ID: 84532 (Base Sepolia)
+#    - RPC_URL: https://sepolia.base.org
+#    - BLOCK_EXPLORER: https://sepolia.basescan.org
+#
+# ✅ Token addresses are hardcoded in frontend/src/lib/tokens.ts:
+#    - USDC: 0xd4B280FFB336e2061cB39347Bd599cB88FF1617A
+#    - USDT: 0x9C607084a30b3E5f222b8f92313c3f75fA12667F
+#    - SOL:  0x9913854799d1BB4E049CDE227156508bB3bA1AbF
+#    - BTC:  0x819509cF2A5CD7849399C9A137547731686914ae
+#    - WETH: 0x9e0cdc73bEE1C6b8D99857fFA18b7C02D8ba162F
+#
+# ❌ DO NOT SET these in production:
+#    - NEXT_PUBLIC_ENABLE_DEBUG (debug panel will be disabled)
+#
+# ============================================================================
+# Why WalletConnect Project ID is Required
+# ============================================================================
+#
+# WalletConnect is the protocol that enables wallet connections:
+# - MetaMask Mobile, Rainbow, Trust Wallet, Coinbase Wallet, etc.
+# - FREE for unlimited users
+# - Takes 2 minutes to get a project ID
+# - Without it, "Connect Wallet" button won't work
+#
+# To get one:
+# 1. Go to https://cloud.walletconnect.com
+# 2. Sign up (free, no credit card needed)
+# 3. Create a new project
+# 4. Copy the Project ID
+# 5. Paste it above
+#
+# ============================================================================
