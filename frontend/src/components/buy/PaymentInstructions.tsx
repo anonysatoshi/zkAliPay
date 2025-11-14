@@ -192,13 +192,11 @@ export function PaymentInstructions({ trades, onAllSettled }: PaymentInstruction
         });
         
         // ============================================================================
-        // Step 3 & 4: Proof Generation & Blockchain Submission (COMMENTED FOR NOW)
-        // TODO: Uncomment after Step 2 validation is tested and working
+        // Step 3: Generate EVM Proof using Axiom (after validation success)
+        // Step 4: Submit Proof to Blockchain
         // ============================================================================
         
-        /* COMMENTED OUT - TESTING STEP 2 ONLY
-        
-        console.log('Starting Axiom proof generation...');
+        console.log('✅ Validation successful! Starting Axiom proof generation...');
         
         setTradeStatuses((prev) => {
           const updated = new Map(prev);
@@ -292,11 +290,6 @@ export function PaymentInstructions({ trades, onAllSettled }: PaymentInstruction
             return updated;
           });
         }
-        
-        END OF COMMENTED CODE */
-        
-        // Temporary: Just show validation success for testing Step 2
-        console.log('✅ Step 2 validation complete - Steps 3 & 4 are commented out for testing');
         
       } else {
         // PDF is invalid - show error
