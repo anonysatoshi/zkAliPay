@@ -8,11 +8,9 @@ COPY orderbook/Cargo.toml orderbook/Cargo.lock ./
 COPY orderbook/src ./src
 COPY orderbook/abi ./abi
 COPY orderbook/migrations ./migrations
-COPY orderbook/.sqlx ./.sqlx
 
 # Build with release profile (--locked ensures Cargo.lock is respected)
-# Use SQLx offline mode with cached query data
-ENV SQLX_OFFLINE=true
+# SQLx uses runtime verification (no offline cache needed)
 RUN cargo build --release --locked --bin api-server --bin auto-cancel-service
 
 # Runtime stage - smaller image
