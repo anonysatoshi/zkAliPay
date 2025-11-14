@@ -27,7 +27,7 @@ export function TelegramWidget() {
 
           {/* Join Button */}
           <Button
-            onClick={() => window.open('https://t.me/zkAlipay_Official', '_blank')}
+            onClick={() => window.open('https://t.me/zkAlipay', '_blank')}
             className="bg-blue-500 hover:bg-blue-600 text-white"
           >
             <Send className="mr-2 h-4 w-4" />
