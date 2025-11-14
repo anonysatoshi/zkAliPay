@@ -30,7 +30,7 @@
       },
       "decentralized": {
         "title": "Peer-to-Peer Marketplace",
-        "description": "Buyers and sellers trade directly. No KYC. No central authority controls the platform. Your trades cannot be blocked or reversed."
+        "description": "Buyers and sellers trade directly. No KYC. No central authority. Your trades cannot be blocked or reversed."
       },
       "selfCustodial": {
         "title": "Cryptographic Guarantees",

@@ -414,7 +414,7 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
               <Input
                 id="alipayId"
                 type="text"
-                placeholder="13800138000"
+                placeholder="11-digit cell number"
                 value={alipayId}
                 onChange={(e) => setAlipayId(e.target.value)}
                 disabled={currentStep !== 'idle'}
@@ -435,7 +435,7 @@ export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {})
               <Input
                 id="alipayName"
                 type="text"
-                placeholder="王健 (Wang Jian)"
+                placeholder=""
                 value={alipayName}
                 onChange={(e) => setAlipayName(e.target.value)}
                 disabled={currentStep !== 'idle'}
