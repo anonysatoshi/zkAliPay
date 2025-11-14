@@ -16,7 +16,11 @@ import { motion } from 'framer-motion';
 
 const BASESCAN_URL = 'https://sepolia.basescan.org/tx';
 
-export function CreateOrderForm() {
+interface CreateOrderFormProps {
+  onSwitchToManage?: () => void;
+}
+
+export function CreateOrderForm({ onSwitchToManage }: CreateOrderFormProps = {}) {
   const { address, isConnected } = useAccount();
   
   const [selectedToken, setSelectedToken] = useState<string>(SUPPORTED_TOKENS[0]);
@@ -219,9 +223,8 @@ export function CreateOrderForm() {
               <Button
                 variant="outline"
                 className="flex-1"
-                onClick={() => setActiveView && setActiveView('manage')}
+                onClick={() => onSwitchToManage && onSwitchToManage()}
               >
-                <ListOrdered className="mr-2 h-4 w-4" />
                 View My Orders
               </Button>
               <Button

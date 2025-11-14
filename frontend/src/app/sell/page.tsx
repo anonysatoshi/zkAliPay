@@ -73,7 +73,7 @@ export default function SellPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
-            {activeView === 'create' ? <CreateOrderForm /> : <MyOrders />}
+            {activeView === 'create' ? <CreateOrderForm onSwitchToManage={() => setActiveView('manage')} /> : <MyOrders />}
           </motion.div>
         </div>
       </section>
