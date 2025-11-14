@@ -8,9 +8,11 @@ COPY Cargo.toml Cargo.lock ./
 COPY src ./src
 COPY abi ./abi
 COPY migrations ./migrations
+COPY .sqlx ./.sqlx
 
 # Build with release profile (--locked ensures Cargo.lock is respected)
-# SQLx uses runtime verification - queries validated when app connects to database
+# Use SQLx offline mode with cached query data
+ENV SQLX_OFFLINE=true
 RUN cargo build --release --locked --bin api-server --bin auto-cancel-service
 
 # Runtime stage - smaller image
