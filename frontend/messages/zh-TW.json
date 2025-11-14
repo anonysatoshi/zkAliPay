@@ -30,7 +30,7 @@
       },
       "decentralized": {
         "title": "點對點市場",
-        "description": "買家和賣家直接交易。沒有公司控制平台。您的交易無法被封鎖或撤銷。"
+        "description": "買家和賣家直接交易。無需 KYC。沒有中央機構控制平台。您的交易無法被封鎖或撤銷。"
       },
       "selfCustodial": {
         "title": "密碼學保證",
