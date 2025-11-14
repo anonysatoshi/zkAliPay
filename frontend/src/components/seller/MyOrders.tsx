@@ -12,10 +12,12 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle, CheckCircle2, Loader2, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 import { Order } from '@/lib/api';
+import { useTranslations } from 'next-intl';
 
 type OrderView = 'active' | 'completed';
 
 export function MyOrders() {
+  const t = useTranslations('sell.myOrders');
   const { data: orders, isLoading, error: fetchError, refetch } = useSellerOrders();
   const {
     executeWithdraw,
@@ -57,7 +59,7 @@ export function MyOrders() {
     return (
       <div className="flex items-center justify-center p-8">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="ml-2">Loading your orders...</span>
+        <span className="ml-2">{t('loading')}</span>
       </div>
     );
   }
@@ -66,7 +68,7 @@ export function MyOrders() {
     return (
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>Failed to load orders. Please try again.</AlertDescription>
+        <AlertDescription>{t('error')}</AlertDescription>
       </Alert>
     );
   }
@@ -92,7 +94,7 @@ export function MyOrders() {
       <Card>
         <CardContent className="pt-6">
           <p className="text-center text-muted-foreground">
-            You don't have any orders. Create one to get started!
+            {t('empty')}
           </p>
         </CardContent>
       </Card>
@@ -114,16 +116,16 @@ export function MyOrders() {
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-sm font-mono text-gray-700 dark:text-gray-300">
-                    Order: {formatAddress(order.order_id)}
+                    {t('orderPrefix')} {formatAddress(order.order_id)}
                   </CardTitle>
                   <CardDescription>
-                    Created {new Date(order.created_at * 1000).toLocaleString()}
+                    {t('created')} {new Date(order.created_at * 1000).toLocaleString()}
                   </CardDescription>
                 </div>
                 {isCompleted && (
                   <div className="flex items-center text-sm text-green-600 dark:text-green-400 font-semibold">
                     <CheckCircle2 className="h-4 w-4 mr-1" />
-                    Completed
+                    {t('completed')}
                   </div>
                 )}
               </div>
@@ -132,21 +134,21 @@ export function MyOrders() {
               {/* Order Info */}
               <div className="grid grid-cols-2 gap-4 text-sm p-4 bg-gradient-to-br from-gray-50 to-blue-50/30 dark:from-gray-800/50 dark:to-blue-900/10 rounded-xl border border-gray-200/50 dark:border-gray-700/50">
                 <div>
-                  <p className="text-gray-600 dark:text-gray-400 text-xs">Total Locked</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-xs">{t('totalLocked')}</p>
                   <p className="font-semibold text-base">{totalAmount} {tokenInfo.symbol}</p>
                 </div>
                 <div>
-                  <p className="text-gray-600 dark:text-gray-400 text-xs">Remaining</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-xs">{t('remaining')}</p>
                   <p className="font-semibold text-base text-green-600 dark:text-green-400">
                     {remainingAmount} {tokenInfo.symbol}
                   </p>
                 </div>
                 <div>
-                  <p className="text-gray-600 dark:text-gray-400 text-xs">Exchange Rate</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-xs">{t('exchangeRate')}</p>
                   <p className="font-semibold text-base">¥{exchangeRate.toFixed(2)}/{tokenInfo.symbol}</p>
                 </div>
                 <div>
-                  <p className="text-gray-600 dark:text-gray-400 text-xs">Est. CNY Value</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-xs">{t('estValue')}</p>
                   <p className="font-semibold text-base">¥{estimatedCNY.toFixed(2)}</p>
                 </div>
               </div>
@@ -155,7 +157,7 @@ export function MyOrders() {
               {!isCompleted && parseFloat(remainingAmount) > 0 && (
                 <div className="pt-4 border-t border-gray-200 dark:border-gray-700 space-y-3">
                   <Label htmlFor={`withdraw-${order.order_id}`} className="text-sm font-medium">
-                    Withdraw Amount ({tokenInfo.symbol})
+                    {t('withdrawAmount', { symbol: tokenInfo.symbol })}
                   </Label>
                   <div className="flex gap-2">
                     <Input
@@ -190,15 +192,15 @@ export function MyOrders() {
                       {isWithdrawing && selectedOrder === order.order_id ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Withdrawing...
+                          {t('withdrawing')}
                         </>
                       ) : (
-                        'Withdraw'
+                        t('withdraw')
                       )}
                     </Button>
                   </div>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
-                    Available: <strong>{remainingAmount} {tokenInfo.symbol}</strong>
+                    {t('available')} <strong>{remainingAmount} {tokenInfo.symbol}</strong>
                   </p>
                 </div>
               )}
@@ -208,7 +210,7 @@ export function MyOrders() {
                 <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                   <Alert className="border-gray-200 dark:border-gray-700">
                     <AlertDescription>
-                      All funds from this order have been withdrawn or filled.
+                      {t('allFundsWithdrawn')}
                     </AlertDescription>
                   </Alert>
                 </div>
@@ -226,7 +228,7 @@ export function MyOrders() {
           <CheckCircle2 className="h-4 w-4" />
           <AlertDescription className="flex items-center justify-between">
             <span>
-              Withdrawal successful!{' '}
+              {t('withdrawSuccess')}{' '}
               {txHash && (
                 <a
                   href={getTransactionUrl(txHash)}
@@ -234,7 +236,7 @@ export function MyOrders() {
                   rel="noopener noreferrer"
                   className="underline inline-flex items-center"
                 >
-                  View on Explorer <ExternalLink className="ml-1 h-3 w-3" />
+                  {t('viewOnExplorer')} <ExternalLink className="ml-1 h-3 w-3" />
                 </a>
               )}
             </span>
@@ -263,7 +265,7 @@ export function MyOrders() {
             : "flex-1 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 rounded-xl transition-all duration-300"
           }
         >
-          Active Orders
+          {t('activeOrders')}
           {activeOrders.length > 0 && (
             <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-white/20 text-white font-semibold">
               {activeOrders.length}
@@ -278,7 +280,7 @@ export function MyOrders() {
             : "flex-1 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 rounded-xl transition-all duration-300"
           }
         >
-          Completed Orders
+          {t('completedOrders')}
           {completedOrders.length > 0 && (
             <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-white/20 text-white font-semibold">
               {completedOrders.length}
@@ -293,8 +295,8 @@ export function MyOrders() {
           <Alert>
             <AlertDescription>
               {view === 'active' 
-                ? "You have no active orders. All your orders have been completed or you haven't created any yet."
-                : "You have no completed orders yet."}
+                ? t('noActiveOrders')
+                : t('noCompletedOrders')}
             </AlertDescription>
           </Alert>
         ) : (
