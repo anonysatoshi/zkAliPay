@@ -3,13 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { isAddress } from 'viem';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle, Loader2 } from 'lucide-react';
+import { AlertCircle, Loader2, Wallet, TrendingUp, ShieldCheck } from 'lucide-react';
 import { api } from '@/lib/api';
 import { BuyFlowData } from '@/app/buy/page';
 import { parseContractError } from '@/lib/contractErrors';
@@ -146,174 +145,241 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t('title')}</CardTitle>
-        <CardDescription>
+    <div className="max-w-3xl mx-auto space-y-8">
+      {/* Page Header */}
+      <div className="text-center space-y-3">
+        <h2 className="text-3xl font-bold tracking-tight">
+          {t('title')}
+        </h2>
+        <p className="text-muted-foreground text-lg">
           {t('description')}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Token Selection */}
-        <div className="space-y-2">
-          <Label htmlFor="token">{t('selectToken')}</Label>
-          <Select
-            value={selectedToken}
-            onValueChange={(value) => {
-              setSelectedToken(value);
-              setAmount(''); // Reset amount when token changes
-            }}
-            disabled={isLoading}
-          >
-            <SelectTrigger id="token">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {SUPPORTED_TOKENS.map((tokenAddr) => {
-                const info = getTokenInfo(tokenAddr);
-                return (
-                  <SelectItem key={tokenAddr} value={tokenAddr}>
-                    {info.symbol} - {info.name}
-                  </SelectItem>
-                );
-              })}
-            </SelectContent>
-          </Select>
-        </div>
+        </p>
+      </div>
 
-        {/* Address Selection */}
-        <div className="space-y-3 border rounded-lg p-4 bg-muted/50">
-          <Label>{t('receiveAt')}</Label>
+      {/* Main Card */}
+      <Card className="border-2 shadow-xl bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-900 dark:to-gray-800/50">
+        <CardContent className="p-8 space-y-8">
           
-          {/* Show connected wallet address */}
-          {isConnected && !useManualAddress && (
-            <div className="flex items-center gap-2">
-              <div className="flex-1 font-mono text-sm bg-background p-2 rounded border">
-                {address}
+          {/* Section 1: Token Selection */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold">
+                1
               </div>
-              <span className="text-xs text-green-600 font-semibold">{t('connected')}</span>
+              <h3 className="text-xl font-semibold">What do you want to buy?</h3>
             </div>
-          )}
-          
-          {/* Checkbox to use different address */}
-          {isConnected && (
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="useManual"
-                checked={useManualAddress}
-                onChange={(e) => setUseManualAddress(e.target.checked)}
-                className="h-4 w-4 cursor-pointer"
-              />
-              <Label htmlFor="useManual" className="font-normal cursor-pointer text-sm">
-                {t('differentAddress')}
-              </Label>
-            </div>
-          )}
-          
-          {/* Manual address input */}
-          {(!isConnected || useManualAddress) && (
-            <div className="space-y-2">
-              <Input
-                type="text"
-                placeholder={t('addressPlaceholder')}
-                value={manualAddress}
-                onChange={(e) => {
-                  setManualAddress(e.target.value);
-                  // Clear error when user starts typing
-                  if (error && error.includes('address')) {
-                    setError(null);
-                  }
+            
+            <div className="pl-[52px] space-y-3">
+              <label className="text-sm font-medium text-muted-foreground">
+                {t('selectToken')}
+              </label>
+              <Select
+                value={selectedToken}
+                onValueChange={(value) => {
+                  setSelectedToken(value);
+                  setAmount(''); // Reset amount when token changes
                 }}
                 disabled={isLoading}
-                className="font-mono text-sm"
-              />
-              <Alert>
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription className="text-xs">
-                  <strong>Warning:</strong> {t('addressWarning')}
-                </AlertDescription>
-              </Alert>
+              >
+                <SelectTrigger className="h-14 text-base border-2 hover:border-primary transition-colors">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {SUPPORTED_TOKENS.map((tokenAddr) => {
+                    const info = getTokenInfo(tokenAddr);
+                    return (
+                      <SelectItem key={tokenAddr} value={tokenAddr} className="text-base py-3">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold">{info.symbol}</span>
+                          <span className="text-muted-foreground">- {info.name}</span>
+                        </div>
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
             </div>
+          </div>
+
+          <div className="border-t"></div>
+
+          {/* Section 2: Amount & Rate */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
+                2
+              </div>
+              <h3 className="text-xl font-semibold">How much do you want?</h3>
+            </div>
+            
+            <div className="pl-[52px] space-y-6">
+              {/* Amount Input */}
+              <div className="space-y-3">
+                <label className="text-sm font-medium text-muted-foreground">
+                  {tokenInfo.symbol} {t('amountLabel')} <span className="text-destructive">*</span>
+                </label>
+                <div className="relative">
+                  <TrendingUp className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                  <Input
+                    type="number"
+                    placeholder={t('amountPlaceholder')}
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    disabled={isLoading}
+                    step="any"
+                    min="0.01"
+                    className="h-14 text-base pl-12 border-2 hover:border-primary transition-colors font-semibold"
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {t('amountHelp')}
+                </p>
+              </div>
+
+              {/* Max Rate Input */}
+              <div className="space-y-3">
+                <label className="text-sm font-medium text-muted-foreground">
+                  {t('maxRate')} <span className="text-xs font-normal">(Optional)</span>
+                </label>
+                <Input
+                  type="number"
+                  placeholder={t('maxRatePlaceholder')}
+                  value={maxRate}
+                  onChange={(e) => setMaxRate(e.target.value)}
+                  disabled={isLoading}
+                  step="0.01"
+                  min="0"
+                  className="h-14 text-base border-2 hover:border-primary transition-colors"
+                />
+                <p className="text-xs text-muted-foreground">
+                  {t('maxRateHelp')}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t"></div>
+
+          {/* Section 3: Receiving Address */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-orange-500 flex items-center justify-center text-white font-bold">
+                3
+              </div>
+              <h3 className="text-xl font-semibold">Where to receive?</h3>
+            </div>
+            
+            <div className="pl-[52px] space-y-4">
+              <label className="text-sm font-medium text-muted-foreground">
+                {t('receiveAt')}
+              </label>
+              
+              {/* Connected Wallet Display */}
+              {isConnected && !useManualAddress && (
+                <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border-2 border-green-200 dark:border-green-800 rounded-xl p-4">
+                  <div className="flex items-center gap-3">
+                    <Wallet className="h-5 w-5 text-green-600" />
+                    <div className="flex-1 font-mono text-sm break-all">
+                      {address}
+                    </div>
+                    <span className="text-xs bg-green-200 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded-full font-semibold">
+                      {t('connected')}
+                    </span>
+                  </div>
+                </div>
+              )}
+              
+              {/* Checkbox for different address */}
+              {isConnected && (
+                <div className="flex items-center gap-2 pl-1">
+                  <input
+                    type="checkbox"
+                    id="useManual"
+                    checked={useManualAddress}
+                    onChange={(e) => setUseManualAddress(e.target.checked)}
+                    className="h-4 w-4 cursor-pointer"
+                  />
+                  <label htmlFor="useManual" className="font-normal cursor-pointer text-sm text-muted-foreground">
+                    {t('differentAddress')}
+                  </label>
+                </div>
+              )}
+              
+              {/* Manual Address Input */}
+              {(!isConnected || useManualAddress) && (
+                <div className="space-y-3">
+                  <div className="relative">
+                    <Wallet className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input
+                      type="text"
+                      placeholder={t('addressPlaceholder')}
+                      value={manualAddress}
+                      onChange={(e) => {
+                        setManualAddress(e.target.value);
+                        if (error && error.includes('address')) {
+                          setError(null);
+                        }
+                      }}
+                      disabled={isLoading}
+                      className="h-14 text-sm font-mono pl-12 border-2 hover:border-primary transition-colors"
+                    />
+                  </div>
+                  <Alert className="bg-yellow-50 border-yellow-200 dark:bg-yellow-950/20 dark:border-yellow-800">
+                    <AlertCircle className="h-4 w-4 text-yellow-600" />
+                    <AlertDescription className="text-xs text-yellow-800 dark:text-yellow-200">
+                      <strong>Warning:</strong> {t('addressWarning')}
+                    </AlertDescription>
+                  </Alert>
+                </div>
+              )}
+              
+              {/* Helper text */}
+              {!isConnected && !manualAddress && (
+                <p className="text-xs text-muted-foreground pl-1">
+                  {t('addressTip')}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Error Message */}
+          {error && (
+            <Alert variant="destructive" className="border-2">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
           )}
-          
-          {/* Helper text */}
-          {!isConnected && !manualAddress && (
-            <p className="text-xs text-muted-foreground">
-              {t('addressTip')}
-            </p>
-          )}
-        </div>
 
-        {/* Amount Input */}
-        <div className="space-y-2">
-          <Label htmlFor="amount">
-            {tokenInfo.symbol} {t('amountLabel')} <span className="text-destructive">{t('required')}</span>
-          </Label>
-          <Input
-            id="amount"
-            type="number"
-            placeholder={t('amountPlaceholder')}
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            disabled={isLoading}
-            step="any"
-            min="0.01"
-          />
-          <p className="text-xs text-muted-foreground">
-            {t('amountHelp')}
-          </p>
-        </div>
+          {/* Submit Button */}
+          <Button
+            onClick={handleGetMatch}
+            disabled={isLoading || (!address && !manualAddress) || !amount}
+            className="w-full h-14 text-base bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg"
+            size="lg"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                {t('finding')}
+              </>
+            ) : (
+              <>
+                <ShieldCheck className="mr-2 h-5 w-5" />
+                {t('getMatch')}
+              </>
+            )}
+          </Button>
+        </CardContent>
+      </Card>
 
-        {/* Max Rate Input (Optional) */}
-        <div className="space-y-2">
-          <Label htmlFor="maxRate">
-            {t('maxRate')}
-          </Label>
-          <Input
-            id="maxRate"
-            type="number"
-            placeholder={t('maxRatePlaceholder')}
-            value={maxRate}
-            onChange={(e) => setMaxRate(e.target.value)}
-            disabled={isLoading}
-            step="0.01"
-            min="0"
-          />
-          <p className="text-xs text-muted-foreground">
-            {t('maxRateHelp')}
-          </p>
-        </div>
-
-        {/* Error Message */}
-        {error && (
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
-        {/* Get Match Button */}
-        <Button
-          onClick={handleGetMatch}
-          disabled={isLoading || (!address && !manualAddress) || !amount}
-          className="w-full"
-          size="lg"
-        >
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              {t('finding')}
-            </>
-          ) : (
-            t('getMatch')
-          )}
-        </Button>
-
-        {/* Info Box */}
-        <div className="bg-muted p-4 rounded-lg text-sm space-y-2">
-          <p className="font-semibold">{t('howItWorks')}</p>
-          <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
+      {/* Info Box */}
+      <Card className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 border-2 border-blue-200 dark:border-blue-800">
+        <CardContent className="p-6">
+          <h4 className="font-semibold text-lg mb-3 flex items-center gap-2">
+            <ShieldCheck className="h-5 w-5 text-blue-600" />
+            {t('howItWorks')}
+          </h4>
+          <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
             <li>{t('step1')}</li>
             <li>{t('step2')}</li>
             <li>{t('step3')}</li>
@@ -321,9 +387,9 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
             <li>{t('step5')}</li>
             <li>{t('step6')}</li>
           </ol>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 

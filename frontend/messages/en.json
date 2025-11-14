@@ -109,7 +109,7 @@
       }
     },
     "progress": {
-      "enterAmount": "Enter Amount",
+      "enterAmount": "Order Info",
       "reviewMatch": "Review Match",
       "createTrades": "Create Trades",
       "submitProof": "Submit Proof",

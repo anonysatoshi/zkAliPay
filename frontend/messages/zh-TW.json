@@ -109,7 +109,7 @@
       }
     },
     "progress": {
-      "enterAmount": "輸入金額",
+      "enterAmount": "訂單資訊",
       "reviewMatch": "查看匹配",
       "createTrades": "創建交易",
       "submitProof": "提交證明",
