@@ -4,12 +4,15 @@ import { ExternalLink, Upload, Zap, Send } from 'lucide-react';
 import { PhaseProgress } from './PhaseProgress';
 import { getTransactionUrl } from '@/lib/contracts';
 import type { TradeStatus } from './types';
+import { useTranslations } from 'next-intl';
 
 interface ProcessingSectionProps {
   status: TradeStatus;
 }
 
 export function ProcessingSection({ status }: ProcessingSectionProps) {
+  const t = useTranslations('buy.paymentInstructions.processingSection');
+  
   // Only show if not pending, expired, or settled
   if (status.status === 'pending' || status.status === 'expired' || status.status === 'settled') {
     return null;
@@ -20,8 +23,8 @@ export function ProcessingSection({ status }: ProcessingSectionProps) {
       {/* Phase 1: Upload & Validation */}
       <PhaseProgress
         phase={1}
-        title="Upload & Validate Payment"
-        description="Submit PDF for validation on Axiom OpenVM"
+        title={t('phase1.title')}
+        description={t('phase1.description')}
         status={
           ['settled', 'submitting_to_blockchain', 'blockchain_submitted', 'proof_submitted', 'generating_proof', 'proof_ready', 'valid'].includes(status.status)
             ? 'completed'
@@ -32,24 +35,24 @@ export function ProcessingSection({ status }: ProcessingSectionProps) {
             : 'pending'
         }
         icon={Upload}
-        estimatedTime="10-30s"
+        estimatedTime={t('phase1.estimatedTime')}
         details={
           <div className="space-y-2">
             {status.uploadedFilename && (
               <div className="p-2 bg-white/70 dark:bg-gray-800/70 rounded-lg border border-gray-200 dark:border-gray-700 text-xs">
-                <span className="text-gray-600 dark:text-gray-400">File:</span> 
+                <span className="text-gray-600 dark:text-gray-400">{t('phase1.file')}</span> 
                 <span className="font-mono ml-2 text-gray-900 dark:text-gray-100">{status.uploadedFilename}</span>
               </div>
             )}
             {status.status === 'uploading' && (
-              <p className="text-xs text-blue-700 dark:text-blue-400 font-medium">📤 Uploading PDF to server...</p>
+              <p className="text-xs text-blue-700 dark:text-blue-400 font-medium">{t('phase1.uploading')}</p>
             )}
             {status.status === 'validating' && (
-              <p className="text-xs text-blue-700 dark:text-blue-400 font-medium">🔍 Submitting PDF for validation on Axiom OpenVM...</p>
+              <p className="text-xs text-blue-700 dark:text-blue-400 font-medium">{t('phase1.validating')}</p>
             )}
             {['valid', 'generating_proof', 'proof_ready', 'submitting_to_blockchain', 'blockchain_submitted', 'proof_submitted', 'settled'].includes(status.status) && (
               <div className="space-y-2">
-                <p className="text-xs text-green-700 dark:text-green-400 font-semibold">✅ Validation complete!</p>
+                <p className="text-xs text-green-700 dark:text-green-400 font-semibold">{t('phase1.validationComplete')}</p>
                 {status.validationDetails && (
                   <p className="text-xs text-green-700 dark:text-green-400">{status.validationDetails}</p>
                 )}
@@ -62,8 +65,8 @@ export function ProcessingSection({ status }: ProcessingSectionProps) {
       {/* Phase 2: Generate Proof */}
       <PhaseProgress
         phase={2}
-        title="Generate Zero-Knowledge Proof"
-        description="Request zero-knowledge proof generation from Axiom OpenVM"
+        title={t('phase2.title')}
+        description={t('phase2.description')}
         status={
           ['settled', 'submitting_to_blockchain', 'blockchain_submitted', 'proof_submitted', 'proof_ready'].includes(status.status)
             ? 'completed'
@@ -74,34 +77,34 @@ export function ProcessingSection({ status }: ProcessingSectionProps) {
             : 'pending'
         }
         icon={Zap}
-        estimatedTime="5-10 min"
+        estimatedTime={t('phase2.estimatedTime')}
         details={
           <div className="space-y-2">
             {status.status === 'generating_proof' && (
               <>
                 <p className="text-xs text-blue-700 dark:text-blue-400 font-medium">
-                  ⚡ Requesting zero-knowledge proof generation from Axiom OpenVM...
+                  {t('phase2.requesting')}
                 </p>
                 <div className="mt-2 space-y-1.5 text-xs text-gray-700 dark:text-gray-300">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-blue-500 dark:bg-blue-400 animate-pulse"></div>
-                    <span>Generating proof on Axiom OpenVM</span>
+                    <span>{t('phase2.generating')}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-500"></div>
-                    <span>Downloading proof for verification</span>
+                    <span>{t('phase2.downloading')}</span>
                   </div>
                 </div>
                 <div className="mt-2 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
                   <p className="text-xs text-yellow-900 dark:text-yellow-200 font-medium">
-                    ⏰ <strong>Please wait:</strong> This process may take 5-10 minutes. Do not close this page.
+                    ⏰ <strong>{t('phase2.pleaseWait')}</strong> {t('phase2.waitMessage')}
                   </p>
                 </div>
               </>
             )}
             {['proof_ready', 'submitting_to_blockchain', 'blockchain_submitted', 'proof_submitted', 'settled'].includes(status.status) && (
               <p className="text-xs text-green-700 dark:text-green-400 font-semibold">
-                ✅ Zero-knowledge proof generated successfully!
+                {t('phase2.proofGenerated')}
               </p>
             )}
           </div>
@@ -111,8 +114,8 @@ export function ProcessingSection({ status }: ProcessingSectionProps) {
       {/* Phase 3: Submit to Blockchain */}
       <PhaseProgress
         phase={3}
-        title="Submit to Blockchain"
-        description="Submit proof to smart contract for settlement"
+        title={t('phase3.title')}
+        description={t('phase3.description')}
         status={
           ['settled', 'proof_submitted'].includes(status.status)
             ? 'completed'
@@ -121,17 +124,17 @@ export function ProcessingSection({ status }: ProcessingSectionProps) {
             : 'pending'
         }
         icon={Send}
-        estimatedTime="10-30s"
+        estimatedTime={t('phase3.estimatedTime')}
         details={
           <div className="space-y-2">
             {['submitting_to_blockchain', 'blockchain_submitted'].includes(status.status) && (
               <>
                 <p className="text-xs text-blue-700 dark:text-blue-400 font-medium">
-                  📤 Submitting proof to zkAlipay smart contract...
+                  {t('phase3.submitting')}
                 </p>
                 {status.blockchain_tx_hash && (
                   <div className="p-3 bg-white/70 dark:bg-gray-800/70 rounded-lg border border-gray-200 dark:border-gray-700">
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-1.5 font-medium">Transaction Hash:</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-1.5 font-medium">{t('phase3.transactionHash')}</p>
                     <a
                       href={getTransactionUrl(status.blockchain_tx_hash)}
                       target="_blank"
@@ -147,7 +150,7 @@ export function ProcessingSection({ status }: ProcessingSectionProps) {
             )}
             {['proof_submitted', 'settled'].includes(status.status) && (
               <p className="text-xs text-green-700 dark:text-green-400 font-semibold">
-                ✅ Proof submitted! Waiting for settlement confirmation...
+                {t('phase3.proofSubmitted')}
               </p>
             )}
           </div>

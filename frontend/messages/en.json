@@ -246,6 +246,36 @@
         }
       }
     },
+    "processingSection": {
+      "phase1": {
+        "title": "Upload & Validate Payment",
+        "description": "Submit PDF for validation on Axiom OpenVM",
+        "estimatedTime": "10-30s",
+        "file": "File:",
+        "uploading": "📤 Uploading PDF to server...",
+        "validating": "🔍 Submitting PDF for validation on Axiom OpenVM...",
+        "validationComplete": "✅ Validation complete!"
+      },
+      "phase2": {
+        "title": "Generate Zero-Knowledge Proof",
+        "description": "Request zero-knowledge proof generation from Axiom OpenVM",
+        "estimatedTime": "5-10 min",
+        "requesting": "⚡ Requesting zero-knowledge proof generation from Axiom OpenVM...",
+        "generating": "Generating proof on Axiom OpenVM",
+        "downloading": "Downloading proof for verification",
+        "pleaseWait": "Please wait:",
+        "waitMessage": "This process may take 5-10 minutes. Do not close this page.",
+        "proofGenerated": "✅ Zero-knowledge proof generated successfully!"
+      },
+      "phase3": {
+        "title": "Submit to Blockchain",
+        "description": "Submit proof to smart contract for settlement",
+        "estimatedTime": "10-30s",
+        "submitting": "📤 Submitting proof to zkAlipay smart contract...",
+        "transactionHash": "Transaction Hash:",
+        "proofSubmitted": "✅ Proof submitted! Waiting for settlement confirmation..."
+      }
+    },
     "progress": {
       "enterAmount": "Order Info",
       "reviewMatch": "Review Match",
