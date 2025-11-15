@@ -9,6 +9,7 @@ import {
   RotateCcw 
 } from 'lucide-react';
 import type { TradeStatus } from './types';
+import { useTranslations } from 'next-intl';
 
 interface ErrorAlertsProps {
   status: TradeStatus;
@@ -16,16 +17,18 @@ interface ErrorAlertsProps {
 }
 
 export function ErrorAlerts({ status, onRetry }: ErrorAlertsProps) {
+  const t = useTranslations('buy.errorAlerts');
+  
   // Proof generation failed
   if (status.status === 'proof_failed') {
     return (
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
         <AlertDescription className="text-sm">
-          <div className="font-semibold mb-2">❌ Proof Generation Failed</div>
+          <div className="font-semibold mb-2">{t('proofFailed.title')}</div>
           <p className="mb-2">{status.error}</p>
           <p className="mt-2 text-xs">
-            The zero-knowledge proof could not be generated. This may be due to a temporary issue with the proving network. Please try again later or contact support.
+            {t('proofFailed.description')}
           </p>
           <Button
             onClick={onRetry}
@@ -34,7 +37,7 @@ export function ErrorAlerts({ status, onRetry }: ErrorAlertsProps) {
             className="mt-3"
           >
             <RotateCcw className="h-4 w-4 mr-2" />
-            Try Again
+            {t('proofFailed.tryAgain')}
           </Button>
         </AlertDescription>
       </Alert>
@@ -47,9 +50,9 @@ export function ErrorAlerts({ status, onRetry }: ErrorAlertsProps) {
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
         <AlertDescription className="text-sm">
-          <div className="font-semibold mb-2">❌ PDF Validation Failed</div>
+          <div className="font-semibold mb-2">{t('validationFailed.title')}</div>
           <p className="mt-2 text-xs">
-            Please ensure you uploaded the correct Alipay payment receipt PDF with the exact payment details shown above.
+            {t('validationFailed.description')}
           </p>
           <Button
             onClick={onRetry}
@@ -58,7 +61,7 @@ export function ErrorAlerts({ status, onRetry }: ErrorAlertsProps) {
             className="mt-3"
           >
             <RotateCcw className="h-4 w-4 mr-2" />
-            Try Again
+            {t('validationFailed.tryAgain')}
           </Button>
         </AlertDescription>
       </Alert>
@@ -72,15 +75,15 @@ export function ErrorAlerts({ status, onRetry }: ErrorAlertsProps) {
         <AlertDescription className="text-sm">
           <div className="flex items-center gap-2">
             <Loader2 className="h-4 w-4 animate-spin" />
-            <span>Generating proof via Axiom OpenVM...</span>
+            <span>{t('processing.generating')}</span>
           </div>
           {status.uploadedFilename && (
             <span className="block mt-2 font-mono text-xs text-muted-foreground">
-              File: {status.uploadedFilename}
+              {t('processing.file')} {status.uploadedFilename}
             </span>
           )}
           <p className="mt-2 text-xs text-muted-foreground">
-            This may take a few minutes. Please do not close this page.
+            {t('processing.wait')}
           </p>
         </AlertDescription>
       </Alert>
@@ -90,10 +93,10 @@ export function ErrorAlerts({ status, onRetry }: ErrorAlertsProps) {
   // Trade settled
   if (status.status === 'settled') {
     return (
-      <Alert className="bg-green-50 border-green-200">
-        <CheckCircle2 className="h-4 w-4 text-green-600" />
-        <AlertDescription className="text-sm text-green-800">
-          ✅ Trade settled! USDC has been sent to your wallet.
+      <Alert className="bg-green-50 border-green-200 dark:bg-green-950/20 dark:border-green-800">
+        <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
+        <AlertDescription className="text-sm text-green-800 dark:text-green-200">
+          {t('settled.message')}
         </AlertDescription>
       </Alert>
     );
@@ -105,7 +108,7 @@ export function ErrorAlerts({ status, onRetry }: ErrorAlertsProps) {
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
         <AlertDescription className="text-sm">
-          ⏰ Payment window expired. This trade can be cancelled.
+          {t('expired.message')}
         </AlertDescription>
       </Alert>
     );

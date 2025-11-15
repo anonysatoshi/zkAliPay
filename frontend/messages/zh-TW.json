@@ -276,6 +276,29 @@
         "proofSubmitted": "✅ 證明已提交！正在等待結算確認..."
       }
     },
+    "errorAlerts": {
+      "proofFailed": {
+        "title": "❌ 證明生成失敗",
+        "description": "無法生成零知識證明。這可能是由於證明網絡的臨時問題。請稍後重試或聯繫支援。",
+        "tryAgain": "重試"
+      },
+      "validationFailed": {
+        "title": "❌ PDF 驗證失敗",
+        "description": "請確保您上傳了正確的支付寶付款收據PDF，並包含上方顯示的確切付款詳情。",
+        "tryAgain": "重試"
+      },
+      "processing": {
+        "generating": "正在通過 Axiom OpenVM 零知識虛擬機生成證明...",
+        "file": "文件：",
+        "wait": "這可能需要幾分鐘。請不要關閉此頁面。"
+      },
+      "settled": {
+        "message": "✅ 交易已結算！USDC已發送到您的錢包。"
+      },
+      "expired": {
+        "message": "⏰ 付款窗口已過期。此交易可以取消。"
+      }
+    },
     "myTrades": {
       "loading": "正在載入您的交易...",
       "error": "無法載入交易。請重試。",

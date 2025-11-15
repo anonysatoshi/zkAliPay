@@ -276,6 +276,29 @@
         "proofSubmitted": "✅ Proof submitted! Waiting for settlement confirmation..."
       }
     },
+    "errorAlerts": {
+      "proofFailed": {
+        "title": "❌ Proof Generation Failed",
+        "description": "The zero-knowledge proof could not be generated. This may be due to a temporary issue with the proving network. Please try again later or contact support.",
+        "tryAgain": "Try Again"
+      },
+      "validationFailed": {
+        "title": "❌ PDF Validation Failed",
+        "description": "Please ensure you uploaded the correct Alipay payment receipt PDF with the exact payment details shown above.",
+        "tryAgain": "Try Again"
+      },
+      "processing": {
+        "generating": "Generating proof via Axiom OpenVM...",
+        "file": "File:",
+        "wait": "This may take a few minutes. Please do not close this page."
+      },
+      "settled": {
+        "message": "✅ Trade settled! USDC has been sent to your wallet."
+      },
+      "expired": {
+        "message": "⏰ Payment window expired. This trade can be cancelled."
+      }
+    },
     "myTrades": {
       "loading": "Loading your trades...",
       "error": "Failed to load trades. Please try again.",
