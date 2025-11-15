@@ -45,7 +45,7 @@ export function MyTrades() {
 
   if (trades.length === 0) {
     return (
-      <Card>
+      <Card className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-lg">
         <CardContent className="pt-6">
           <p className="text-center text-muted-foreground">
             You don't have any trades yet. Buy some tokens to get started!
@@ -59,24 +59,24 @@ export function MyTrades() {
     switch (status) {
       case 0:
         return (
-          <span className="flex items-center text-xs text-yellow-600 bg-yellow-100 px-2 py-1 rounded">
-            <Clock className="h-3 w-3 mr-1" />
+          <div className="flex items-center text-sm font-semibold text-yellow-700 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/30 px-3 py-1.5 rounded-xl border border-yellow-300 dark:border-yellow-700">
+            <Clock className="h-4 w-4 mr-1.5" />
             Pending Payment
-          </span>
+          </div>
         );
       case 1:
         return (
-          <span className="flex items-center text-xs text-green-600 bg-green-100 px-2 py-1 rounded">
-            <CheckCircle2 className="h-3 w-3 mr-1" />
+          <div className="flex items-center text-sm font-semibold text-green-700 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-3 py-1.5 rounded-xl border border-green-300 dark:border-green-700">
+            <CheckCircle2 className="h-4 w-4 mr-1.5" />
             Settled
-          </span>
+          </div>
         );
       case 2:
         return (
-          <span className="flex items-center text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
-            <AlertCircle className="h-3 w-3 mr-1" />
+          <div className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-xl border border-gray-300 dark:border-gray-700">
+            <AlertCircle className="h-4 w-4 mr-1.5" />
             Expired
-          </span>
+          </div>
         );
       default:
         return null;
@@ -98,15 +98,15 @@ export function MyTrades() {
     return (
       <Card 
         key={trade.trade_id} 
-        className={isCompleted ? 'opacity-70' : ''}
+        className={`bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-lg transition-all hover:shadow-xl ${isCompleted ? 'opacity-70' : ''}`}
       >
-        <CardHeader>
+        <CardHeader className="pb-4">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-sm font-mono">
+              <CardTitle className="text-sm font-mono text-gray-700 dark:text-gray-300">
                 Trade: {formatAddress(trade.trade_id)}
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-xs mt-1">
                 Created {new Date(trade.created_at * 1000).toLocaleString()}
               </CardDescription>
             </div>
@@ -114,57 +114,61 @@ export function MyTrades() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Trade Info */}
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <p className="text-muted-foreground">Token</p>
-              <p className="font-semibold">{tokenAmount}</p>
+          {/* Trade Info - Apple Style Grid */}
+          <div className="grid grid-cols-2 gap-4 p-4 bg-gradient-to-br from-gray-50 to-blue-50/30 dark:from-gray-800/50 dark:to-blue-900/10 rounded-xl border border-gray-200/50 dark:border-gray-700/50">
+            <div className="space-y-1">
+              <p className="text-gray-600 dark:text-gray-400 text-xs font-medium">Token Received</p>
+              <p className="font-bold text-base text-gray-900 dark:text-gray-100">{tokenAmount}</p>
             </div>
-            <div>
-              <p className="text-muted-foreground">CNY Paid</p>
-              <p className="font-semibold">¥{cnyAmount}</p>
+            <div className="space-y-1">
+              <p className="text-gray-600 dark:text-gray-400 text-xs font-medium">CNY Paid</p>
+              <p className="font-bold text-base text-green-600 dark:text-green-400">¥{cnyAmount}</p>
             </div>
-            <div>
-              <p className="text-muted-foreground">Payment Nonce</p>
-              <p className="font-mono text-xs">{trade.payment_nonce}</p>
+            <div className="space-y-1">
+              <p className="text-gray-600 dark:text-gray-400 text-xs font-medium">Payment Nonce</p>
+              <p className="font-mono text-xs text-gray-700 dark:text-gray-300">{trade.payment_nonce}</p>
             </div>
-            <div>
-              <p className="text-muted-foreground">
+            <div className="space-y-1">
+              <p className="text-gray-600 dark:text-gray-400 text-xs font-medium">
                 {isPending ? 'Expires At' : isSettled ? 'Settled At' : 'Expired At'}
               </p>
-              <p className="text-xs">
+              <p className="text-xs text-gray-700 dark:text-gray-300">
                 {new Date(trade.expires_at * 1000).toLocaleString()}
               </p>
             </div>
           </div>
 
-          {/* Transaction Links */}
-          <div className="pt-4 border-t space-y-2">
-            {trade.escrow_tx_hash && (
-              <a
-                href={getTransactionUrl(trade.escrow_tx_hash)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-primary flex items-center gap-1 hover:underline"
-              >
-                View Creation TX <ExternalLink className="h-3 w-3" />
-              </a>
-            )}
-            {trade.settlement_tx_hash && (
-              <a
-                href={getTransactionUrl(trade.settlement_tx_hash)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-green-600 flex items-center gap-1 hover:underline"
-              >
-                View Settlement TX <ExternalLink className="h-3 w-3" />
-              </a>
-            )}
-          </div>
+          {/* Transaction Links - Modern Style */}
+          {(trade.escrow_tx_hash || trade.settlement_tx_hash) && (
+            <div className="pt-3 border-t border-gray-200 dark:border-gray-700 space-y-2">
+              {trade.escrow_tx_hash && (
+                <a
+                  href={getTransactionUrl(trade.escrow_tx_hash)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                  View Creation TX
+                </a>
+              )}
+              {trade.settlement_tx_hash && (
+                <a
+                  href={getTransactionUrl(trade.settlement_tx_hash)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-xs text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-medium transition-colors"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                  View Settlement TX
+                </a>
+              )}
+            </div>
+          )}
 
           {/* Warning for expired pending trades */}
           {isActuallyExpired && isPending && (
-            <Alert variant="destructive">
+            <Alert variant="destructive" className="border-red-300 dark:border-red-700">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription className="text-xs">
                 This trade has expired. The auto-cancel service will clean it up shortly.
@@ -178,28 +182,34 @@ export function MyTrades() {
 
   return (
     <div className="space-y-6">
-      {/* Toggle Buttons */}
-      <div className="flex gap-2 border-b">
+      {/* Toggle Buttons - Apple Style */}
+      <div className="flex gap-3">
         <Button
-          variant={view === 'pending' ? 'default' : 'ghost'}
+          size="lg"
           onClick={() => setView('pending')}
-          className="rounded-b-none"
+          className={view === 'pending'
+            ? "flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg rounded-xl transition-all duration-300"
+            : "flex-1 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 rounded-xl transition-all duration-300"
+          }
         >
           Pending Trades
           {pendingTrades.length > 0 && (
-            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-primary-foreground text-primary">
+            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-white/20 text-white font-semibold">
               {pendingTrades.length}
             </span>
           )}
         </Button>
         <Button
-          variant={view === 'completed' ? 'default' : 'ghost'}
+          size="lg"
           onClick={() => setView('completed')}
-          className="rounded-b-none"
+          className={view === 'completed'
+            ? "flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg rounded-xl transition-all duration-300"
+            : "flex-1 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 rounded-xl transition-all duration-300"
+          }
         >
           Completed Trades
           {completedTrades.length > 0 && (
-            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-primary-foreground text-primary">
+            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-white/20 text-white font-semibold">
               {completedTrades.length}
             </span>
           )}
@@ -209,7 +219,7 @@ export function MyTrades() {
       {/* Trades Display */}
       <div className="space-y-4">
         {displayedTrades.length === 0 ? (
-          <Alert>
+          <Alert className="border-gray-200 dark:border-gray-700">
             <AlertDescription>
               {view === 'pending' 
                 ? "You have no pending trades."
