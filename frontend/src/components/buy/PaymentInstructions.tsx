@@ -2,24 +2,14 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  Clock, 
-  AlertCircle, 
-  CheckCircle2, 
-  ExternalLink,
-  Loader2,
-  RotateCcw,
-  Upload,
-  Zap,
-  Send,
-} from 'lucide-react';
+import { Clock, CheckCircle2 } from 'lucide-react';
 import { api } from '@/lib/api';
-import { getTransactionUrl } from '@/lib/contracts';
 import { PaymentTutorialModal } from './payment/PaymentTutorialModal';
-import { PhaseProgress } from './payment/PhaseProgress';
-import { formatTime } from './payment/utils';
+import { PaymentDetailsSection } from './payment/PaymentDetailsSection';
+import { UploadSection } from './payment/UploadSection';
+import { ProcessingSection } from './payment/ProcessingSection';
+import { ErrorAlerts } from './payment/ErrorAlerts';
+import { formatTime, formatCnyAmount } from './payment/utils';
 import type { Trade, PaymentInstructionsProps, TradeStatus } from './payment/types';
 
 export function PaymentInstructions({ trades, onAllSettled }: PaymentInstructionsProps) {
@@ -345,7 +335,23 @@ export function PaymentInstructions({ trades, onAllSettled }: PaymentInstruction
     <div className="space-y-6">
       {trades.map((trade) => {
         const status = tradeStatuses.get(trade.trade_id)!;
-        const cnyAmount = (parseFloat(trade.cny_amount) / 100).toFixed(2);
+        const cnyAmount = formatCnyAmount(trade.cny_amount);
+
+        const handleRetry = () => {
+          setTradeStatuses((prev) => {
+            const updated = new Map(prev);
+            updated.set(trade.trade_id, {
+              ...status,
+              status: 'pending',
+              error: undefined,
+              uploadedFilename: undefined,
+              validationDetails: undefined,
+              expectedHash: undefined,
+              actualHash: undefined,
+            });
+            return updated;
+          });
+        };
 
         return (
           <Card 
@@ -385,391 +391,28 @@ export function PaymentInstructions({ trades, onAllSettled }: PaymentInstruction
             </CardHeader>
 
             <CardContent className="space-y-4 pt-6">
-              {/* Payment Details */}
-              <div className="bg-gradient-to-br from-muted/30 to-muted/50 border border-muted rounded-xl p-4 space-y-3 text-sm shadow-sm">
-                <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground font-medium">Alipay Account:</span>
-                  <span className="font-mono font-semibold bg-white dark:bg-gray-800 px-2 py-1 rounded">{trade.alipay_id}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground font-medium">Account Name:</span>
-                  <span className="font-semibold">{trade.alipay_name}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground font-medium">Amount:</span>
-                  <span className="font-bold text-lg text-primary">¥{cnyAmount}</span>
-                </div>
-                <div className="flex justify-between items-center border-t pt-2 mt-2">
-                  <span className="text-muted-foreground font-medium">Payment Note:</span>
-                  <span className="font-mono text-base font-bold bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 px-2 py-1 rounded">{trade.payment_nonce}</span>
-                </div>
-              </div>
+              {/* Payment Details Section */}
+              <PaymentDetailsSection
+                trade={trade}
+                status={status}
+                cnyAmount={cnyAmount}
+                onOpenTutorial={() => setTutorialOpen(trade.trade_id)}
+              />
 
-              {/* Tutorial Button - Only show for pending trades */}
+              {/* Upload Section - Only for pending trades */}
               {status.status === 'pending' && status.timeRemaining > 0 && (
-                <Alert className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-300">
-                  <AlertDescription>
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-blue-900 mb-1">
-                          First time using zkAlipay?
-                        </p>
-                        <p className="text-xs text-blue-700">
-                          Follow our step-by-step guide with screenshots to complete your payment successfully.
-                        </p>
-                      </div>
-                      <Button
-                        onClick={() => setTutorialOpen(trade.trade_id)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white flex-shrink-0"
-                        size="sm"
-                      >
-                        📚 How to Pay
-                      </Button>
-                    </div>
-                  </AlertDescription>
-                </Alert>
+                <UploadSection
+                  tradeId={trade.trade_id}
+                  error={status.error}
+                  onFileUpload={(file) => handlePdfUpload(trade.trade_id, file)}
+                />
               )}
 
-              {/* Trade Info */}
-              <div className="text-xs text-muted-foreground space-y-1">
-                <p>
-                  Trade ID:{' '}
-                  <span className="font-mono">
-                    {trade.trade_id.slice(0, 10)}...{trade.trade_id.slice(-8)}
-                  </span>
-                </p>
-                <a
-                  href={getTransactionUrl(trade.tx_hash)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary flex items-center gap-1 hover:underline"
-                >
-                  View on Explorer <ExternalLink className="h-3 w-3" />
-                </a>
-                {status.tx_hash && (
-                  <a
-                    href={getTransactionUrl(status.tx_hash)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary flex items-center gap-1 hover:underline"
-                  >
-                    View Proof TX <ExternalLink className="h-3 w-3" />
-                  </a>
-                )}
-              </div>
+              {/* Processing Section - Phases 1, 2, 3 */}
+              <ProcessingSection status={status} />
 
-              {/* Action Buttons */}
-              {status.status === 'pending' && status.timeRemaining > 0 && (
-                <>
-                  {/* Error Display */}
-                  {status.error && (
-                    <Alert variant="destructive" className="mb-2">
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertDescription className="text-sm">
-                        {status.error}
-                      </AlertDescription>
-                    </Alert>
-                  )}
-                  
-                  <div className="space-y-2 pt-2">
-                    <label htmlFor={`pdf-upload-${trade.trade_id}`} className="text-sm font-medium">
-                      Upload Alipay Payment PDF
-                    </label>
-                    <input
-                      id={`pdf-upload-${trade.trade_id}`}
-                      type="file"
-                      accept="application/pdf"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          handlePdfUpload(trade.trade_id, file);
-                        }
-                      }}
-                      className="block w-full text-sm text-muted-foreground
-                        file:mr-4 file:py-2 file:px-4
-                        file:rounded-md file:border-0
-                        file:text-sm file:font-semibold
-                        file:bg-primary file:text-primary-foreground
-                        hover:file:bg-primary/90
-                        cursor-pointer"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Upload the PDF of your Alipay payment receipt. Maximum file size: 10MB
-                    </p>
-                  </div>
-                </>
-              )}
-
-              {/* Phase-Based Progress Display - Only show after user uploads */}
-              {(status.status !== 'pending' && status.status !== 'expired' && status.status !== 'settled') && (
-                <div className="space-y-3 pt-4">
-                  {/* Phase 1: Upload & Validation */}
-                  <PhaseProgress
-                    phase={1}
-                    title="Upload & Validate Payment"
-                    description="Upload PDF and verify payment details"
-                    status={
-                      ['settled', 'submitting_to_blockchain', 'blockchain_submitted', 'proof_submitted', 'generating_proof', 'proof_ready', 'valid'].includes(status.status)
-                        ? 'completed'
-                        : ['uploading', 'validating'].includes(status.status)
-                        ? 'in_progress'
-                        : status.status === 'invalid'
-                        ? 'failed'
-                        : 'pending'
-                    }
-                    icon={Upload}
-                    estimatedTime="10-30s"
-                    details={
-                      <div className="space-y-2">
-                        {status.uploadedFilename && (
-                          <div className="p-2 bg-white/60 rounded text-xs">
-                            <span className="text-muted-foreground">File:</span> 
-                            <span className="font-mono ml-2">{status.uploadedFilename}</span>
-                          </div>
-                        )}
-                        {status.status === 'uploading' && (
-                          <p className="text-xs text-blue-700">📤 Uploading PDF to server...</p>
-                        )}
-                        {status.status === 'validating' && (
-                          <p className="text-xs text-blue-700">🔍 Validating payment details with Axiom Execute mode...</p>
-                        )}
-                        {['valid', 'generating_proof', 'proof_ready', 'submitting_to_blockchain', 'blockchain_submitted', 'proof_submitted', 'settled'].includes(status.status) && (
-                          <div className="space-y-2">
-                            <p className="text-xs text-green-700 font-semibold">✅ Validation complete!</p>
-                            {status.validationDetails && (
-                              <p className="text-xs text-green-700">{status.validationDetails}</p>
-                            )}
-                            {status.expectedHash && status.actualHash && (
-                              <div className="p-2 bg-white/60 rounded text-xs font-mono space-y-1">
-                                <div>
-                                  <span className="text-muted-foreground">Expected:</span>
-                                  <div className="break-all text-[10px]">{status.expectedHash.slice(0, 32)}...</div>
-                                </div>
-                                <div>
-                                  <span className="text-muted-foreground">Actual:</span>
-                                  <div className="break-all text-[10px]">{status.actualHash.slice(0, 32)}...</div>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    }
-                  />
-
-                  {/* Phase 2: Generate Proof */}
-                  <PhaseProgress
-                    phase={2}
-                    title="Generate Zero-Knowledge Proof"
-                    description="Create cryptographic proof via Axiom network"
-                    status={
-                      ['settled', 'submitting_to_blockchain', 'blockchain_submitted', 'proof_submitted', 'proof_ready'].includes(status.status)
-                        ? 'completed'
-                        : status.status === 'generating_proof'
-                        ? 'in_progress'
-                        : status.status === 'proof_failed'
-                        ? 'failed'
-                        : 'pending'
-                    }
-                    icon={Zap}
-                    estimatedTime="5-10 min"
-                    details={
-                      <div className="space-y-2">
-                        {status.status === 'generating_proof' && (
-                          <>
-                            <p className="text-xs text-blue-700">
-                              ⚡ Generating EVM-compatible zero-knowledge proof via Axiom OpenVM proving network...
-                            </p>
-                            <div className="mt-2 space-y-1 text-xs">
-                              <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
-                                <span>Generating proof on remote server</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <div className="w-2 h-2 rounded-full bg-gray-300"></div>
-                                <span>Downloading proof for verification</span>
-                              </div>
-                            </div>
-                            <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded">
-                              <p className="text-xs text-yellow-800">
-                                ⏰ <strong>Please wait:</strong> This process may take 5-10 minutes. Do not close this page.
-                              </p>
-                            </div>
-                          </>
-                        )}
-                        {['proof_ready', 'submitting_to_blockchain', 'blockchain_submitted', 'proof_submitted', 'settled'].includes(status.status) && (
-                          <p className="text-xs text-green-700 font-semibold">
-                            ✅ Zero-knowledge proof generated successfully!
-                          </p>
-                        )}
-                      </div>
-                    }
-                  />
-
-                  {/* Phase 3: Submit to Blockchain */}
-                  <PhaseProgress
-                    phase={3}
-                    title="Submit to Blockchain"
-                    description="Submit proof to smart contract for settlement"
-                    status={
-                      ['settled', 'proof_submitted'].includes(status.status)
-                        ? 'completed'
-                        : ['submitting_to_blockchain', 'blockchain_submitted', 'settling'].includes(status.status)
-                        ? 'in_progress'
-                        : 'pending'
-                    }
-                    icon={Send}
-                    estimatedTime="10-30s"
-                    details={
-                      <div className="space-y-2">
-                        {['submitting_to_blockchain', 'blockchain_submitted'].includes(status.status) && (
-                          <>
-                            <p className="text-xs text-blue-700">
-                              📤 Submitting proof to zkAlipay smart contract...
-                            </p>
-                            {status.blockchain_tx_hash && (
-                              <div className="p-2 bg-white/60 rounded">
-                                <p className="text-xs text-muted-foreground mb-1">Transaction Hash:</p>
-                                <a
-                                  href={getTransactionUrl(status.blockchain_tx_hash)}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="flex items-center gap-1 text-xs text-primary hover:underline break-all"
-                                >
-                                  {status.blockchain_tx_hash}
-                                  <ExternalLink className="h-3 w-3 flex-shrink-0" />
-                                </a>
-                              </div>
-                            )}
-                          </>
-                        )}
-                        {['proof_submitted', 'settled'].includes(status.status) && (
-                          <p className="text-xs text-green-700 font-semibold">
-                            ✅ Proof submitted! Waiting for settlement confirmation...
-                          </p>
-                        )}
-                      </div>
-                    }
-                  />
-                </div>
-              )}
-
-              {status.status === 'proof_failed' && (
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription className="text-sm">
-                    <div className="font-semibold mb-2">❌ Proof Generation Failed</div>
-                    <p className="mb-2">{status.error}</p>
-                    <p className="mt-2 text-xs">
-                      The zero-knowledge proof could not be generated. This may be due to a temporary issue with the proving network. Please try again later or contact support.
-                    </p>
-                    <Button
-                      onClick={() => {
-                        setTradeStatuses((prev) => {
-                          const updated = new Map(prev);
-                          updated.set(trade.trade_id, {
-                            ...status,
-                            status: 'pending',
-                            error: undefined,
-                          });
-                          return updated;
-                        });
-                      }}
-                      variant="outline"
-                      size="sm"
-                      className="mt-3"
-                    >
-                      <RotateCcw className="h-4 w-4 mr-2" />
-                      Try Again
-                    </Button>
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              {status.status === 'invalid' && (
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription className="text-sm">
-                    <div className="font-semibold mb-2">❌ PDF Validation Failed</div>
-                    <p className="mb-2">{status.error}</p>
-                    {status.expectedHash && status.actualHash && (
-                      <div className="mt-2 p-2 bg-white/50 rounded text-xs font-mono space-y-1">
-                        <div>
-                          <span className="text-muted-foreground">Expected Hash:</span>
-                          <div className="break-all">{status.expectedHash}</div>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">Actual Hash:</span>
-                          <div className="break-all text-red-600">{status.actualHash}</div>
-                        </div>
-                      </div>
-                    )}
-                    <p className="mt-2 text-xs">
-                      Please ensure you uploaded the correct Alipay payment receipt PDF with the exact payment details shown above.
-                    </p>
-                    <Button
-                      onClick={() => {
-                        setTradeStatuses((prev) => {
-                          const updated = new Map(prev);
-                          updated.set(trade.trade_id, {
-                            ...status,
-                            status: 'pending',
-                            error: undefined,
-                            uploadedFilename: undefined,
-                            validationDetails: undefined,
-                            expectedHash: undefined,
-                            actualHash: undefined,
-                          });
-                          return updated;
-                        });
-                      }}
-                      variant="outline"
-                      size="sm"
-                      className="mt-3"
-                    >
-                      <RotateCcw className="h-4 w-4 mr-2" />
-                      Try Again
-                    </Button>
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              {status.status === 'processing' && (
-                <Alert>
-                  <AlertDescription className="text-sm">
-                    <div className="flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <span>Generating zkPDF proof via Axiom API...</span>
-                    </div>
-                    {status.uploadedFilename && (
-                      <span className="block mt-2 font-mono text-xs text-muted-foreground">
-                        File: {status.uploadedFilename}
-                      </span>
-                    )}
-                    <p className="mt-2 text-xs text-muted-foreground">
-                      This may take a few minutes. Please do not close this page.
-                    </p>
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              {status.status === 'settled' && (
-                <Alert className="bg-green-50 border-green-200">
-                  <CheckCircle2 className="h-4 w-4 text-green-600" />
-                  <AlertDescription className="text-sm text-green-800">
-                    ✅ Trade settled! USDC has been sent to your wallet.
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              {status.status === 'expired' && (
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription className="text-sm">
-                    ⏰ Payment window expired. This trade can be cancelled.
-                  </AlertDescription>
-                </Alert>
-              )}
+              {/* Error Alerts - All error states */}
+              <ErrorAlerts status={status} onRetry={handleRetry} />
             </CardContent>
           </Card>
         );
