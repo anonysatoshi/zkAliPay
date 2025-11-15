@@ -66,7 +66,11 @@ export function ProcessingSection({ status }: ProcessingSectionProps) {
       <PhaseProgress
         phase={2}
         title={t('phase2.title')}
-        description={t('phase2.description')}
+        description={
+          status.status === 'generating_proof'
+            ? t('phase2.generatingDescription')
+            : t('phase2.description')
+        }
         status={
           ['settled', 'submitting_to_blockchain', 'blockchain_submitted', 'proof_submitted', 'proof_ready'].includes(status.status)
             ? 'completed'

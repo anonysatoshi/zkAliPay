@@ -259,6 +259,7 @@
       "phase2": {
         "title": "Generate Zero-Knowledge Proof",
         "description": "Request zero-knowledge proof generation from Axiom OpenVM",
+        "generatingDescription": "Generating zero-knowledge proof on Axiom OpenVM",
         "estimatedTime": "5-10 min",
         "requesting": "⚡ Requesting zero-knowledge proof generation from Axiom OpenVM...",
         "generating": "Generating proof on Axiom OpenVM",

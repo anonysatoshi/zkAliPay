@@ -259,6 +259,7 @@
       "phase2": {
         "title": "生成零知識證明",
         "description": "從 Axiom OpenVM 零知識虛擬機請求零知識證明生成",
+        "generatingDescription": "正在 Axiom OpenVM 零知識虛擬機上生成零知識證明",
         "estimatedTime": "約5-10分鐘",
         "requesting": "⚡ 正在從 Axiom OpenVM 零知識虛擬機請求零知識證明生成...",
         "generating": "正在 Axiom OpenVM 零知識虛擬機上生成證明",
