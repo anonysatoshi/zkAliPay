@@ -11,8 +11,10 @@ import { ProcessingSection } from './payment/ProcessingSection';
 import { ErrorAlerts } from './payment/ErrorAlerts';
 import { formatTime, formatCnyAmount } from './payment/utils';
 import type { Trade, PaymentInstructionsProps, TradeStatus } from './payment/types';
+import { useTranslations } from 'next-intl';
 
 export function PaymentInstructions({ trades, onAllSettled }: PaymentInstructionsProps) {
+  const t = useTranslations('buy.paymentInstructions');
   const [tradeStatuses, setTradeStatuses] = useState<Map<string, TradeStatus>>(
     new Map(
       trades.map((t) => [
@@ -361,7 +363,7 @@ export function PaymentInstructions({ trades, onAllSettled }: PaymentInstruction
             <CardHeader className="border-b bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-950/20 dark:to-purple-950/20">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg font-bold">
-                  💸 Payment: ¥{cnyAmount} CNY
+                  {t('paymentTitle')}: ¥{cnyAmount} CNY
                 </CardTitle>
                 <div className="flex items-center gap-2">
                   {status.status === 'pending' && status.timeRemaining > 0 && (

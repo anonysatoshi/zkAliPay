@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ExternalLink, HelpCircle } from 'lucide-react';
 import { getTransactionUrl } from '@/lib/contracts';
 import type { Trade, TradeStatus } from './types';
+import { useTranslations } from 'next-intl';
 
 interface PaymentDetailsSectionProps {
   trade: Trade;
@@ -18,6 +19,8 @@ export function PaymentDetailsSection({
   cnyAmount,
   onOpenTutorial 
 }: PaymentDetailsSectionProps) {
+  const t = useTranslations('buy.paymentInstructions');
+  
   return (
     <>
       {/* Payment Details - Apple Style */}
@@ -25,7 +28,7 @@ export function PaymentDetailsSection({
         {/* Header with Tutorial Link */}
         {status.status === 'pending' && status.timeRemaining > 0 && (
           <div className="flex items-center justify-between px-6 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border-b border-gray-200 dark:border-gray-700">
-            <span className="text-xs font-medium text-gray-600 dark:text-gray-300">Payment Instructions</span>
+            <span className="text-xs font-medium text-gray-600 dark:text-gray-300">{t('paymentInstructions')}</span>
             <Button
               onClick={onOpenTutorial}
               variant="ghost"
@@ -33,7 +36,7 @@ export function PaymentDetailsSection({
               className="h-7 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-100/50 dark:hover:bg-blue-900/30 gap-1.5"
             >
               <HelpCircle className="h-3.5 w-3.5" />
-              Need Help?
+              {t('needHelp')}
             </Button>
           </div>
         )}
@@ -43,7 +46,7 @@ export function PaymentDetailsSection({
           {/* Alipay Account */}
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-              Alipay Account
+              {t('alipayAccount')}
             </label>
             <div className="font-mono text-xl font-bold text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700">
               {trade.alipay_id}
@@ -53,7 +56,7 @@ export function PaymentDetailsSection({
           {/* Account Name */}
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-              Account Name
+              {t('accountName')}
             </label>
             <div className="text-xl font-bold text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700">
               {trade.alipay_name}
@@ -63,7 +66,7 @@ export function PaymentDetailsSection({
           {/* Amount */}
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-              Amount to Transfer
+              {t('amountToTransfer')}
             </label>
             <div className="text-3xl font-bold text-green-600 dark:text-green-400 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 px-4 py-3 rounded-xl border-2 border-green-200 dark:border-green-800">
               ¥{cnyAmount}
@@ -74,13 +77,13 @@ export function PaymentDetailsSection({
           <div className="space-y-1.5 pt-2 border-t-2 border-gray-200 dark:border-gray-700">
             <label className="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-wide flex items-center gap-1">
               <span className="text-base">⚠️</span>
-              Payment Note (CRITICAL)
+              {t('paymentNoteCritical')}
             </label>
             <div className="font-mono text-3xl font-bold text-red-600 dark:text-red-400 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 px-4 py-4 rounded-xl border-2 border-red-300 dark:border-red-700 text-center tracking-wider">
               {trade.payment_nonce}
             </div>
             <p className="text-xs text-red-600 dark:text-red-400 font-semibold text-center">
-              You MUST include this exact number in the payment note field!
+              {t('mustInclude')}
             </p>
           </div>
         </div>
@@ -99,7 +102,7 @@ export function PaymentDetailsSection({
             className="text-primary flex items-center gap-1 hover:underline transition-colors"
           >
             <ExternalLink className="h-3 w-3" />
-            View Trade
+            {t('viewTrade')}
           </a>
           {status.tx_hash && (
             <a
@@ -109,7 +112,7 @@ export function PaymentDetailsSection({
               className="text-primary flex items-center gap-1 hover:underline transition-colors"
             >
               <ExternalLink className="h-3 w-3" />
-              View Proof
+              {t('viewProof')}
             </a>
           )}
         </div>

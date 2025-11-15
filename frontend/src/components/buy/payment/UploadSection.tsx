@@ -2,6 +2,7 @@
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface UploadSectionProps {
   tradeId: string;
@@ -10,6 +11,8 @@ interface UploadSectionProps {
 }
 
 export function UploadSection({ tradeId, error, onFileUpload }: UploadSectionProps) {
+  const t = useTranslations('buy.paymentInstructions');
+  
   return (
     <>
       {/* Error Display */}
@@ -24,7 +27,7 @@ export function UploadSection({ tradeId, error, onFileUpload }: UploadSectionPro
       
       <div className="space-y-2 pt-2">
         <label htmlFor={`pdf-upload-${tradeId}`} className="text-sm font-medium">
-          Upload Alipay Payment PDF
+          {t('uploadPdf')}
         </label>
         <input
           id={`pdf-upload-${tradeId}`}
@@ -45,7 +48,7 @@ export function UploadSection({ tradeId, error, onFileUpload }: UploadSectionPro
             cursor-pointer"
         />
         <p className="text-xs text-muted-foreground">
-          Upload the PDF of your Alipay payment receipt. Maximum file size: 10MB
+          {t('uploadHelp')}
         </p>
       </div>
     </>

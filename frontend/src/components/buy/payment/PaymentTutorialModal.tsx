@@ -8,6 +8,7 @@ import {
   ChevronLeft,
   X
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface PaymentTutorialModalProps {
   isOpen: boolean;
@@ -27,37 +28,38 @@ export function PaymentTutorialModal({
   amount 
 }: PaymentTutorialModalProps) {
   const [currentStep, setCurrentStep] = useState(0);
+  const t = useTranslations('buy.paymentInstructions.tutorial');
 
   const steps = [
     {
-      title: "Open Alipay Transfer",
-      description: "Open your Alipay app and navigate to the transfer/payment section.",
+      title: t('step1.title'),
+      description: t('step1.description'),
       content: (
         <div className="space-y-6">
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-6">
             <h4 className="font-bold text-blue-900 dark:text-blue-100 mb-4 text-lg flex items-center gap-2">
               <span className="text-2xl">📱</span>
-              Instructions
+              {t('step1.instructions')}
             </h4>
             <ol className="space-y-3 text-sm text-blue-800 dark:text-blue-200">
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">1</span>
-                <span className="pt-0.5">Open your <strong>Alipay (支付宝)</strong> mobile app</span>
+                <span className="pt-0.5">{t('step1.step1')}</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">2</span>
-                <span className="pt-0.5">Tap on <strong>"Transfer" (转账)</strong> or <strong>"Friends" (朋友)</strong></span>
+                <span className="pt-0.5">{t('step1.step2')}</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">3</span>
-                <span className="pt-0.5">Select <strong>"Transfer to Alipay Account"</strong></span>
+                <span className="pt-0.5">{t('step1.step3')}</span>
               </li>
             </ol>
           </div>
           <div className="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-950/20 dark:to-orange-950/20 border-2 border-yellow-300 dark:border-yellow-700 rounded-2xl p-5">
             <p className="text-sm text-yellow-900 dark:text-yellow-100 flex items-start gap-2">
               <span className="text-xl">⚠️</span>
-              <span><strong>Important:</strong> Make sure you're transferring to an Alipay account, not a bank account.</span>
+              <span><strong>{t('step1.important')}</strong> {t('step1.importantNote')}</span>
             </p>
           </div>
         </div>
@@ -325,10 +327,10 @@ export function PaymentTutorialModal({
           
           <div className="space-y-3">
             <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400">
-              Payment Instructions
+              {t('title')}
             </h2>
             <p className="text-sm text-gray-600 dark:text-gray-300">
-              Step {currentStep + 1} of {steps.length}
+              {t('stepOf', { current: currentStep + 1, total: steps.length })}
             </p>
           </div>
 
@@ -371,7 +373,7 @@ export function PaymentTutorialModal({
             className="h-12 px-6 border-2 disabled:opacity-30"
           >
             <ChevronLeft className="h-4 w-4 mr-2" />
-            Previous
+            {t('previous')}
           </Button>
           
           <div className="text-sm font-semibold text-gray-600 dark:text-gray-300">
@@ -383,7 +385,7 @@ export function PaymentTutorialModal({
               onClick={() => setCurrentStep(Math.min(steps.length - 1, currentStep + 1))}
               className="h-12 px-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg"
             >
-              Next
+              {t('next')}
               <ChevronRight className="h-4 w-4 ml-2" />
             </Button>
           ) : (
@@ -392,7 +394,7 @@ export function PaymentTutorialModal({
               className="h-12 px-6 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold shadow-lg"
             >
               <CheckCircle2 className="h-4 w-4 mr-2" />
-              Got it!
+              {t('gotIt')}
             </Button>
           )}
         </div>
