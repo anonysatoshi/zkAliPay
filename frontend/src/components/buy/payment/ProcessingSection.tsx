@@ -11,7 +11,7 @@ interface ProcessingSectionProps {
 }
 
 export function ProcessingSection({ status }: ProcessingSectionProps) {
-  const t = useTranslations('buy.paymentInstructions.processingSection');
+  const t = useTranslations('buy.processingSection');
   
   // Only show if not pending, expired, or settled
   if (status.status === 'pending' || status.status === 'expired' || status.status === 'settled') {

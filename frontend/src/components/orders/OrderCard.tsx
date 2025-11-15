@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { getTokenInfo, formatTokenAmount, getExchangeRateLabel } from '@/lib/tokens';
 import type { Order } from '@/hooks/useOrders';
 import { useTranslations, useLocale } from 'next-intl';
+import { useRouter } from 'next/navigation';
 
 interface OrderCardProps {
   order: Order;
@@ -39,14 +40,25 @@ function formatAddress(addr: string): string {
 export function OrderCard({ order }: OrderCardProps) {
   const t = useTranslations('orderCard');
   const locale = useLocale();
+  const router = useRouter();
   
   const tokenInfo = getTokenInfo(order.token);
   const rate = formatExchangeRate(order.exchange_rate);
   const available = formatTokenAmount(order.remaining_amount, order.token);
   const timeAgo = formatTimestamp(order.created_at, locale);
 
+  const handleClick = () => {
+    // Navigate to buy panel with pre-selected token
+    // Store the selected token in sessionStorage so the buy panel can pick it up
+    sessionStorage.setItem('preselectedToken', order.token);
+    router.push('/buy');
+  };
+
   return (
-    <Card className="hover:shadow-lg transition-shadow duration-200">
+    <Card 
+      className="hover:shadow-lg transition-all duration-200 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+      onClick={handleClick}
+    >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div>

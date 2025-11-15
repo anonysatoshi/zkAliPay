@@ -33,6 +33,17 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
   const [useManualAddress, setUseManualAddress] = useState(false);
   const [manualAddress, setManualAddress] = useState('');
 
+  // Check for preselected token from order card click
+  useEffect(() => {
+    const preselectedToken = sessionStorage.getItem('preselectedToken');
+    if (preselectedToken && SUPPORTED_TOKENS.includes(preselectedToken)) {
+      console.log('Preselected token from order card:', preselectedToken);
+      setSelectedToken(preselectedToken);
+      // Clear the session storage after using it
+      sessionStorage.removeItem('preselectedToken');
+    }
+  }, []);
+
   // Update token info when token selection changes
   useEffect(() => {
     setTokenInfo(getTokenInfo(selectedToken));
