@@ -56,17 +56,12 @@ export function OrderList() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">
-          Available Orders ({data.length})
-        </h2>
-        {isRefetching && (
-          <div className="flex items-center text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin mr-2" />
-            Refreshing...
-          </div>
-        )}
-      </div>
+      {isRefetching && (
+        <div className="flex items-center justify-end text-sm text-muted-foreground mb-6">
+          <Loader2 className="h-4 w-4 animate-spin mr-2" />
+          Refreshing...
+        </div>
+      )}
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {data.map((order) => (

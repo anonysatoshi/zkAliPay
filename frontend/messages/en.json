@@ -21,8 +21,8 @@
       "titleHighlight": "Unstoppable.",
       "subtitle": "Built on cutting-edge cryptography that makes traditional exchanges obsolete",
       "zkProofs": {
-        "title": "Zero-Knowledge Proofs",
-        "description": "Verify Alipay payments cryptographically. Complete privacy - no personal information exposed on-chain."
+        "title": "Zero-Knowledge Virtual Machines",
+        "description": "Generate cryptographically verifiable proof for Alipay payment - no personal info exposed on-chain."
       },
       "instantSettlement": {
         "title": "Automatic Settlement",
@@ -110,6 +110,47 @@
         "partialFill": "Only {filled} {symbol} available. Requested {requested} {symbol}.",
         "confirmAddress": "⚠️ IMPORTANT: Confirm Receive Address\n\nTokens will be sent to:\n{address}\n({shortened})\n\nThis address CANNOT be changed later. Please verify it's correct.\n\nClick OK to continue or Cancel to go back."
       }
+    },
+    "matchReview": {
+      "title": "Review Match Plan",
+      "description": "We've found the best rates for your purchase",
+      "noMatchPlan": "No match plan available. Please go back and try again.",
+      "matchedOrders": "Matched Orders",
+      "order": "Order",
+      "tokenAmount": "Token Amount",
+      "cnyAmount": "CNY Amount",
+      "exchangeRate": "Exchange Rate",
+      "seller": "Seller",
+      "totalSummary": "Total Summary",
+      "totalToken": "Total {symbol}",
+      "totalCnyToPay": "Total CNY to Pay",
+      "averageExchangeRate": "Average Exchange Rate",
+      "paymentBreakdown": "Payment Breakdown",
+      "paymentTo": "Payment {index} to {name}",
+      "back": "Back",
+      "confirmMatch": "Confirm Match"
+    },
+    "executeTrade": {
+      "title": "Creating Your Trades",
+      "description": "Submitting transactions to the blockchain...",
+      "successTitle": "Trades Created Successfully!",
+      "errorTitle": "Trade Creation Failed",
+      "successDescription": "Redirecting to payment instructions",
+      "errorDescription": "Something went wrong",
+      "processingTitle": "Creating your trades...",
+      "processingDescription": "Calling smart contract...",
+      "submittingTitle": "Submitting transaction to blockchain...",
+      "submittingDescription": "This may take 10-60 seconds. Please don't close this page.",
+      "successMessage": "Your trades have been created successfully",
+      "createdTrades": "Created Trades",
+      "trade": "Trade",
+      "amount": "Amount",
+      "paymentTo": "Payment to",
+      "viewTx": "View TX",
+      "continueToPayment": "Continue to Payment",
+      "goBack": "Go Back",
+      "retry": "Retry",
+      "pendingPayment": "PENDING PAYMENT"
     },
     "progress": {
       "enterAmount": "Order Info",

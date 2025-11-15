@@ -21,8 +21,8 @@
       "titleHighlight": "勢不可擋。",
       "subtitle": "建立在尖端密碼學之上，淘汰傳統交易所",
       "zkProofs": {
-        "title": "零知識證明",
-        "description": "密碼學驗證支付寶付款。完全隱私 - 鏈上不暴露任何個人信息。"
+        "title": "零知識虛擬機",
+        "description": "為支付寶付款生成可加密驗證的證明 - 不會在鏈上暴露任何個人信息。"
       },
       "instantSettlement": {
         "title": "自動結算",
@@ -110,6 +110,47 @@
         "partialFill": "僅有 {filled} {symbol} 可用。您請求 {requested} {symbol}。",
         "confirmAddress": "⚠️ 重要：確認接收地址\n\n代幣將被發送到：\n{address}\n({shortened})\n\n此地址以後無法更改。請確認正確。\n\n點擊確定繼續或取消返回。"
       }
+    },
+    "matchReview": {
+      "title": "查看匹配計劃",
+      "description": "我們為您找到了最佳匯率",
+      "noMatchPlan": "沒有可用的匹配計劃。請返回重試。",
+      "matchedOrders": "匹配訂單",
+      "order": "訂單",
+      "tokenAmount": "代幣數量",
+      "cnyAmount": "人民幣金額",
+      "exchangeRate": "匯率",
+      "seller": "賣家",
+      "totalSummary": "總計",
+      "totalToken": "總計 {symbol}",
+      "totalCnyToPay": "應付人民幣總額",
+      "averageExchangeRate": "平均匯率",
+      "paymentBreakdown": "付款明細",
+      "paymentTo": "付款 {index} 給 {name}",
+      "back": "返回",
+      "confirmMatch": "確認匹配"
+    },
+    "executeTrade": {
+      "title": "正在創建您的交易",
+      "description": "正在提交交易到區塊鏈...",
+      "successTitle": "交易創建成功！",
+      "errorTitle": "交易創建失敗",
+      "successDescription": "正在跳轉到付款說明",
+      "errorDescription": "出現問題",
+      "processingTitle": "正在創建您的交易...",
+      "processingDescription": "正在調用智能合約...",
+      "submittingTitle": "正在提交交易到區塊鏈...",
+      "submittingDescription": "這可能需要 10-60 秒。請不要關閉此頁面。",
+      "successMessage": "您的交易已成功創建",
+      "createdTrades": "已創建交易",
+      "trade": "交易",
+      "amount": "金額",
+      "paymentTo": "付款給",
+      "viewTx": "查看交易",
+      "continueToPayment": "繼續付款",
+      "goBack": "返回",
+      "retry": "重試",
+      "pendingPayment": "等待付款"
     },
     "progress": {
       "enterAmount": "訂單資訊",

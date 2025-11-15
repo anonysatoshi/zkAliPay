@@ -22,7 +22,7 @@ export function MatchReview({ flowData, goToNextStep, goBack }: MatchReviewProps
   if (!matchPlan) {
     return (
       <Alert variant="destructive">
-        <AlertDescription>No match plan available. Please go back and try again.</AlertDescription>
+        <AlertDescription>{t('noMatchPlan')}</AlertDescription>
       </Alert>
     );
   }
@@ -48,10 +48,10 @@ export function MatchReview({ flowData, goToNextStep, goBack }: MatchReviewProps
       {/* Page Header */}
       <div className="text-center space-y-3">
         <h2 className="text-3xl font-bold tracking-tight">
-          Review Match Plan
+          {t('title')}
         </h2>
         <p className="text-muted-foreground text-lg">
-          We've found the best rates for your purchase
+          {t('description')}
         </p>
       </div>
 
@@ -65,7 +65,7 @@ export function MatchReview({ flowData, goToNextStep, goBack }: MatchReviewProps
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold">
                 <Users className="h-5 w-5" />
               </div>
-              <h3 className="text-xl font-semibold">Matched Orders ({matchPlan.fills.length})</h3>
+              <h3 className="text-xl font-semibold">{t('matchedOrders')} ({matchPlan.fills.length})</h3>
             </div>
             
             <div className="pl-[52px] space-y-3">
@@ -80,26 +80,26 @@ export function MatchReview({ flowData, goToNextStep, goBack }: MatchReviewProps
                     className="border-2 rounded-xl p-5 bg-gradient-to-br from-muted/30 to-muted/50 hover:shadow-md transition-all"
                   >
                     <div className="flex items-center justify-between mb-3">
-                      <span className="font-semibold text-lg">Order {index + 1}</span>
+                      <span className="font-semibold text-lg">{t('order')} {index + 1}</span>
                       <span className="text-xs font-mono bg-muted px-2 py-1 rounded">
                         {fill.order_id.slice(0, 10)}...
                       </span>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1">
-                        <p className="text-xs text-muted-foreground font-medium">Token Amount</p>
+                        <p className="text-xs text-muted-foreground font-medium">{t('tokenAmount')}</p>
                         <p className="text-base font-bold">{fillAmount.toFixed(tokenInfo.decimals === 6 ? 2 : 4)} {tokenInfo.symbol}</p>
                       </div>
                       <div className="space-y-1">
-                        <p className="text-xs text-muted-foreground font-medium">CNY Amount</p>
+                        <p className="text-xs text-muted-foreground font-medium">{t('cnyAmount')}</p>
                         <p className="text-base font-bold text-primary">¥{fillCNY.toFixed(2)}</p>
                       </div>
                       <div className="space-y-1">
-                        <p className="text-xs text-muted-foreground font-medium">Exchange Rate</p>
+                        <p className="text-xs text-muted-foreground font-medium">{t('exchangeRate')}</p>
                         <p className="text-sm font-semibold">{rate.toFixed(2)} {getExchangeRateLabel(tokenAddress)}</p>
                       </div>
                       <div className="space-y-1">
-                        <p className="text-xs text-muted-foreground font-medium">Seller</p>
+                        <p className="text-xs text-muted-foreground font-medium">{t('seller')}</p>
                         <p className="font-mono text-xs bg-white dark:bg-gray-800 px-2 py-1 rounded">
                           {fill.seller.slice(0, 6)}...{fill.seller.slice(-4)}
                         </p>
@@ -119,7 +119,7 @@ export function MatchReview({ flowData, goToNextStep, goBack }: MatchReviewProps
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
                 <CheckCircle2 className="h-5 w-5" />
               </div>
-              <h3 className="text-xl font-semibold">Total Summary</h3>
+              <h3 className="text-xl font-semibold">{t('totalSummary')}</h3>
             </div>
             
             <div className="pl-[52px]">
@@ -128,20 +128,20 @@ export function MatchReview({ flowData, goToNextStep, goBack }: MatchReviewProps
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <TrendingUp className="h-4 w-4 text-blue-600" />
-                      <p className="text-sm text-muted-foreground font-medium">Total {tokenInfo.symbol}</p>
+                      <p className="text-sm text-muted-foreground font-medium">{t('totalToken', { symbol: tokenInfo.symbol })}</p>
                     </div>
                     <p className="text-3xl font-bold">{totalAmount.toFixed(tokenInfo.decimals === 6 ? 2 : 4)}</p>
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <DollarSign className="h-4 w-4 text-primary" />
-                      <p className="text-sm text-muted-foreground font-medium">Total CNY to Pay</p>
+                      <p className="text-sm text-muted-foreground font-medium">{t('totalCnyToPay')}</p>
                     </div>
                     <p className="text-3xl font-bold text-primary">¥{totalCNY.toFixed(2)}</p>
                   </div>
                 </div>
                 <div className="pt-3 border-t border-blue-200 dark:border-blue-800">
-                  <p className="text-sm text-muted-foreground font-medium mb-1">Average Exchange Rate</p>
+                  <p className="text-sm text-muted-foreground font-medium mb-1">{t('averageExchangeRate')}</p>
                   <p className="text-xl font-bold">{avgRate.toFixed(4)} {getExchangeRateLabel(tokenAddress)}</p>
                 </div>
               </div>
@@ -156,7 +156,7 @@ export function MatchReview({ flowData, goToNextStep, goBack }: MatchReviewProps
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-orange-500 flex items-center justify-center text-white font-bold">
                 <DollarSign className="h-5 w-5" />
               </div>
-              <h3 className="text-xl font-semibold">Payment Breakdown</h3>
+              <h3 className="text-xl font-semibold">{t('paymentBreakdown')}</h3>
             </div>
             
             <div className="pl-[52px]">
@@ -169,7 +169,7 @@ export function MatchReview({ flowData, goToNextStep, goBack }: MatchReviewProps
                   return (
                     <div key={fill.order_id} className="flex justify-between items-center py-2 border-b last:border-0">
                       <span className="text-sm text-muted-foreground">
-                        Payment {index + 1} to <span className="font-semibold text-foreground">{fill.alipay_name}</span>
+                        {t('paymentTo', { index: index + 1, name: fill.alipay_name })}
                       </span>
                       <span className="text-lg font-bold">
                         ¥{fillCNY.toFixed(2)}
@@ -190,7 +190,7 @@ export function MatchReview({ flowData, goToNextStep, goBack }: MatchReviewProps
               size="lg"
             >
               <ArrowLeft className="mr-2 h-5 w-5" />
-              Back
+              {t('back')}
             </Button>
             <Button 
               onClick={goToNextStep} 
@@ -198,7 +198,7 @@ export function MatchReview({ flowData, goToNextStep, goBack }: MatchReviewProps
               size="lg"
             >
               <CheckCircle2 className="mr-2 h-5 w-5" />
-              Confirm Match
+              {t('confirmMatch')}
             </Button>
           </div>
         </CardContent>

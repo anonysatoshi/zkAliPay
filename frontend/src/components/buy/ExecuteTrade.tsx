@@ -166,14 +166,14 @@ export function ExecuteTrade({ flowData, updateFlowData, goBack, goToNextStep }:
       {/* Page Header */}
       <div className="text-center space-y-3">
         <h2 className="text-3xl font-bold tracking-tight">
-          {status === 'executing' && 'Creating Your Trades'}
-          {status === 'success' && 'Trades Created Successfully!'}
-          {status === 'error' && 'Trade Creation Failed'}
+          {status === 'executing' && t('title')}
+          {status === 'success' && t('successTitle')}
+          {status === 'error' && t('errorTitle')}
         </h2>
         <p className="text-muted-foreground text-lg">
-          {status === 'executing' && 'Submitting transactions to the blockchain...'}
-          {status === 'success' && 'Redirecting to payment instructions'}
-          {status === 'error' && 'Something went wrong'}
+          {status === 'executing' && t('description')}
+          {status === 'success' && t('successDescription')}
+          {status === 'error' && t('errorDescription')}
         </p>
       </div>
 
@@ -194,12 +194,12 @@ export function ExecuteTrade({ flowData, updateFlowData, goBack, goToNextStep }:
                 </div>
                 
                 <div className="text-center space-y-2">
-                  <p className="text-2xl font-bold">Creating your trades...</p>
+                  <p className="text-2xl font-bold">{t('processingTitle')}</p>
                   <p className="text-muted-foreground max-w-md">
                     {progress < 40 && (
                       <span className="flex items-center justify-center gap-2">
                         <Rocket className="h-4 w-4" />
-                        Calling smart contract...
+                        {t('processingDescription')}
                       </span>
                     )}
                     {progress >= 40 && progress < 65 && (
@@ -234,12 +234,12 @@ export function ExecuteTrade({ flowData, updateFlowData, goBack, goToNextStep }:
                 <div className="bg-blue-50 dark:bg-blue-950/20 border-2 border-blue-200 dark:border-blue-800 rounded-xl p-4 max-w-md">
                   <p className="text-sm text-blue-800 dark:text-blue-200 text-center">
                     {progress < 65 
-                      ? '⚡ Submitting transaction to blockchain...'
+                      ? `⚡ ${t('submittingTitle')}`
                       : '🔄 Waiting for database sync (ensures secure proof submission)...'
                     }
                   </p>
                   <p className="text-xs text-center text-blue-600 dark:text-blue-300 mt-2">
-                    This may take 10-60 seconds. Please don't close this page.
+                    {t('submittingDescription')}
                   </p>
                 </div>
               </div>
@@ -257,7 +257,7 @@ export function ExecuteTrade({ flowData, updateFlowData, goBack, goToNextStep }:
                 <div className="text-center space-y-2">
                   <p className="text-3xl font-bold">All Set!</p>
                   <p className="text-muted-foreground">
-                    Your trades have been created successfully
+                    {t('successMessage')}
                   </p>
                 </div>
               </div>
@@ -268,7 +268,7 @@ export function ExecuteTrade({ flowData, updateFlowData, goBack, goToNextStep }:
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <CheckCircle2 className="h-5 w-5 text-green-600" />
-                  Created Trades ({trades.length})
+                  {t('createdTrades')} ({trades.length})
                 </h3>
                 
                 <div className="space-y-3">
@@ -278,18 +278,18 @@ export function ExecuteTrade({ flowData, updateFlowData, goBack, goToNextStep }:
                       className="border-2 rounded-xl p-5 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-950/10 dark:to-emerald-950/10"
                     >
                       <div className="flex items-center justify-between mb-3">
-                        <span className="font-semibold text-lg">Trade {index + 1}</span>
+                        <span className="font-semibold text-lg">{t('trade')} {index + 1}</span>
                         <span className="text-xs px-3 py-1.5 bg-green-200 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full font-semibold">
-                          PENDING PAYMENT
+                          {t('pendingPayment')}
                         </span>
                       </div>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Amount</span>
+                          <span className="text-muted-foreground">{t('amount')}</span>
                           <span className="font-bold">¥{(parseFloat(trade.cny_amount) / 100).toFixed(2)} CNY</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Payment to</span>
+                          <span className="text-muted-foreground">{t('paymentTo')}</span>
                           <span className="font-semibold">{trade.alipay_name} ({trade.alipay_id})</span>
                         </div>
                         <div className="flex justify-between items-center pt-2 border-t">
@@ -303,7 +303,7 @@ export function ExecuteTrade({ flowData, updateFlowData, goBack, goToNextStep }:
                               rel="noopener noreferrer"
                               className="text-primary text-xs flex items-center gap-1 hover:underline"
                             >
-                              View TX <ExternalLink className="h-3 w-3" />
+                              {t('viewTx')} <ExternalLink className="h-3 w-3" />
                             </a>
                           )}
                         </div>
@@ -320,7 +320,7 @@ export function ExecuteTrade({ flowData, updateFlowData, goBack, goToNextStep }:
                   className="flex-1 h-14 text-base bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg"
                 >
                   <ArrowRight className="mr-2 h-5 w-5" />
-                  Continue to Payment
+                  {t('continueToPayment')}
                 </Button>
               </div>
             </>
@@ -356,14 +356,14 @@ export function ExecuteTrade({ flowData, updateFlowData, goBack, goToNextStep }:
                   className="flex-1 h-14 text-base border-2"
                 >
                   <ArrowLeft className="mr-2 h-5 w-5" />
-                  Back
+                  {t('goBack')}
                 </Button>
                 <Button 
                   onClick={retry} 
                   className="flex-1 h-14 text-base bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg"
                 >
                   <Rocket className="mr-2 h-5 w-5" />
-                  Retry
+                  {t('retry')}
                 </Button>
               </div>
             </>
