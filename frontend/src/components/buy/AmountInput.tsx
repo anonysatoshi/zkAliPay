@@ -166,7 +166,7 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold">
                 1
               </div>
-              <h3 className="text-xl font-semibold">What do you want to buy?</h3>
+              <h3 className="text-xl font-semibold">{t('section1Title')}</h3>
             </div>
             
             <div className="pl-[52px] space-y-3">
@@ -209,7 +209,7 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
                 2
               </div>
-              <h3 className="text-xl font-semibold">How much do you want?</h3>
+              <h3 className="text-xl font-semibold">{t('section2Title')}</h3>
             </div>
             
             <div className="pl-[52px] space-y-6">
@@ -266,7 +266,7 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-orange-500 flex items-center justify-center text-white font-bold">
                 3
               </div>
-              <h3 className="text-xl font-semibold">Where to receive?</h3>
+              <h3 className="text-xl font-semibold">{t('section3Title')}</h3>
             </div>
             
             <div className="pl-[52px] space-y-4">

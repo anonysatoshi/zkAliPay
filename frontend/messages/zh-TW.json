@@ -76,6 +76,9 @@
     "amountInput": {
       "title": "輸入購買訂單信息",
       "description": "選擇代幣並指定您想通過支付寶用人民幣購買的金額",
+      "section1Title": "您想購買什麼？",
+      "section2Title": "您想購買多少？",
+      "section3Title": "在哪裡接收？",
       "selectToken": "選擇代幣",
       "receiveAt": "接收代幣地址：",
       "connected": "✓ 已連接",

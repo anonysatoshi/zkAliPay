@@ -76,6 +76,9 @@
     "amountInput": {
       "title": "Enter Buy Order Info",
       "description": "Select token and specify how much you want to buy with CNY via Alipay",
+      "section1Title": "What do you want to buy?",
+      "section2Title": "How much do you want?",
+      "section3Title": "Where to receive?",
       "selectToken": "Select Token",
       "receiveAt": "Receive Tokens At:",
       "connected": "✓ Connected",
