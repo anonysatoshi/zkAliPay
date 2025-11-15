@@ -48,19 +48,6 @@ export function ErrorAlerts({ status, onRetry }: ErrorAlertsProps) {
         <AlertCircle className="h-4 w-4" />
         <AlertDescription className="text-sm">
           <div className="font-semibold mb-2">❌ PDF Validation Failed</div>
-          <p className="mb-2">{status.error}</p>
-          {status.expectedHash && status.actualHash && (
-            <div className="mt-2 p-2 bg-white/50 rounded text-xs font-mono space-y-1">
-              <div>
-                <span className="text-muted-foreground">Expected Hash:</span>
-                <div className="break-all">{status.expectedHash}</div>
-              </div>
-              <div>
-                <span className="text-muted-foreground">Actual Hash:</span>
-                <div className="break-all text-red-600">{status.actualHash}</div>
-              </div>
-            </div>
-          )}
           <p className="mt-2 text-xs">
             Please ensure you uploaded the correct Alipay payment receipt PDF with the exact payment details shown above.
           </p>
@@ -85,7 +72,7 @@ export function ErrorAlerts({ status, onRetry }: ErrorAlertsProps) {
         <AlertDescription className="text-sm">
           <div className="flex items-center gap-2">
             <Loader2 className="h-4 w-4 animate-spin" />
-            <span>Generating zkPDF proof via Axiom API...</span>
+            <span>Generating proof via Axiom OpenVM...</span>
           </div>
           {status.uploadedFilename && (
             <span className="block mt-2 font-mono text-xs text-muted-foreground">

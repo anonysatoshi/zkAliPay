@@ -21,7 +21,7 @@ export function ProcessingSection({ status }: ProcessingSectionProps) {
       <PhaseProgress
         phase={1}
         title="Upload & Validate Payment"
-        description="Upload PDF and verify payment details"
+        description="Submit PDF for validation on Axiom OpenVM"
         status={
           ['settled', 'submitting_to_blockchain', 'blockchain_submitted', 'proof_submitted', 'generating_proof', 'proof_ready', 'valid'].includes(status.status)
             ? 'completed'
@@ -45,25 +45,13 @@ export function ProcessingSection({ status }: ProcessingSectionProps) {
               <p className="text-xs text-blue-700">📤 Uploading PDF to server...</p>
             )}
             {status.status === 'validating' && (
-              <p className="text-xs text-blue-700">🔍 Validating payment details with Axiom Execute mode...</p>
+              <p className="text-xs text-blue-700">🔍 Submitting PDF for validation on Axiom OpenVM...</p>
             )}
             {['valid', 'generating_proof', 'proof_ready', 'submitting_to_blockchain', 'blockchain_submitted', 'proof_submitted', 'settled'].includes(status.status) && (
               <div className="space-y-2">
                 <p className="text-xs text-green-700 font-semibold">✅ Validation complete!</p>
                 {status.validationDetails && (
                   <p className="text-xs text-green-700">{status.validationDetails}</p>
-                )}
-                {status.expectedHash && status.actualHash && (
-                  <div className="p-2 bg-white/60 rounded text-xs font-mono space-y-1">
-                    <div>
-                      <span className="text-muted-foreground">Expected:</span>
-                      <div className="break-all text-[10px]">{status.expectedHash.slice(0, 32)}...</div>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground">Actual:</span>
-                      <div className="break-all text-[10px]">{status.actualHash.slice(0, 32)}...</div>
-                    </div>
-                  </div>
                 )}
               </div>
             )}
@@ -75,7 +63,7 @@ export function ProcessingSection({ status }: ProcessingSectionProps) {
       <PhaseProgress
         phase={2}
         title="Generate Zero-Knowledge Proof"
-        description="Create cryptographic proof via Axiom network"
+        description="Request zero-knowledge proof generation from Axiom OpenVM"
         status={
           ['settled', 'submitting_to_blockchain', 'blockchain_submitted', 'proof_submitted', 'proof_ready'].includes(status.status)
             ? 'completed'
@@ -92,12 +80,12 @@ export function ProcessingSection({ status }: ProcessingSectionProps) {
             {status.status === 'generating_proof' && (
               <>
                 <p className="text-xs text-blue-700">
-                  ⚡ Generating EVM-compatible zero-knowledge proof via Axiom OpenVM proving network...
+                  ⚡ Requesting zero-knowledge proof generation from Axiom OpenVM...
                 </p>
                 <div className="mt-2 space-y-1 text-xs">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
-                    <span>Generating proof on remote server</span>
+                    <span>Generating proof on Axiom OpenVM</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-gray-300"></div>
