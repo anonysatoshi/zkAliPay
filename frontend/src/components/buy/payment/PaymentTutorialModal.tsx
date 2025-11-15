@@ -66,49 +66,49 @@ export function PaymentTutorialModal({
       )
     },
     {
-      title: "Enter Payment Details",
-      description: "Enter the recipient's Alipay account and the payment amount.",
+      title: t('step2.title'),
+      description: t('step2.description'),
       content: (
         <div className="space-y-6">
           <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-2 border-gray-300 dark:border-gray-700 rounded-2xl p-6 space-y-5">
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Recipient Alipay ID</label>
+              <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">{t('step2.recipientId')}</label>
               <div className="font-mono font-bold text-2xl text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700">{alipayId}</div>
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Recipient Name</label>
+              <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">{t('step2.recipientName')}</label>
               <div className="font-bold text-2xl text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700">{alipayName}</div>
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Amount to Transfer</label>
+              <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">{t('step2.amountToTransfer')}</label>
               <div className="font-bold text-3xl text-green-600 dark:text-green-400 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 p-4 rounded-xl border-2 border-green-200 dark:border-green-800">¥{amount}</div>
             </div>
           </div>
           <div className="bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-950/20 dark:to-pink-950/20 border-2 border-red-300 dark:border-red-700 rounded-2xl p-5">
             <p className="text-sm text-red-900 dark:text-red-100 flex items-start gap-2">
               <span className="text-xl">🔴</span>
-              <span><strong>Critical:</strong> Double-check the recipient information matches exactly!</span>
+              <span><strong>{t('step2.critical')}</strong> {t('step2.criticalNote')}</span>
             </p>
           </div>
         </div>
       )
     },
     {
-      title: "Add Payment Note (CRITICAL)",
-      description: "This is the most important step! You MUST include the exact payment note.",
+      title: t('step3.title'),
+      description: t('step3.description'),
       content: (
         <div className="space-y-6">
           <div className="bg-gradient-to-br from-red-100 via-orange-100 to-pink-100 dark:from-red-950/40 dark:via-orange-950/40 dark:to-pink-950/40 border-4 border-red-500 dark:border-red-600 rounded-2xl p-6">
             <h4 className="font-bold text-red-900 dark:text-red-100 text-xl mb-3 flex items-center gap-2">
               <span className="text-2xl">🚨</span>
-              CRITICAL STEP
+              {t('step3.criticalStep')}
               <span className="text-2xl">🚨</span>
             </h4>
             <p className="text-sm text-red-800 dark:text-red-200 mb-4">
-              You MUST add this exact payment note. Without it, your payment cannot be verified!
+              {t('step3.mustAdd')}
             </p>
             <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border-4 border-red-600 dark:border-red-500 shadow-lg">
-              <label className="text-xs font-bold text-red-700 dark:text-red-400 uppercase tracking-wider block mb-2">Payment Note (留言/备注)</label>
+              <label className="text-xs font-bold text-red-700 dark:text-red-400 uppercase tracking-wider block mb-2">{t('step3.paymentNote')}</label>
               <div className="font-mono font-bold text-4xl text-red-600 dark:text-red-400 tracking-wider text-center py-2">
                 {paymentNonce}
               </div>
@@ -119,7 +119,7 @@ export function PaymentTutorialModal({
           <div className="space-y-3">
             <h5 className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
               <span className="text-lg">📸</span>
-              Example Screenshot
+              {t('step3.exampleScreenshot')}
             </h5>
             <div className="border-4 border-gray-300 dark:border-gray-700 rounded-2xl overflow-hidden shadow-xl">
               <img 
@@ -129,58 +129,58 @@ export function PaymentTutorialModal({
               />
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 italic text-center">
-              Screenshot shows where to add the payment note in the Alipay transfer screen
+              {t('step3.screenshotAlt')}
             </p>
           </div>
 
           <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-5">
             <p className="text-sm text-blue-900 dark:text-blue-100 flex items-start gap-2">
               <span className="text-xl">💡</span>
-              <span><strong>Tip:</strong> Look for "留言" (message) or "备注" (note) field in your Alipay transfer screen and paste this exact number.</span>
+              <span><strong>{t('step3.tip')}</strong> {t('step3.tipNote')}</span>
             </p>
           </div>
         </div>
       )
     },
     {
-      title: "Complete the Transfer",
-      description: "Review all details and complete the payment.",
+      title: t('step4.title'),
+      description: t('step4.description'),
       content: (
         <div className="space-y-6">
           <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border-2 border-green-300 dark:border-green-700 rounded-2xl p-6">
             <h4 className="font-bold text-green-900 dark:text-green-100 mb-4 text-lg flex items-center gap-2">
               <span className="text-2xl">✅</span>
-              Final Checklist
+              {t('step4.finalChecklist')}
             </h4>
             <ul className="space-y-3 text-sm text-green-800 dark:text-green-200">
               <li className="flex items-start gap-3 bg-white/60 dark:bg-gray-800/60 p-3 rounded-xl">
                 <CheckCircle2 className="h-6 w-6 flex-shrink-0 mt-0.5 text-green-600" />
-                <span>Recipient Alipay ID: <strong className="font-mono">{alipayId}</strong></span>
+                <span>{t('step4.recipientId')} <strong className="font-mono">{alipayId}</strong></span>
               </li>
               <li className="flex items-start gap-3 bg-white/60 dark:bg-gray-800/60 p-3 rounded-xl">
                 <CheckCircle2 className="h-6 w-6 flex-shrink-0 mt-0.5 text-green-600" />
-                <span>Amount: <strong className="text-lg">¥{amount}</strong></span>
+                <span>{t('step4.amount')} <strong className="text-lg">¥{amount}</strong></span>
               </li>
               <li className="flex items-start gap-3 bg-white/60 dark:bg-gray-800/60 p-3 rounded-xl">
                 <CheckCircle2 className="h-6 w-6 flex-shrink-0 mt-0.5 text-green-600" />
-                <span>Payment Note: <strong className="font-mono text-lg">{paymentNonce}</strong></span>
+                <span>{t('step4.paymentNote')} <strong className="font-mono text-lg">{paymentNonce}</strong></span>
               </li>
             </ul>
           </div>
           <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-2 border-gray-300 dark:border-gray-700 rounded-2xl p-6 space-y-3">
-            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">After verifying all details:</p>
+            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{t('step4.afterVerifying')}</p>
             <ol className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-600 text-white flex items-center justify-center text-xs font-bold">1</span>
-                <span className="pt-0.5">Tap <strong>"Confirm Transfer"</strong> or <strong>"确认转账"</strong></span>
+                <span className="pt-0.5">{t('step4.step1')}</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-600 text-white flex items-center justify-center text-xs font-bold">2</span>
-                <span className="pt-0.5">Complete the payment authentication (password/fingerprint/face ID)</span>
+                <span className="pt-0.5">{t('step4.step2')}</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-600 text-white flex items-center justify-center text-xs font-bold">3</span>
-                <span className="pt-0.5">Wait for the success confirmation</span>
+                <span className="pt-0.5">{t('step4.step3')}</span>
               </li>
             </ol>
           </div>
@@ -188,45 +188,45 @@ export function PaymentTutorialModal({
       )
     },
     {
-      title: "Request Payment Receipt",
-      description: "After payment, you need to download the official PDF receipt from Alipay.",
+      title: t('step5.title'),
+      description: t('step5.description'),
       content: (
         <div className="space-y-6">
           <div className="bg-gradient-to-br from-purple-100 via-blue-100 to-indigo-100 dark:from-purple-950/30 dark:via-blue-950/30 dark:to-indigo-950/30 border-2 border-purple-300 dark:border-purple-700 rounded-2xl p-6">
             <h4 className="font-bold text-purple-900 dark:text-purple-100 mb-3 text-lg flex items-center gap-2">
               <span className="text-2xl">📄</span>
-              Getting Your Receipt
+              {t('step5.gettingReceipt')}
             </h4>
             <p className="text-sm text-purple-800 dark:text-purple-200">
-              You need an official Alipay PDF receipt to complete the verification.
+              {t('step5.needReceipt')}
             </p>
           </div>
 
           <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-2 border-gray-300 dark:border-gray-700 rounded-2xl p-6">
             <h5 className="font-semibold mb-4 text-sm text-gray-900 dark:text-gray-100 flex items-center gap-2">
               <span className="text-lg">🔍</span>
-              How to Find the Receipt Portal
+              {t('step5.howToFind')}
             </h5>
             <ol className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs font-bold">1</span>
-                <span className="pt-0.5">In Alipay, go to <strong>"Me" (我的)</strong> → <strong>"Bills" (账单)</strong></span>
+                <span className="pt-0.5">{t('step5.step1')}</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs font-bold">2</span>
-                <span className="pt-0.5">Find your recent transfer to <strong>{alipayName}</strong></span>
+                <span className="pt-0.5">{t('step5.step2', { name: alipayName })}</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs font-bold">3</span>
-                <span className="pt-0.5">Tap on the transaction to view details</span>
+                <span className="pt-0.5">{t('step5.step3')}</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs font-bold">4</span>
-                <span className="pt-0.5">Look for <strong>"Electronic Receipt" (电子回单)</strong> or <strong>"Receipt" (回单)</strong></span>
+                <span className="pt-0.5">{t('step5.step4')}</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs font-bold">5</span>
-                <span className="pt-0.5">Tap it and select <strong>"Download PDF"</strong> or <strong>"Save"</strong></span>
+                <span className="pt-0.5">{t('step5.step5')}</span>
               </li>
             </ol>
           </div>
@@ -235,7 +235,7 @@ export function PaymentTutorialModal({
           <div className="space-y-3">
             <h5 className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
               <span className="text-lg">📸</span>
-              Receipt Portal Screenshot
+              {t('step5.receiptScreenshot')}
             </h5>
             <div className="border-4 border-gray-300 dark:border-gray-700 rounded-2xl overflow-hidden shadow-xl">
               <img 
@@ -245,31 +245,31 @@ export function PaymentTutorialModal({
               />
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 italic text-center">
-              Screenshot shows where to request the electronic receipt (电子回单) in Alipay
+              {t('step5.screenshotAlt')}
             </p>
           </div>
 
           <div className="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-950/20 dark:to-orange-950/20 border-2 border-yellow-300 dark:border-yellow-700 rounded-2xl p-5">
             <p className="text-sm text-yellow-900 dark:text-yellow-100 flex items-start gap-2">
               <span className="text-xl">⏱️</span>
-              <span><strong>Note:</strong> It may take a few minutes for Alipay to generate the PDF receipt. If it's not available immediately, wait 1-2 minutes and try again.</span>
+              <span><strong>{t('step5.note')}</strong> {t('step5.noteText')}</span>
             </p>
           </div>
         </div>
       )
     },
     {
-      title: "Upload Receipt",
-      description: "Upload the PDF receipt to complete your trade.",
+      title: t('step6.title'),
+      description: t('step6.description'),
       content: (
         <div className="space-y-6">
           <div className="bg-gradient-to-br from-green-100 via-emerald-100 to-teal-100 dark:from-green-950/30 dark:via-emerald-950/30 dark:to-teal-950/30 border-2 border-green-400 dark:border-green-600 rounded-2xl p-6">
             <h4 className="font-bold text-green-900 dark:text-green-100 mb-3 text-xl flex items-center gap-2">
               <span className="text-3xl">🎉</span>
-              Almost Done!
+              {t('step6.almostDone')}
             </h4>
             <p className="text-sm text-green-800 dark:text-green-200">
-              Once you have the PDF receipt downloaded to your device:
+              {t('step6.onceDownloaded')}
             </p>
           </div>
 
@@ -277,23 +277,23 @@ export function PaymentTutorialModal({
             <ol className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-green-600 text-white flex items-center justify-center text-xs font-bold">1</span>
-                <span className="pt-0.5">Close this tutorial</span>
+                <span className="pt-0.5">{t('step6.step1')}</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-green-600 text-white flex items-center justify-center text-xs font-bold">2</span>
-                <span className="pt-0.5">Click the <strong>"Choose File"</strong> button below the payment details</span>
+                <span className="pt-0.5">{t('step6.step2')}</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-green-600 text-white flex items-center justify-center text-xs font-bold">3</span>
-                <span className="pt-0.5">Select the Alipay PDF receipt you just downloaded</span>
+                <span className="pt-0.5">{t('step6.step3')}</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-green-600 text-white flex items-center justify-center text-xs font-bold">4</span>
-                <span className="pt-0.5">Wait for the automated verification to complete</span>
+                <span className="pt-0.5">{t('step6.step4')}</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-green-600 text-white flex items-center justify-center text-xs font-bold">5</span>
-                <span className="pt-0.5">If successful, your crypto will be released automatically! 🚀</span>
+                <span className="pt-0.5">{t('step6.step5')}</span>
               </li>
             </ol>
           </div>
@@ -301,7 +301,7 @@ export function PaymentTutorialModal({
           <div className="bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-950/20 dark:to-pink-950/20 border-2 border-red-300 dark:border-red-700 rounded-2xl p-5">
             <p className="text-sm text-red-900 dark:text-red-100 flex items-start gap-2">
               <span className="text-xl">⏰</span>
-              <span><strong>Reminder:</strong> Make sure to upload the receipt before the timer expires, or your trade will be cancelled!</span>
+              <span><strong>{t('step6.reminder')}</strong> {t('step6.reminderText')}</span>
             </p>
           </div>
         </div>
