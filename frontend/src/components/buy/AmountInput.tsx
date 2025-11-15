@@ -36,11 +36,33 @@ export function AmountInput({ flowData, updateFlowData, goToNextStep }: AmountIn
   // Check for preselected token from order card click
   useEffect(() => {
     const preselectedToken = sessionStorage.getItem('preselectedToken');
-    if (preselectedToken && SUPPORTED_TOKENS.includes(preselectedToken)) {
-      console.log('Preselected token from order card:', preselectedToken);
-      setSelectedToken(preselectedToken);
+    console.log('=== Preselected Token Debug ===');
+    console.log('Raw preselectedToken from sessionStorage:', preselectedToken);
+    console.log('SUPPORTED_TOKENS:', SUPPORTED_TOKENS);
+    
+    if (preselectedToken) {
+      // Normalize to lowercase for comparison
+      const normalizedPreselected = preselectedToken.toLowerCase();
+      
+      // Find matching token (case-insensitive)
+      const matchingToken = SUPPORTED_TOKENS.find(
+        token => token.toLowerCase() === normalizedPreselected
+      );
+      
+      console.log('Normalized preselected:', normalizedPreselected);
+      console.log('Matching token found:', matchingToken);
+      
+      if (matchingToken) {
+        console.log('✅ Setting selectedToken to:', matchingToken);
+        setSelectedToken(matchingToken);
+      } else {
+        console.log('❌ No matching token found in SUPPORTED_TOKENS');
+      }
+      
       // Clear the session storage after using it
       sessionStorage.removeItem('preselectedToken');
+    } else {
+      console.log('No preselectedToken in sessionStorage');
     }
   }, []);
 
