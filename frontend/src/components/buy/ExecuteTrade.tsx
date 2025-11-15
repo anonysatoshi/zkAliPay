@@ -172,7 +172,6 @@ export function ExecuteTrade({ flowData, updateFlowData, goBack, goToNextStep }:
         </h2>
         <p className="text-muted-foreground text-lg">
           {status === 'executing' && t('description')}
-          {status === 'success' && t('successDescription')}
           {status === 'error' && t('errorDescription')}
         </p>
       </div>
@@ -255,7 +254,7 @@ export function ExecuteTrade({ flowData, updateFlowData, goBack, goToNextStep }:
                   <CheckCircle2 className="h-14 w-14 text-white" />
                 </div>
                 <div className="text-center space-y-2">
-                  <p className="text-3xl font-bold">All Set!</p>
+                  <p className="text-3xl font-bold">{t('allSet')}</p>
                   <p className="text-muted-foreground">
                     {t('successMessage')}
                   </p>

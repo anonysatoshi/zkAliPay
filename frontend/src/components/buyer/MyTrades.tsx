@@ -9,18 +9,20 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle, CheckCircle2, Loader2, Clock, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 import { Trade } from '@/lib/api';
+import { useTranslations } from 'next-intl';
 
 type TradeView = 'pending' | 'completed';
 
 export function MyTrades() {
   const { data: tradesData, isLoading, error: fetchError, refetch } = useBuyerTrades();
   const [view, setView] = useState<TradeView>('pending');
+  const t = useTranslations('buy.myTrades');
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-8">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="ml-2">Loading your trades...</span>
+        <span className="ml-2">{t('loading')}</span>
       </div>
     );
   }
@@ -29,7 +31,7 @@ export function MyTrades() {
     return (
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>Failed to load trades. Please try again.</AlertDescription>
+        <AlertDescription>{t('error')}</AlertDescription>
       </Alert>
     );
   }
@@ -48,7 +50,7 @@ export function MyTrades() {
       <Card className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-gray-200/50 dark:border-gray-800/50 shadow-lg">
         <CardContent className="pt-6">
           <p className="text-center text-muted-foreground">
-            You don't have any trades yet. Buy some tokens to get started!
+            {t('noTrades')}
           </p>
         </CardContent>
       </Card>
@@ -61,21 +63,21 @@ export function MyTrades() {
         return (
           <div className="flex items-center text-sm font-semibold text-yellow-700 dark:text-yellow-400 bg-yellow-100 dark:bg-yellow-900/30 px-3 py-1.5 rounded-xl border border-yellow-300 dark:border-yellow-700">
             <Clock className="h-4 w-4 mr-1.5" />
-            Pending Payment
+            {t('pendingPayment')}
           </div>
         );
       case 1:
         return (
           <div className="flex items-center text-sm font-semibold text-green-700 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-3 py-1.5 rounded-xl border border-green-300 dark:border-green-700">
             <CheckCircle2 className="h-4 w-4 mr-1.5" />
-            Settled
+            {t('settled')}
           </div>
         );
       case 2:
         return (
           <div className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-xl border border-gray-300 dark:border-gray-700">
             <AlertCircle className="h-4 w-4 mr-1.5" />
-            Expired
+            {t('expired')}
           </div>
         );
       default:
@@ -104,10 +106,10 @@ export function MyTrades() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-sm font-mono text-gray-700 dark:text-gray-300">
-                Trade: {formatAddress(trade.trade_id)}
+                {t('trade')} {formatAddress(trade.trade_id)}
               </CardTitle>
               <CardDescription className="text-xs mt-1">
-                Created {new Date(trade.created_at * 1000).toLocaleString()}
+                {t('created')} {new Date(trade.created_at * 1000).toLocaleString()}
               </CardDescription>
             </div>
             {getStatusBadge(trade.status)}
@@ -117,20 +119,20 @@ export function MyTrades() {
           {/* Trade Info - Apple Style Grid */}
           <div className="grid grid-cols-2 gap-4 p-4 bg-gradient-to-br from-gray-50 to-blue-50/30 dark:from-gray-800/50 dark:to-blue-900/10 rounded-xl border border-gray-200/50 dark:border-gray-700/50">
             <div className="space-y-1">
-              <p className="text-gray-600 dark:text-gray-400 text-xs font-medium">Token Received</p>
+              <p className="text-gray-600 dark:text-gray-400 text-xs font-medium">{t('tokenReceived')}</p>
               <p className="font-bold text-base text-gray-900 dark:text-gray-100">{tokenAmount}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-gray-600 dark:text-gray-400 text-xs font-medium">CNY Paid</p>
+              <p className="text-gray-600 dark:text-gray-400 text-xs font-medium">{t('cnyPaid')}</p>
               <p className="font-bold text-base text-green-600 dark:text-green-400">¥{cnyAmount}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-gray-600 dark:text-gray-400 text-xs font-medium">Payment Nonce</p>
+              <p className="text-gray-600 dark:text-gray-400 text-xs font-medium">{t('paymentNonce')}</p>
               <p className="font-mono text-xs text-gray-700 dark:text-gray-300">{trade.payment_nonce}</p>
             </div>
             <div className="space-y-1">
               <p className="text-gray-600 dark:text-gray-400 text-xs font-medium">
-                {isPending ? 'Expires At' : isSettled ? 'Settled At' : 'Expired At'}
+                {isPending ? t('expiresAt') : isSettled ? t('settledAt') : t('expiredAt')}
               </p>
               <p className="text-xs text-gray-700 dark:text-gray-300">
                 {new Date(trade.expires_at * 1000).toLocaleString()}
@@ -149,7 +151,7 @@ export function MyTrades() {
                   className="flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors"
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
-                  View Creation TX
+                  {t('viewCreationTx')}
                 </a>
               )}
               {trade.settlement_tx_hash && (
@@ -160,7 +162,7 @@ export function MyTrades() {
                   className="flex items-center gap-1.5 text-xs text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-medium transition-colors"
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
-                  View Settlement TX
+                  {t('viewSettlementTx')}
                 </a>
               )}
             </div>
@@ -171,7 +173,7 @@ export function MyTrades() {
             <Alert variant="destructive" className="border-red-300 dark:border-red-700">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription className="text-xs">
-                This trade has expired. The auto-cancel service will clean it up shortly.
+                {t('expiredWarning')}
               </AlertDescription>
             </Alert>
           )}
@@ -192,7 +194,7 @@ export function MyTrades() {
             : "flex-1 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 rounded-xl transition-all duration-300"
           }
         >
-          Pending Trades
+          {t('pendingTrades')}
           {pendingTrades.length > 0 && (
             <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-white/20 text-white font-semibold">
               {pendingTrades.length}
@@ -207,7 +209,7 @@ export function MyTrades() {
             : "flex-1 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-2 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 rounded-xl transition-all duration-300"
           }
         >
-          Completed Trades
+          {t('completedTrades')}
           {completedTrades.length > 0 && (
             <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-white/20 text-white font-semibold">
               {completedTrades.length}
@@ -221,9 +223,7 @@ export function MyTrades() {
         {displayedTrades.length === 0 ? (
           <Alert className="border-gray-200 dark:border-gray-700">
             <AlertDescription>
-              {view === 'pending' 
-                ? "You have no pending trades."
-                : "You have no completed trades yet."}
+              {view === 'pending' ? t('noPending') : t('noCompleted')}
             </AlertDescription>
           </Alert>
         ) : (
