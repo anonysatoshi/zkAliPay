@@ -1,8 +1,7 @@
 'use client';
 
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, HelpCircle } from 'lucide-react';
 import { getTransactionUrl } from '@/lib/contracts';
 import type { Trade, TradeStatus } from './types';
 
@@ -21,77 +20,99 @@ export function PaymentDetailsSection({
 }: PaymentDetailsSectionProps) {
   return (
     <>
-      {/* Payment Details */}
-      <div className="bg-gradient-to-br from-muted/30 to-muted/50 border border-muted rounded-xl p-4 space-y-3 text-sm shadow-sm">
-        <div className="flex justify-between items-center">
-          <span className="text-muted-foreground font-medium">Alipay Account:</span>
-          <span className="font-mono font-semibold bg-white dark:bg-gray-800 px-2 py-1 rounded">{trade.alipay_id}</span>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="text-muted-foreground font-medium">Account Name:</span>
-          <span className="font-semibold">{trade.alipay_name}</span>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="text-muted-foreground font-medium">Amount:</span>
-          <span className="font-bold text-lg text-primary">¥{cnyAmount}</span>
-        </div>
-        <div className="flex justify-between items-center border-t pt-2 mt-2">
-          <span className="text-muted-foreground font-medium">Payment Note:</span>
-          <span className="font-mono text-base font-bold bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 px-2 py-1 rounded">{trade.payment_nonce}</span>
+      {/* Payment Details - Apple Style */}
+      <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden shadow-sm">
+        {/* Header with Tutorial Link */}
+        {status.status === 'pending' && status.timeRemaining > 0 && (
+          <div className="flex items-center justify-between px-6 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border-b border-gray-200 dark:border-gray-700">
+            <span className="text-xs font-medium text-gray-600 dark:text-gray-300">Payment Instructions</span>
+            <Button
+              onClick={onOpenTutorial}
+              variant="ghost"
+              size="sm"
+              className="h-7 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-100/50 dark:hover:bg-blue-900/30 gap-1.5"
+            >
+              <HelpCircle className="h-3.5 w-3.5" />
+              Need Help?
+            </Button>
+          </div>
+        )}
+        
+        {/* Payment Details Grid */}
+        <div className="p-6 space-y-4">
+          {/* Alipay Account */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+              Alipay Account
+            </label>
+            <div className="font-mono text-xl font-bold text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700">
+              {trade.alipay_id}
+            </div>
+          </div>
+
+          {/* Account Name */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+              Account Name
+            </label>
+            <div className="text-xl font-bold text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700">
+              {trade.alipay_name}
+            </div>
+          </div>
+
+          {/* Amount */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+              Amount to Transfer
+            </label>
+            <div className="text-3xl font-bold text-green-600 dark:text-green-400 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 px-4 py-3 rounded-xl border-2 border-green-200 dark:border-green-800">
+              ¥{cnyAmount}
+            </div>
+          </div>
+
+          {/* Payment Note - Critical */}
+          <div className="space-y-1.5 pt-2 border-t-2 border-gray-200 dark:border-gray-700">
+            <label className="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-wide flex items-center gap-1">
+              <span className="text-base">⚠️</span>
+              Payment Note (CRITICAL)
+            </label>
+            <div className="font-mono text-3xl font-bold text-red-600 dark:text-red-400 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 px-4 py-4 rounded-xl border-2 border-red-300 dark:border-red-700 text-center tracking-wider">
+              {trade.payment_nonce}
+            </div>
+            <p className="text-xs text-red-600 dark:text-red-400 font-semibold text-center">
+              You MUST include this exact number in the payment note field!
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Tutorial Button - Only show for pending trades */}
-      {status.status === 'pending' && status.timeRemaining > 0 && (
-        <Alert className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-300">
-          <AlertDescription>
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-blue-900 mb-1">
-                  First time using zkAlipay?
-                </p>
-                <p className="text-xs text-blue-700">
-                  Follow our step-by-step guide with screenshots to complete your payment successfully.
-                </p>
-              </div>
-              <Button
-                onClick={onOpenTutorial}
-                className="bg-blue-600 hover:bg-blue-700 text-white flex-shrink-0"
-                size="sm"
-              >
-                📚 How to Pay
-              </Button>
-            </div>
-          </AlertDescription>
-        </Alert>
-      )}
-
-      {/* Trade Info */}
-      <div className="text-xs text-muted-foreground space-y-1">
-        <p>
-          Trade ID:{' '}
-          <span className="font-mono">
-            {trade.trade_id.slice(0, 10)}...{trade.trade_id.slice(-8)}
-          </span>
-        </p>
-        <a
-          href={getTransactionUrl(trade.tx_hash)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-primary flex items-center gap-1 hover:underline"
-        >
-          View on Explorer <ExternalLink className="h-3 w-3" />
-        </a>
-        {status.tx_hash && (
+      {/* Trade Info - Minimalist Footer */}
+      <div className="flex items-center justify-between text-xs text-muted-foreground px-1">
+        <span className="font-mono">
+          ID: {trade.trade_id.slice(0, 8)}...{trade.trade_id.slice(-6)}
+        </span>
+        <div className="flex items-center gap-3">
           <a
-            href={getTransactionUrl(status.tx_hash)}
+            href={getTransactionUrl(trade.tx_hash)}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-primary flex items-center gap-1 hover:underline"
+            className="text-primary flex items-center gap-1 hover:underline transition-colors"
           >
-            View Proof TX <ExternalLink className="h-3 w-3" />
+            <ExternalLink className="h-3 w-3" />
+            View Trade
           </a>
-        )}
+          {status.tx_hash && (
+            <a
+              href={getTransactionUrl(status.tx_hash)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary flex items-center gap-1 hover:underline transition-colors"
+            >
+              <ExternalLink className="h-3 w-3" />
+              View Proof
+            </a>
+          )}
+        </div>
       </div>
     </>
   );
