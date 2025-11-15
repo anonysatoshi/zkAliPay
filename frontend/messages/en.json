@@ -11,7 +11,7 @@
       "subtitle1": "The world's first",
       "subtitle2": "peer-to-peer fiat gateway",
       "subtitle3": "powered by",
-      "subtitle4": "zero-knowledge cryptography",
+      "subtitle4": "zero-knowledge virtual machine",
       "tagline": "A decentralized marketplace where anyone can buy or sell crypto with Alipay. Pure peer-to-peer. Cryptographically secured. No middlemen.",
       "startTrading": "Start Trading",
       "howItWorks": "How it Works"
@@ -229,6 +229,11 @@
     "joinButton": "Join Channel",
     "members": "Members",
     "online": "Online"
+  },
+  "orderCard": {
+    "active": "Active",
+    "available": "Available",
+    "orderId": "Order ID"
   },
   "footer": {
     "description": "The world's first decentralized fiat gateway powered by zero-knowledge virtual machine. Trade CNY for crypto with cryptographic certainty.",

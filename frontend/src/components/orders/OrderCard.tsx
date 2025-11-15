@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { getTokenInfo, formatTokenAmount, getExchangeRateLabel } from '@/lib/tokens';
 import type { Order } from '@/hooks/useOrders';
+import { useTranslations, useLocale } from 'next-intl';
 
 interface OrderCardProps {
   order: Order;
@@ -14,9 +15,16 @@ function formatExchangeRate(rate: string): string {
   return num.toFixed(2);
 }
 
-function formatTimestamp(ts: number): string {
+function formatTimestamp(ts: number, locale: string): string {
   const now = Date.now() / 1000;
   const diff = now - ts;
+  
+  if (locale === 'zh-TW') {
+    if (diff < 60) return '剛剛';
+    if (diff < 3600) return `${Math.floor(diff / 60)} 分鐘前`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)} 小時前`;
+    return `${Math.floor(diff / 86400)} 天前`;
+  }
   
   if (diff < 60) return 'Just now';
   if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
@@ -29,10 +37,13 @@ function formatAddress(addr: string): string {
 }
 
 export function OrderCard({ order }: OrderCardProps) {
+  const t = useTranslations('orderCard');
+  const locale = useLocale();
+  
   const tokenInfo = getTokenInfo(order.token);
   const rate = formatExchangeRate(order.exchange_rate);
   const available = formatTokenAmount(order.remaining_amount, order.token);
-  const timeAgo = formatTimestamp(order.created_at);
+  const timeAgo = formatTimestamp(order.created_at, locale);
 
   return (
     <Card className="hover:shadow-lg transition-shadow duration-200">
@@ -44,18 +55,18 @@ export function OrderCard({ order }: OrderCardProps) {
             </div>
             <p className="text-sm text-muted-foreground mt-1">{timeAgo}</p>
           </div>
-          <Badge variant="secondary">Active</Badge>
+          <Badge variant="secondary">{t('active')}</Badge>
         </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
           <div className="flex justify-between items-center">
-            <span className="text-sm text-muted-foreground">Available:</span>
+            <span className="text-sm text-muted-foreground">{t('available')}:</span>
             <span className="text-lg font-semibold">{available} {tokenInfo.symbol}</span>
           </div>
           <div className="pt-2 border-t">
             <div className="text-xs text-muted-foreground">
-              Order ID: {order.order_id.slice(0, 10)}...
+              {t('orderId')}: {order.order_id.slice(0, 10)}...
             </div>
           </div>
         </div>

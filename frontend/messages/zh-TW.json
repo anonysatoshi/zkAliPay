@@ -11,7 +11,7 @@
       "subtitle1": "全球首個",
       "subtitle2": "點對點法幣網關",
       "subtitle3": "採用",
-      "subtitle4": "零知識密碼學技術",
+      "subtitle4": "零知識虛擬機技術",
       "tagline": "一個去中心化市場，任何人都可以用支付寶買賣加密貨幣。純點對點。密碼學保障。無中間商。",
       "startTrading": "開始交易",
       "howItWorks": "運作原理"
@@ -228,6 +228,11 @@
     "joinButton": "加入頻道",
     "members": "成員",
     "online": "在線"
+  },
+  "orderCard": {
+    "active": "活躍",
+    "available": "可用",
+    "orderId": "訂單編號"
   },
   "footer": {
     "description": "全球首個基於零知識虛擬機的去中心化法幣網關。以密碼學確定性交易人民幣換取加密貨幣。",
